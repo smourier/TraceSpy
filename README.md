@@ -17,6 +17,7 @@ Notables points of interest are:
 
 ![TrceSply.png](doc/TrceSpy.PNG?raw=true)
 
+# ETW messages support
 **Starting with version 2.0**, TraceSpy supports simple ETW (Event Tracing for Windows) real time "message" traces. These traces can be easily created from a client point of view like this:
 
 ```{{
