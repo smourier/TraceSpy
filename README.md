@@ -28,6 +28,8 @@ using (EventProvider prov = new EventProvider(providerGuid1))
 }
 ```
 
+These traces are very fast to create, and cost almost nothing to the system. In fact you you should get rid of OutputDebugString usage, as this is a thing of the past, and use ETW.
+
 EventProvider - supported with .NET Framework 4 and higher - is located in the System.Diagnostics.Eventing namespace. The good news is these traces are supposed to be super fast, and they can even be left in production code.
 
 What's cool is you can now specialize TraceSpy for a given set of traces. Just uncheck the "Capture OutputDebugString events", define some ETW provider to capture, and you will now only get traces that you need!
