@@ -1,21 +1,23 @@
 # TraceSpy
 TraceSpy is a pure .NET alternative to the very popular SysInternals DebugView tool
 
+*** This is the now home of https://tracespy.codeplex.com/ ***
+
 Notables points of interest are:
 
 * It's 100% .NET
 * It does not need UAC to be disabled nor special rights (unless you want to use ETW traces, see below)
-* It can remove empty lines (which is very handy to get rid of these pesky trace lines sent by Visual Studio 2010 for example...)
-* The traced application is less blocked by this tracing tool than DebugView
+* It can remove empty lines (which is very handy to get rid of these pesky trace lines sent by Visual Studio or addins, for example...)
+* The traced application is less blocked by this tracing tool than by DebugView, because it's more async
 * The Copy (CTRL-C) operation just copies the traced text, and not the full line (a full line copy feature is there though)
-* The process name of the traced application is optionally displayed instead of the process id (if available and not dead at that time)
+* The process name of the traced application is optionally displayed instead of the process id (if available and not dead at display  time)
 * The find dialog has an autocomplete feature
 * Lines that contain newline characters (\r, \n) are not displayed as normal lines (DbgView does this) but as one big line
-* There is a colorizer feature that allows traces colorization using regular expressions.
+* There is a super duper cool colorizer feature that allows traces colorization using regular expressions.
 
 ![TrceSply.png](doc/TrceSpy.PNG?raw=true)
 
-Starting with version 2.0, TraceSpy supports simple ETW (Event Tracing for Windows) real time "message" traces. These traces can be easily created from a client point of view like this:
+**Starting with version 2.0**, TraceSpy supports simple ETW (Event Tracing for Windows) real time "message" traces. These traces can be easily created from a client point of view like this:
 
 ```{{
 Guid providerGuid1 = new Guid("01234567-01234-01234-01234-012345678901"); // change this!
@@ -41,7 +43,7 @@ And add the provider Guid (the description is mandatory but not used today):
 
 One last note: for these traces to be read, TraceSpy *must* be started as Administrator (run under full UAC token).
 
-Version 2.1 version as added the following features:
+**Version 2.1** version added the following features:
 
 * ETW description with process name (optional).
 * Quick Colorizers feature.
