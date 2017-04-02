@@ -1,0 +1,82 @@
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+body
+{
+    font-family: 'Lucida Console';
+    font-size:12px;
+    text-decoration:none;
+    overflow-x: hidden;
+}
+
+a:link, a:visited
+{
+    color:white;
+    text-decoration: none;
+}
+
+a:hover, a:active
+{
+    color:white;
+    text-decoration: underline;
+}
+
+.ai
+{
+    color: #fff;
+}
+
+#content
+{
+    padding:10px;
+}
+
+#header
+{
+    width: 100%;
+    background: #000;
+    margin:10px;
+    padding: 10px;
+    color: #fff;
+}
+
+    #header img
+    {
+        vertical-align:middle;
+    }
+
+h1
+{
+    font-size:20px;
+    padding:10px 10px 5px 0px;
+}
+
+table
+{
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+tr:nth-of-type(odd)
+{
+    background: #eee;
+}
+
+th
+{
+    background: #333;
+    color: white;
+    font-weight: bold;
+}
+
+td, th
+{
+    padding: 6px;
+    border: 1px solid #ccc;
+    text-align: left;
+    white-space:nowrap;
+}

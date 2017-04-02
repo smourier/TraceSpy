@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>TraceSpy Server</title>
+    <script type="text/javascript" src="TraceSpy.js"></script>
+    <link href="TraceSpy.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body onload="TSUpdateDiag(1000);">
+    <div id="header">
+        <a href="http://tracespy.codeplex.com"><img src="TraceSpyServer.png" /></a>
+        <a href="index.html" style="vertical-align:-70%">Index</a>
+        <span style="text-decoration: underline;vertical-align:-70%">Diagnostics</span>
+    </div>
+    <div id="content">
+
+        <h1>Server Status</h1>
+        <table>
+            <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Connection Status</td>
+                <td id="ServerStatus"></td>
+            </tr>
+            <tr>
+                <td>Server Time</td>
+                <td id="ServerTime"></td>
+            </tr>
+            <tr>
+                <td>Process Count</td>
+                <td id="ProcessorCount"></td>
+            </tr>
+            <tr>
+                <td>Process CPU Usage</td>
+                <td id="CpuUsage"></td>
+            </tr>
+            <tr>
+                <td>Process Memory Usage / Working Set</td>
+                <td id="MemoryUsage"></td>
+            </tr>
+            <tr>
+                <td>TraceSpy Version</td>
+                <td id="ServerVersion"></td>
+            </tr>
+            <tr>
+                <td>CLR Version</td>
+                <td id="ClrVersion"></td>
+            </tr>
+            <tr>
+                <td>OS Version</td>
+                <td id="OSVersion"></td>
+            </tr>
+        </table>
+
+        <h1>TraceSpy Statistics</h1>
+        <table>
+            <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Circular Buffer Count</td>
+                <td id="BufferCount"></td>
+            </tr>
+            <tr>
+                <td>Circular Buffer Total Count</td>
+                <td id="BufferTotalCount"></td>
+            </tr>
+            <tr>
+                <td>Session Id</td>
+                <td id="SessionId"></td>
+            </tr>
+        </table>
+
+        <h1>Configuration</h1>
+        <table id="ConfTable">
+            <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Circular Buffer Capacity</td>
+                <td id="BufferCapacity"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
