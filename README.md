@@ -26,8 +26,6 @@ using (EventProvider prov = new EventProvider(providerGuid1))
 {
   prov.WriteMessageEvent("hello", 0, 0);
 }
-
-}}
 ```
 
 EventProvider - supported with .NET Framework 4 and higher - is located in the System.Diagnostics.Eventing namespace. The good news is these traces are supposed to be super fast, and they can even be left in production code.
