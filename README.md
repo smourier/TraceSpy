@@ -1,7 +1,7 @@
 # TraceSpy
 TraceSpy is a pure .NET alternative to the very popular SysInternals DebugView tool
 
-*** This is the now home of https://tracespy.codeplex.com/ ***
+*** This is the new home of https://tracespy.codeplex.com/ ***
 
 Notables points of interest are:
 
