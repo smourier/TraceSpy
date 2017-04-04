@@ -21,7 +21,7 @@ Notables points of interest are:
 **Starting with version 2.0**, TraceSpy supports simple ETW (Event Tracing for Windows) real time "message" traces. These traces can be easily created from a client point of view like this:
 
 ```{{
-Guid providerGuid1 = new Guid("01234567-01234-01234-01234-012345678901"); // change this!
+Guid providerGuid1 = new Guid("01234567-01234-01234-01234-012345678901"); // change this guid, make it yours!
 using (EventProvider prov = new EventProvider(providerGuid1))
 {
   prov.WriteMessageEvent("hello", 0, 0);
