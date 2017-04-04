@@ -32,6 +32,8 @@ These traces are very fast to create, and cost almost nothing to the system. In 
 
 EventProvider - supported with .NET Framework 4 and higher - is located in the System.Diagnostics.Eventing namespace. The good news is these traces are supposed to be super fast, and they can even be left in production code.
 
+If you want to use ETW from other platforms than .NET, it's possible (as long as you run on the Windows OS), I've provided some VBA interop code with an Excel sample here: [VBA ETW real time traces sample](vba) 
+
 What's cool is you can now specialize TraceSpy for a given set of traces. Just uncheck the "Capture OutputDebugString events", define some ETW provider to capture, and you will now only get traces that you need!
 
 From the TraceSpy UI, you just need to configure the provider Guid, in the Options menu, like this:
