@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading;
 using TraceSpyService.Configuration;
 
@@ -31,9 +29,9 @@ namespace TraceSpyService
             Host.Log(this, "Session Id: " + SessionId);
             Status = ServiceControllerStatus.StartPending;
             int count = 0;
-            foreach (EtwProviderElement element in ServiceSection.Current.EtwListener.Providers.Cast<EtwProviderElement>().Where(e => e.Enabled))
+            foreach (var element in ServiceSection.Current.EtwListener.Providers.Cast<EtwProviderElement>().Where(e => e.Enabled))
             {
-                EventRealtimeListener listener = new EventRealtimeListener(element.Guid, element.Guid.ToString(), element.TraceLevel);
+                var listener = new EventRealtimeListener(element.Guid, element.Guid.ToString(), element.TraceLevel);
                 if (!string.IsNullOrWhiteSpace(element.Description))
                 {
                     listener.Description = element.Description;
@@ -41,7 +39,7 @@ namespace TraceSpyService
 
                 listener.ConsoleOutput = element.ConsoleOutput || ServiceSection.Current.EtwListener.ConsoleOutput;
 
-                Thread t = new Thread(ProcessEtwTrace);
+                var t = new Thread(ProcessEtwTrace);
                 t.Start(listener);
 
                 listener.RealtimeEvent += OnEtwListenerRealtimeEvent;
@@ -68,7 +66,7 @@ namespace TraceSpyService
             {
                 try
                 {
-                    Process process = Process.GetProcessById(id);
+                    var process = Process.GetProcessById(id);
                     name = process.ProcessName;
                 }
                 catch
@@ -89,14 +87,14 @@ namespace TraceSpyService
             if (Status != ServiceControllerStatus.Running)
                 return;
 
-            EventRealtimeListener listener = (EventRealtimeListener)sender;
-
-            EtwRecord record = new EtwRecord();
+            var listener = (EventRealtimeListener)sender;
+            var record = new EtwRecord();
             record.ProcessName = e.ProcessId + "/" + GetProcessName(e.ProcessId);
             if (!string.IsNullOrWhiteSpace(listener.Description))
             {
                 record.ProcessName += "/" + listener.Description;
             }
+
             record.Text = e.Message;
 
             if (!_watch.IsRunning)
@@ -129,7 +127,7 @@ namespace TraceSpyService
         public void Stop()
         {
             Status = ServiceControllerStatus.StopPending;
-            foreach (EventRealtimeListener listener in _listeners)
+            foreach (var listener in _listeners)
             {
                 listener.Dispose();
             }

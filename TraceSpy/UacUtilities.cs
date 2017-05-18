@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Principal;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Security.Principal;
 
 namespace TraceSpy
 {
@@ -13,7 +10,7 @@ namespace TraceSpy
     {
         public static bool IsAdministrator()
         {
-            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            var identity = WindowsIdentity.GetCurrent();
             return identity != null && new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator);
         }
 
@@ -22,7 +19,7 @@ namespace TraceSpy
             if (!force && IsAdministrator())
                 return false;
 
-            ProcessStartInfo info = new ProcessStartInfo();
+            var info = new ProcessStartInfo();
             info.FileName = Environment.GetCommandLineArgs()[0];
             info.UseShellExecute = true;
             info.Verb = "runas"; // Provides Run as Administrator
@@ -61,7 +58,7 @@ namespace TraceSpy
 
         public static Image GetShieldImage(SHGSI flags)
         {
-            using (Icon icon = GetShieldIcon(flags))
+            using (var icon = GetShieldIcon(flags))
             {
                 if (icon == null)
                     return null;
@@ -72,7 +69,7 @@ namespace TraceSpy
 
         private static Icon GetStockIcon(int id, SHGSI flags)
         {
-            SHSTOCKICONINFO info = new SHSTOCKICONINFO();
+            var info = new SHSTOCKICONINFO();
             info.cbSize = Marshal.SizeOf(typeof(SHSTOCKICONINFO));
             if (SHGetStockIconInfo(id, flags, ref info) == 0)
                 return Icon.FromHandle(info.hIcon);

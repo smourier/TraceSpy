@@ -166,7 +166,7 @@
             this.textBoxBackColor.Name = "textBoxBackColor";
             this.textBoxBackColor.Size = new System.Drawing.Size(100, 20);
             this.textBoxBackColor.TabIndex = 9;
-            this.textBoxBackColor.TextChanged += new System.EventHandler(this.textBoxBackColor_TextChanged);
+            this.textBoxBackColor.TextChanged += new System.EventHandler(this.TextBoxBackColor_TextChanged);
             // 
             // textBoxForeColor
             // 
@@ -174,7 +174,7 @@
             this.textBoxForeColor.Name = "textBoxForeColor";
             this.textBoxForeColor.Size = new System.Drawing.Size(100, 20);
             this.textBoxForeColor.TabIndex = 6;
-            this.textBoxForeColor.TextChanged += new System.EventHandler(this.textBoxForeColor_TextChanged);
+            this.textBoxForeColor.TextChanged += new System.EventHandler(this.TextBoxForeColor_TextChanged);
             // 
             // buttonBackColor
             // 

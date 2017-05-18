@@ -64,7 +64,7 @@ namespace TraceSpyTest
         {
             int count = 1;
             string t;
-            Guid etwProvider = CommandLineUtilities.GetArgument<Guid>("etw", Guid.Empty);
+            var etwProvider = CommandLineUtilities.GetArgument("etw", Guid.Empty);
             Console.WriteLine("TraceSpy Test.");
             Console.WriteLine();
             Console.WriteLine("Press Q (or CTRL-C) to quit");
@@ -87,7 +87,7 @@ namespace TraceSpyTest
             Console.WriteLine();
             do
             {
-                ConsoleKeyInfo info = Console.ReadKey(true);
+                var info = Console.ReadKey(true);
                 int key = (int)info.Key;
                 int num = GetFinalNumber(info);
                 switch (info.Key)

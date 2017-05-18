@@ -14,7 +14,7 @@ namespace TraceSpyService.Configuration
         protected override object GetElementKey(ConfigurationElement element)
         {
             if (element == null)
-                throw new ArgumentNullException("element");
+                throw new ArgumentNullException(nameof(element));
 
             return ((PrefixElement)element).Uri;
         }
@@ -24,7 +24,7 @@ namespace TraceSpyService.Configuration
             get
             {
                 if (uri == null)
-                    throw new ArgumentNullException("uri");
+                    throw new ArgumentNullException(nameof(uri));
 
                 return (PrefixElement)BaseGet(uri);
             }
@@ -33,7 +33,7 @@ namespace TraceSpyService.Configuration
         public string GetRelativePath(string rawUrl)
         {
             if (rawUrl == null)
-                throw new ArgumentNullException("rawUrl");
+                throw new ArgumentNullException(nameof(rawUrl));
 
             foreach (PrefixElement pe in this)
             {

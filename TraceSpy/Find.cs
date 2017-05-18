@@ -11,7 +11,7 @@ namespace TraceSpy
         public Find(Settings settings)
         {
             if (settings == null)
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
 
             _settings = settings;
             InitializeComponent();
@@ -50,7 +50,7 @@ namespace TraceSpy
             if (search.Length == 0)
                 return null;
 
-            RegexOptions options = RegexOptions.None;
+            var options = RegexOptions.None;
             if (!checkBoxCase.Checked)
             {
                 options |= RegexOptions.IgnoreCase;
@@ -60,7 +60,7 @@ namespace TraceSpy
 
         internal void FindNext()
         {
-            Regex regex = BuildRegex();
+            var regex = BuildRegex();
             if (regex == null)
                 return;
 
@@ -69,7 +69,7 @@ namespace TraceSpy
 
         private void ButtonOkClick(object sender, EventArgs e)
         {
-            Regex regex = BuildRegex();
+            var regex = BuildRegex();
             if (regex == null)
                 return;
 
@@ -83,12 +83,12 @@ namespace TraceSpy
             buttonOK.Enabled = comboBoxFind.Text.Trim().Length > 0;
         }
 
-        private void comboBoxFind_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxFind_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateControls();
         }
 
-        private void comboBoxFind_TextUpdate(object sender, EventArgs e)
+        private void ComboBoxFind_TextUpdate(object sender, EventArgs e)
         {
             UpdateControls();
         }

@@ -38,16 +38,14 @@ namespace TraceSpyService
 
         public static TokenElevationType GetTokenElevationType()
         {
-            TokenElevationType type = TokenElevationType.Unknown;
+            var type = TokenElevationType.Unknown;
             int len = IntPtr.Size;
-            IntPtr h;
-            if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, out h))
+            if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, out IntPtr h))
                 return type;
 
             try
             {
-                int olen;
-                GetTokenInformation(h, TokenElevationTypeInformation, out type, len, out olen);
+                GetTokenInformation(h, TokenElevationTypeInformation, out type, len, out int olen);
                 return type;
             }
             finally
@@ -70,8 +68,7 @@ namespace TraceSpyService
         {
             if (conversionType == typeof(Guid))
             {
-                Guid g;
-                if (!Guid.TryParse(string.Format("{0}", value), out g))
+                if (!Guid.TryParse(string.Format("{0}", value), out Guid g))
                     return defaultValue;
 
                 return g;
@@ -115,7 +112,7 @@ namespace TraceSpyService
         public static string FormatFileSize(long size, string byteName, string numberFormat, IFormatProvider formatProvider)
         {
             if (size < 0)
-                throw new ArgumentException(null, "size");
+                throw new ArgumentException(null, nameof(size));
 
             if (byteName == null)
             {
@@ -173,10 +170,11 @@ namespace TraceSpyService
             }
             return string.Format(formatProvider, "{0:" + numberFormat + "}" + suffix + byteName, dsize);
         }
+
         public static string GetConfiguration(this Assembly assembly)
         {
             if (assembly == null)
-                throw new ArgumentNullException("assembly");
+                throw new ArgumentNullException(nameof(assembly));
 
             object[] atts = assembly.GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false);
             if (atts != null && atts.Length > 0)
@@ -188,7 +186,7 @@ namespace TraceSpyService
         public static string GetInformationalVersion(this Assembly assembly)
         {
             if (assembly == null)
-                throw new ArgumentNullException("assembly");
+                throw new ArgumentNullException(nameof(assembly));
 
             object[] atts = assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
             if (atts != null && atts.Length > 0)
@@ -212,8 +210,7 @@ namespace TraceSpyService
             try
             {
                 CultureInfo culture;
-                int lcid;
-                if (int.TryParse(name, out lcid))
+                if (int.TryParse(name, out int lcid))
                 {
                     culture = new CultureInfo(lcid);
                 }

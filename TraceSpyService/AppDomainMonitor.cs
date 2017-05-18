@@ -39,7 +39,7 @@ namespace TraceSpyService
 
             MemoryUsage = AppDomain.CurrentDomain.MonitoringSurvivedMemorySize;
             
-            DateTime utcNow = DateTime.UtcNow;
+            var utcNow = DateTime.UtcNow;
             TimeSpan monitoringTotalProcessorTime = AppDomain.CurrentDomain.MonitoringTotalProcessorTime;
             CpuUsage = Math.Min(100, Math.Max(0, (int)(((monitoringTotalProcessorTime - _totalCpuTime).TotalMilliseconds * 100.0) / (utcNow - _LastCollectTime).TotalMilliseconds)));
             _totalCpuTime = monitoringTotalProcessorTime;

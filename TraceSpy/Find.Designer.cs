@@ -98,8 +98,8 @@
             this.comboBoxFind.Name = "comboBoxFind";
             this.comboBoxFind.Size = new System.Drawing.Size(255, 21);
             this.comboBoxFind.TabIndex = 1;
-            this.comboBoxFind.SelectedIndexChanged += new System.EventHandler(this.comboBoxFind_SelectedIndexChanged);
-            this.comboBoxFind.TextUpdate += new System.EventHandler(this.comboBoxFind_TextUpdate);
+            this.comboBoxFind.SelectedIndexChanged += new System.EventHandler(this.ComboBoxFind_SelectedIndexChanged);
+            this.comboBoxFind.TextUpdate += new System.EventHandler(this.ComboBoxFind_TextUpdate);
             // 
             // Find
             // 

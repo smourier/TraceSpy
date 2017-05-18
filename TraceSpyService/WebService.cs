@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
-using System.Security.Principal;
 using System.ServiceProcess;
-using System.Text;
-using System.Web;
 using TraceSpyService.Configuration;
 
 namespace TraceSpyService
@@ -178,7 +174,7 @@ namespace TraceSpyService
             {
                 response.StatusCode = statusCode;
                 response.StatusDescription = statusDescription;
-                using (StreamWriter writer = new StreamWriter(response.OutputStream))
+                using (var writer = new StreamWriter(response.OutputStream))
                 {
                     if (htmlBody != null)
                     {
@@ -206,7 +202,7 @@ namespace TraceSpyService
 
             if (!string.IsNullOrWhiteSpace(ServiceSection.Current.WebServer.Login))
             {
-                HttpListenerBasicIdentity basic = context.User.Identity as HttpListenerBasicIdentity;
+                var basic = context.User.Identity as HttpListenerBasicIdentity;
                 if (basic != null)
                 {
                     Host.Log(this, "OnAuthenticate Basic name: " + basic.Name);
@@ -243,7 +239,6 @@ namespace TraceSpyService
             _listener.BeginGetContext(ListenerCallback, null);
             
             HttpListenerContext context = _listener.EndGetContext(result);
-
             HttpListenerRequest request = context.Request;
             HttpListenerResponse response = context.Response;
 
@@ -348,7 +343,7 @@ namespace TraceSpyService
         //{
         //    StringBuilder sb = new StringBuilder();
         //    sb.AppendLine("<h1>TraceSpy Service - " + (Environment.Is64BitProcess ? "64" : "32") + "-bit - Build Number " + Assembly.GetExecutingAssembly().GetInformationalVersion() + "</h1>");
-        //    sb.AppendLine("Copyright (C) SoftFluent S.A.S 2012-" + DateTime.Now.Year + ". All rights reserved.");
+        //    sb.AppendLine("Copyright (C) Simon Mourier 2011-" + DateTime.Now.Year + ". All rights reserved.");
         //    sb.Append("<table cellspacing=\"0\">");
         //    AppendRow(sb, "Listener Buffer Capacity", Program._service._listenerService.Buffer.Capacity);
         //    AppendRow(sb, "Listener Buffer Count", Program._service._listenerService.Buffer.Count);
@@ -369,7 +364,7 @@ namespace TraceSpyService
 
         private void WriteAssemblyStream(HttpListenerContext context, string fileName)
         {
-            using (Stream stream = typeof(WebService).Assembly.GetManifestResourceStream("TraceSpyService.html." + fileName))
+            using (var stream = typeof(WebService).Assembly.GetManifestResourceStream("TraceSpyService.html." + fileName))
             {
                 if (stream == null)
                 {
@@ -377,7 +372,7 @@ namespace TraceSpyService
                     return;
                 }
 
-                DateTime ifModifiedSince = DateTime.MaxValue;
+                var ifModifiedSince = DateTime.MaxValue;
                 string ifm = context.Request.Headers["If-Modified-Since"];
                 //Host.Log(this, "WriteAssemblyStream ifm: " + ifm);
                 if (!string.IsNullOrEmpty(ifm))
@@ -536,8 +531,8 @@ namespace TraceSpyService
             context.Response.AddHeader("Cache-Control", "no-cache");
             if (path.StartsWith(DiagnosticsRequest, StringComparison.OrdinalIgnoreCase))
             {
-                DataContractJsonSerializer s = new DataContractJsonSerializer(typeof(JsonDiag));
-                JsonDiag diag = new JsonDiag();
+                var s = new DataContractJsonSerializer(typeof(JsonDiag));
+                var diag = new JsonDiag();
 
                 diag.Version = Assembly.GetExecutingAssembly().GetInformationalVersion() + " - " + Assembly.GetExecutingAssembly().GetConfiguration();
                 diag.Time = DateTime.UtcNow.ToString("r");
@@ -554,10 +549,10 @@ namespace TraceSpyService
                 diag.BufferTotalCount = Program._service._listenerService.Buffer.TotalCount;
                 diag.SessionId = Program._service._listenerService.SessionId.ToString("N");
 
-                List<JsonPrefix> prefixes = new List<JsonPrefix>();
+                var prefixes = new List<JsonPrefix>();
                 foreach (PrefixElement prefix in ServiceSection.Current.WebServer.Prefixes)
                 {
-                    JsonPrefix jp = new JsonPrefix();
+                    var jp = new JsonPrefix();
                     jp.Enabled = prefix.Enabled;
                     jp.Uri = prefix.Uri;
                     jp.BasePath = prefix.BasePath;
@@ -565,10 +560,10 @@ namespace TraceSpyService
                 }
                 diag.Prefixes = prefixes.ToArray();
 
-                List<JsonEtwProvider> providers = new List<JsonEtwProvider>();
+                var providers = new List<JsonEtwProvider>();
                 foreach (EtwProviderElement provider in ServiceSection.Current.EtwListener.Providers)
                 {
-                    JsonEtwProvider jpr = new JsonEtwProvider();
+                    var jpr = new JsonEtwProvider();
                     jpr.Enabled = provider.Enabled;
                     jpr.Description = provider.Description;
                     jpr.Guid = provider.Guid.ToString("N");
@@ -581,10 +576,9 @@ namespace TraceSpyService
             }
             else if (path.StartsWith(TracesRequest, StringComparison.OrdinalIgnoreCase))
             {
-                Guid sessionId;
-                long startIndex = GetStartIndex(path, out sessionId);
-                DataContractJsonSerializer s = new DataContractJsonSerializer(typeof(JsonTraces));
-                JsonTraces traces = new JsonTraces();
+                long startIndex = GetStartIndex(path, out Guid sessionId);
+                var s = new DataContractJsonSerializer(typeof(JsonTraces));
+                var traces = new JsonTraces();
                 traces.BufferCapacity = Program._service._listenerService.Buffer.Capacity;
                 traces.BufferCount = Program._service._listenerService.Buffer.Count;
                 traces.BufferTotalCount = Program._service._listenerService.Buffer.TotalCount;

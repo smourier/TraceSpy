@@ -12,7 +12,7 @@ namespace TraceSpy
         public Colorizers(Settings settings)
         {
             if (settings == null)
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
 
             _settings = settings;
             InitializeComponent();
@@ -58,7 +58,7 @@ namespace TraceSpy
 
         private static ListViewItem GetColorizerItem(Colorizer colorizer)
         {
-            ListViewItem item = new ListViewItem(colorizer.Active.ToString());
+            var item = new ListViewItem(colorizer.Active.ToString());
             item.SubItems.Add(colorizer.IgnoreCase.ToString());
             item.SubItems.Add(colorizer.Definition);
             item.Tag = colorizer;
@@ -67,7 +67,7 @@ namespace TraceSpy
 
         private static ListViewItem GetColorSetItem(ColorSet set)
         {
-            ListViewItem item = new ListViewItem(set.Name);
+            var item = new ListViewItem(set.Name);
             item.SubItems.Add(set.ForeColorName);
             item.SubItems.Add(set.BackColorName);
             item.SubItems.Add(set.Mode.ToString());
@@ -82,7 +82,7 @@ namespace TraceSpy
             {
                 foreach (ListViewItem item in listViewColorizers.Items)
                 {
-                    Colorizer colorizer = item.Tag as Colorizer;
+                    var colorizer = item.Tag as Colorizer;
                     if (colorizer != null)
                         yield return colorizer;
                 }
@@ -95,7 +95,7 @@ namespace TraceSpy
             {
                 foreach (ListViewItem item in listViewColorSets.Items)
                 {
-                    ColorSet set = item.Tag as ColorSet;
+                    var set = item.Tag as ColorSet;
                     if (set != null)
                         yield return set;
                 }
@@ -114,13 +114,13 @@ namespace TraceSpy
 
         private void ButtonAddColorizerClick(object sender, EventArgs e)
         {
-            ColorizerEdit edit = new ColorizerEdit(null);
-            DialogResult dr = edit.ShowDialog(this);
+            var edit = new ColorizerEdit(null);
+            var dr = edit.ShowDialog(this);
             listViewColorizers.Focus();
             if (dr != DialogResult.OK)
                 return;
 
-            Colorizer existing = GetExistingColorizer(edit.Colorizer);
+            var existing = GetExistingColorizer(edit.Colorizer);
             if (existing != null)
             {
                 GetColorizerItem(existing).Selected = true;
@@ -132,7 +132,7 @@ namespace TraceSpy
 
         private void ButtonRemoveColorizerClick(object sender, EventArgs e)
         {
-            Colorizer colorizer = GetSelectedColorizer();
+            var colorizer = GetSelectedColorizer();
             if (colorizer == null)
                 return;
 
@@ -141,24 +141,24 @@ namespace TraceSpy
 
         private void ButtonModifyColorizerClick(object sender, EventArgs e)
         {
-            Colorizer colorizer = GetSelectedColorizer();
+            var colorizer = GetSelectedColorizer();
             if (colorizer == null)
                 return;
 
-            ColorizerEdit edit = new ColorizerEdit(colorizer);
-            DialogResult dr = edit.ShowDialog(this);
+            var edit = new ColorizerEdit(colorizer);
+            var dr = edit.ShowDialog(this);
             listViewColorizers.Focus();
             if (dr != DialogResult.OK)
                 return;
 
-            Colorizer existing = GetExistingColorizer(edit.Colorizer);
+            var existing = GetExistingColorizer(edit.Colorizer);
             if ((existing != null) && (existing != edit.Colorizer))
             {
                 Remove(edit.Colorizer);
                 return;
             }
 
-            ListViewItem item = listViewColorizers.SelectedItems[0];
+            var item = listViewColorizers.SelectedItems[0];
             item.Text = edit.Colorizer.Active.ToString();
             item.SubItems[1].Text = edit.Colorizer.IgnoreCase.ToString();
             item.SubItems[2].Text = edit.Colorizer.Definition;
@@ -166,13 +166,13 @@ namespace TraceSpy
 
         private void ButtonAddColorSetClick(object sender, EventArgs e)
         {
-            ColorSetEdit edit = new ColorSetEdit(null, true);
-            DialogResult dr = edit.ShowDialog(this);
+            var edit = new ColorSetEdit(null, true);
+            var dr = edit.ShowDialog(this);
             listViewColorizers.Focus();
             if (dr != DialogResult.OK)
                 return;
 
-            ColorSet existing = GetExistingColorSet(edit.ColorSet);
+            var existing = GetExistingColorSet(edit.ColorSet);
             if (existing != null)
             {
                 GetColorSetItem(existing).Selected = true;
@@ -208,7 +208,7 @@ namespace TraceSpy
 
         private void ButtonRemoveColorSetClick(object sender, EventArgs e)
         {
-            ColorSet set = GetSelectedColorSet();
+            var set = GetSelectedColorSet();
             if (set == null)
                 return;
 
@@ -217,24 +217,24 @@ namespace TraceSpy
 
         private void ButtonModifyColorSetClick(object sender, EventArgs e)
         {
-            ColorSet set = GetSelectedColorSet();
+            var set = GetSelectedColorSet();
             if (set == null)
                 return;
 
-            ColorSetEdit edit = new ColorSetEdit(set, true);
-            DialogResult dr = edit.ShowDialog(this);
+            var edit = new ColorSetEdit(set, true);
+            var dr = edit.ShowDialog(this);
             listViewColorSets.Focus();
             if (dr != DialogResult.OK)
                 return;
 
-            ColorSet existing = GetExistingColorSet(edit.ColorSet);
+            var existing = GetExistingColorSet(edit.ColorSet);
             if ((existing != null) && (existing != edit.ColorSet))
             {
                 Remove(edit.ColorSet);
                 return;
             }
 
-            ListViewItem item = listViewColorSets.SelectedItems[0];
+            var item = listViewColorSets.SelectedItems[0];
             item.Text = edit.ColorSet.Name;
             item.SubItems[1].Text = edit.ColorSet.ForeColorName;
             item.SubItems[2].Text = edit.ColorSet.BackColorName;
@@ -254,11 +254,11 @@ namespace TraceSpy
 
         private void UpdateControls()
         {
-            Colorizer colorizer = GetSelectedColorizer();
+            var colorizer = GetSelectedColorizer();
             buttonRemoveColorizer.Enabled = colorizer != null;
             buttonModifyColorizer.Enabled = colorizer != null;
 
-            ColorSet set = GetSelectedColorSet();
+            var set = GetSelectedColorSet();
             buttonRemoveColorSet.Enabled = set != null;
             buttonModifyColorSet.Enabled = set != null;
         }

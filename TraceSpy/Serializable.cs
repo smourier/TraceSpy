@@ -29,14 +29,14 @@ namespace TraceSpy
         public static T Deserialize(string filePath, T defaultValue)
         {
             if (filePath == null)
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
 
             if (!File.Exists(filePath))
                 return defaultValue;
 
             try
             {
-                using (XmlTextReader reader = new XmlTextReader(filePath))
+                using (var reader = new XmlTextReader(filePath))
                 {
                     return Deserialize(reader, defaultValue);
                 }
@@ -63,11 +63,11 @@ namespace TraceSpy
         public static T Deserialize(Stream stream, T defaultValue)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
 
             try
             {
-                XmlSerializer deserializer = new XmlSerializer(typeof(T));
+                var deserializer = new XmlSerializer(typeof(T));
                 return (T)deserializer.Deserialize(stream);
             }
 #if DEBUG
@@ -92,11 +92,11 @@ namespace TraceSpy
         public static T Deserialize(TextReader reader, T defaultValue)
         {
             if (reader == null)
-                throw new ArgumentNullException("reader");
+                throw new ArgumentNullException(nameof(reader));
 
             try
             {
-                XmlSerializer deserializer = new XmlSerializer(typeof(T));
+                var deserializer = new XmlSerializer(typeof(T));
                 return (T)deserializer.Deserialize(reader);
             }
 #if DEBUG
@@ -121,11 +121,11 @@ namespace TraceSpy
         public static T Deserialize(XmlReader reader, T defaultValue)
         {
             if (reader == null)
-                throw new ArgumentNullException("reader");
+                throw new ArgumentNullException(nameof(reader));
 
             try
             {
-                XmlSerializer deserializer = new XmlSerializer(typeof(T));
+                var deserializer = new XmlSerializer(typeof(T));
                 return (T)deserializer.Deserialize(reader);
             }
 #if DEBUG
@@ -150,41 +150,42 @@ namespace TraceSpy
         public void Serialize(XmlWriter writer)
         {
             if (writer == null)
-                throw new ArgumentNullException("writer");
+                throw new ArgumentNullException(nameof(writer));
 
-            XmlSerializer serializer = new XmlSerializer(GetType());
+            var serializer = new XmlSerializer(GetType());
             serializer.Serialize(writer, this);
         }
 
         public void Serialize(TextWriter writer)
         {
             if (writer == null)
-                throw new ArgumentNullException("writer");
+                throw new ArgumentNullException(nameof(writer));
 
-            XmlSerializer serializer = new XmlSerializer(GetType());
+            var serializer = new XmlSerializer(GetType());
             serializer.Serialize(writer, this);
         }
 
         public void Serialize(Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
 
-            XmlSerializer serializer = new XmlSerializer(GetType());
+            var serializer = new XmlSerializer(GetType());
             serializer.Serialize(stream, this);
         }
 
         public void Serialize(string filePath)
         {
             if (filePath == null)
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
 
             string dir = Path.GetDirectoryName(filePath);
-            if ((dir !=null) && (!Directory.Exists(dir)))
+            if (dir != null && !Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
             }
-            using (XmlTextWriter writer = new XmlTextWriter(filePath, Encoding.UTF8))
+
+            using (var writer = new XmlTextWriter(filePath, Encoding.UTF8))
             {
                 Serialize(writer);
             }
@@ -192,7 +193,7 @@ namespace TraceSpy
 
         public T Clone()
         {
-            using (MemoryStream stream = new MemoryStream())
+            using (var stream = new MemoryStream())
             {
                 Serialize(stream);
                 stream.Position = 0;

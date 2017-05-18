@@ -41,7 +41,7 @@ namespace TraceSpyService
         public static bool AttachConsole(Process process)
         {
             if (process == null)
-                throw new ArgumentNullException("process");
+                throw new ArgumentNullException(nameof(process));
 
             return AttachConsole(process.Id);
         }

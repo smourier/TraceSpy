@@ -89,7 +89,7 @@
             this.checkBoxActive.TabIndex = 6;
             this.checkBoxActive.Text = "Active";
             this.checkBoxActive.UseVisualStyleBackColor = true;
-            this.checkBoxActive.CheckedChanged += new System.EventHandler(this.checkBoxActive_CheckedChanged);
+            this.checkBoxActive.CheckedChanged += new System.EventHandler(this.CheckBoxActive_CheckedChanged);
             // 
             // textBoxGuid
             // 
@@ -97,7 +97,7 @@
             this.textBoxGuid.Name = "textBoxGuid";
             this.textBoxGuid.Size = new System.Drawing.Size(385, 20);
             this.textBoxGuid.TabIndex = 1;
-            this.textBoxGuid.TextChanged += new System.EventHandler(this.textBoxGuid_TextChanged);
+            this.textBoxGuid.TextChanged += new System.EventHandler(this.TextBoxGuid_TextChanged);
             // 
             // label1
             // 
@@ -124,8 +124,8 @@
             this.comboBoxLevels.Name = "comboBoxLevels";
             this.comboBoxLevels.Size = new System.Drawing.Size(206, 21);
             this.comboBoxLevels.TabIndex = 5;
-            this.comboBoxLevels.SelectedIndexChanged += new System.EventHandler(this.comboBoxLevels_SelectedIndexChanged);
-            this.comboBoxLevels.TextUpdate += new System.EventHandler(this.comboBoxLevels_TextUpdate);
+            this.comboBoxLevels.SelectedIndexChanged += new System.EventHandler(this.ComboBoxLevels_SelectedIndexChanged);
+            this.comboBoxLevels.TextUpdate += new System.EventHandler(this.ComboBoxLevels_TextUpdate);
             // 
             // EtwProviderEdit
             // 

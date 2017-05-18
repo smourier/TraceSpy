@@ -19,17 +19,17 @@ namespace TraceSpy
 
         internal static void ComputeQuickColorizersColorRanges(List<ColorRange> ranges, Settings settings, string line)
         {
-            QuickColorizer[] colorizers = settings.QuickColorizers;
+            var colorizers = settings.QuickColorizers;
             if (colorizers == null || colorizers.Length == 0)
                 return;
 
             Main.Log("QCCR colorizers:" + colorizers.Length);
-            foreach (QuickColorizer colorizer in colorizers)
+            foreach (var colorizer in colorizers)
             {
                 if (!colorizer.Active || string.IsNullOrEmpty(colorizer.Text))
                     continue;
 
-                StringComparison sc = colorizer.IgnoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+                var sc = colorizer.IgnoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
                 int index = line.IndexOf(colorizer.Text, sc);
                 Main.Log("QCCR test qc:" + colorizer + " sc:" + sc + " index:" + index);
                 if (index < 0)
@@ -55,7 +55,7 @@ namespace TraceSpy
                 }
 
                 Main.Log("QCCR match '" + line +  "'");
-                ColorRange range = CreateColorRange(colorizer.ColorSet, index, colorizer.Text.Length, line);
+                var range = CreateColorRange(colorizer.ColorSet, index, colorizer.Text.Length, line);
                 ranges.Add(range);
             }
             ranges.Sort();
@@ -77,7 +77,7 @@ namespace TraceSpy
 
         internal static void ComputeColorizersColorRanges(List<ColorRange> ranges, Settings settings, string line)
         {
-            Colorizer[] colorizers = settings.Colorizers;
+            var colorizers = settings.Colorizers;
             if (colorizers == null || colorizers.Length == 0 || settings.ColorSets == null || settings.ColorSets.Length == 0)
                 return;
 
@@ -118,7 +118,7 @@ namespace TraceSpy
 
         private static ColorRange CreateColorRange(ColorSet colorset, int startIndex, int length, string line)
         {
-            ColorRange range = new ColorRange(colorset, startIndex, length);
+            var range = new ColorRange(colorset, startIndex, length);
 #if DEBUG
             System.Diagnostics.Debug.Assert(startIndex >= 0);
             System.Diagnostics.Debug.Assert(length > 0);
@@ -134,8 +134,8 @@ namespace TraceSpy
             // create intermediate null range
             // note: overlapped match will create undetermined results...
             int lastCovered = 0;
-            List<ColorRange> newRanges = new List<ColorRange>();
-            foreach (ColorRange range in ranges)
+            var newRanges = new List<ColorRange>();
+            foreach (var range in ranges)
             {
                 if (range.StartIndex > lastCovered)
                 {
@@ -162,7 +162,7 @@ namespace TraceSpy
         private static void Dump(List<ColorRange> ranges, string text, string line)
         {
             Main.Log(text + "CCCR Ranges:" + ranges.Count);
-            foreach (ColorRange range in ranges)
+            foreach (var range in ranges)
             {
                 Main.Log("CCCR  range:" + range + " colorset:" + range.ColorSet + " startIndex:" + range.StartIndex + " length:" + range.Length);
                 Main.Log("CCCR   text:'" + line.Substring(range.StartIndex, range.Length) + "'");
@@ -209,7 +209,7 @@ namespace TraceSpy
         public int CompareTo(ColorRange other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             return StartIndex.CompareTo(other.StartIndex);
         }

@@ -12,7 +12,7 @@ namespace TraceSpy
         public EtwProviders(Settings settings)
         {
             if (settings == null)
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
 
             _settings = settings;
             InitializeComponent();
@@ -29,7 +29,7 @@ namespace TraceSpy
 
         private static ListViewItem GetItem(EtwProvider provider)
         {
-            ListViewItem item = new ListViewItem(provider.Active.ToString());
+            var item = new ListViewItem(provider.Active.ToString());
             item.SubItems.Add(provider.ProviderGuid.ToString());
             item.SubItems.Add(provider.Description ?? string.Empty);
             item.SubItems.Add(provider.TraceLevel.ToString());
@@ -40,9 +40,9 @@ namespace TraceSpy
         private void LoadProviders()
         {
             listView.Items.Clear();
-            foreach (EtwProvider provider in _settings.EtwProviders)
+            foreach (var provider in _settings.EtwProviders)
             {
-                ListViewItem item = GetItem(provider);
+                var item = GetItem(provider);
                 listView.Items.Add(item);
             }
         }
@@ -57,7 +57,7 @@ namespace TraceSpy
 
         private void UpdateControls()
         {
-            EtwProvider provider = GetSelectedEtwProvider();
+            var provider = GetSelectedEtwProvider();
             buttonRemove.Enabled = provider != null;
             buttonModify.Enabled = provider != null;
         }
@@ -73,7 +73,7 @@ namespace TraceSpy
             {
                 foreach (ListViewItem item in listView.Items)
                 {
-                    EtwProvider provider = item.Tag as EtwProvider;
+                    var provider = item.Tag as EtwProvider;
                     if (provider != null)
                         yield return provider;
                 }
@@ -82,13 +82,13 @@ namespace TraceSpy
 
         private void ButtonAddClick(object sender, EventArgs e)
         {
-            EtwProviderEdit edit = new EtwProviderEdit(null);
-            DialogResult dr = edit.ShowDialog(this);
+            var edit = new EtwProviderEdit(null);
+            var dr = edit.ShowDialog(this);
             listView.Focus();
             if (dr != DialogResult.OK)
                 return;
 
-            EtwProvider existing = GetExisting(edit.EtwProvider);
+            var existing = GetExisting(edit.EtwProvider);
             if (existing != null)
             {
                 GetItem(existing).Selected = true;
@@ -112,7 +112,7 @@ namespace TraceSpy
 
         private void ButtonRemoveClick(object sender, EventArgs e)
         {
-            EtwProvider provider = GetSelectedEtwProvider();
+            var provider = GetSelectedEtwProvider();
             if (provider == null)
                 return;
 
@@ -121,24 +121,24 @@ namespace TraceSpy
 
         private void ButtonModifyClick(object sender, EventArgs e)
         {
-            EtwProvider provider = GetSelectedEtwProvider();
+            var provider = GetSelectedEtwProvider();
             if (provider == null)
                 return;
 
-            EtwProviderEdit edit = new EtwProviderEdit(provider);
-            DialogResult dr = edit.ShowDialog(this);
+            var edit = new EtwProviderEdit(provider);
+            var dr = edit.ShowDialog(this);
             listView.Focus();
             if (dr != DialogResult.OK)
                 return;
 
-            EtwProvider existing = GetExisting(edit.EtwProvider);
+            var existing = GetExisting(edit.EtwProvider);
             if ((existing != null) && (existing != edit.EtwProvider))
             {
                 Remove(edit.EtwProvider);
                 return;
             }
 
-            ListViewItem item = listView.SelectedItems[0];
+            var item = listView.SelectedItems[0];
             item.Text = edit.EtwProvider.Active.ToString();
             item.SubItems[1].Text = edit.EtwProvider.ProviderGuid.ToString();
             item.SubItems[2].Text = edit.EtwProvider.Description;

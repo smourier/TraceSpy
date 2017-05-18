@@ -95,14 +95,14 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
-            this.fileToolStripMenuItem.DropDownOpening += new System.EventHandler(this.fileToolStripMenuItem_DropDownOpening);
+            this.fileToolStripMenuItem.DropDownOpening += new System.EventHandler(this.FileToolStripMenuItem_DropDownOpening);
             // 
             // restartAsAdministratorToolStripMenuItem
             // 
             this.restartAsAdministratorToolStripMenuItem.Name = "restartAsAdministratorToolStripMenuItem";
             this.restartAsAdministratorToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.restartAsAdministratorToolStripMenuItem.Text = "Restart as Administrator";
-            this.restartAsAdministratorToolStripMenuItem.Click += new System.EventHandler(this.restartAsAdministratorToolStripMenuItem_Click);
+            this.restartAsAdministratorToolStripMenuItem.Click += new System.EventHandler(this.RestartAsAdministratorToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
             // 
@@ -122,14 +122,14 @@
             this.captureOnToolStripMenuItem.Name = "captureOnToolStripMenuItem";
             this.captureOnToolStripMenuItem.Size = new System.Drawing.Size(104, 20);
             this.captureOnToolStripMenuItem.Text = "Stop Capture";
-            this.captureOnToolStripMenuItem.Click += new System.EventHandler(this.captureOnToolStripMenuItem_Click);
+            this.captureOnToolStripMenuItem.Click += new System.EventHandler(this.CaptureOnToolStripMenuItem_Click);
             // 
             // ETWCaptureOnToolStripMenuItem
             // 
             this.ETWCaptureOnToolStripMenuItem.Name = "ETWCaptureOnToolStripMenuItem";
             this.ETWCaptureOnToolStripMenuItem.Size = new System.Drawing.Size(115, 20);
             this.ETWCaptureOnToolStripMenuItem.Text = "Stop ETW Capture";
-            this.ETWCaptureOnToolStripMenuItem.Click += new System.EventHandler(this.stopETWCaptureToolStripMenuItem_Click);
+            this.ETWCaptureOnToolStripMenuItem.Click += new System.EventHandler(this.StopETWCaptureToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -203,7 +203,7 @@
             this.quickColorizersToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
             this.quickColorizersToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
             this.quickColorizersToolStripMenuItem.Text = "Quick Colorizers...";
-            this.quickColorizersToolStripMenuItem.Click += new System.EventHandler(this.quickColorizersToolStripMenuItem_Click);
+            this.quickColorizersToolStripMenuItem.Click += new System.EventHandler(this.QuickColorizersToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -267,7 +267,7 @@
             this.captureToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
             this.captureToolStripMenuItem.Size = new System.Drawing.Size(300, 22);
             this.captureToolStripMenuItem.Text = "&Capture OutputDebugString Events";
-            this.captureToolStripMenuItem.Click += new System.EventHandler(this.captureToolStripMenuItem_Click);
+            this.captureToolStripMenuItem.Click += new System.EventHandler(this.CaptureToolStripMenuItem_Click);
             // 
             // captureETWProvidersTracesToolStripMenuItem
             // 
@@ -275,14 +275,14 @@
             this.captureETWProvidersTracesToolStripMenuItem.Name = "captureETWProvidersTracesToolStripMenuItem";
             this.captureETWProvidersTracesToolStripMenuItem.Size = new System.Drawing.Size(300, 22);
             this.captureETWProvidersTracesToolStripMenuItem.Text = "Capture ETW Providers Traces";
-            this.captureETWProvidersTracesToolStripMenuItem.Click += new System.EventHandler(this.captureETWProvidersTracesToolStripMenuItem_Click);
+            this.captureETWProvidersTracesToolStripMenuItem.Click += new System.EventHandler(this.CaptureETWProvidersTracesToolStripMenuItem_Click);
             // 
             // eTWProvidersToolStripMenuItem
             // 
             this.eTWProvidersToolStripMenuItem.Name = "eTWProvidersToolStripMenuItem";
             this.eTWProvidersToolStripMenuItem.Size = new System.Drawing.Size(300, 22);
             this.eTWProvidersToolStripMenuItem.Text = "ETW Providers...";
-            this.eTWProvidersToolStripMenuItem.Click += new System.EventHandler(this.eTWProvidersToolStripMenuItem_Click);
+            this.eTWProvidersToolStripMenuItem.Click += new System.EventHandler(this.ETWProvidersToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -325,7 +325,7 @@
             this.showProcessIdToolStripMenuItem.Name = "showProcessIdToolStripMenuItem";
             this.showProcessIdToolStripMenuItem.Size = new System.Drawing.Size(300, 22);
             this.showProcessIdToolStripMenuItem.Text = "Show Process Id";
-            this.showProcessIdToolStripMenuItem.Click += new System.EventHandler(this.showProcessIdToolStripMenuItem_Click);
+            this.showProcessIdToolStripMenuItem.Click += new System.EventHandler(this.ShowProcessIdToolStripMenuItem_Click);
             // 
             // showETWDescriptionToolStripMenuItem
             // 
@@ -333,7 +333,7 @@
             this.showETWDescriptionToolStripMenuItem.Name = "showETWDescriptionToolStripMenuItem";
             this.showETWDescriptionToolStripMenuItem.Size = new System.Drawing.Size(300, 22);
             this.showETWDescriptionToolStripMenuItem.Text = "Show ETW Description";
-            this.showETWDescriptionToolStripMenuItem.Click += new System.EventHandler(this.showETWDescriptionToolStripMenuItem_Click);
+            this.showETWDescriptionToolStripMenuItem.Click += new System.EventHandler(this.ShowETWDescriptionToolStripMenuItem_Click);
             // 
             // showTooltipsToolStripMenuItem
             // 
@@ -341,7 +341,7 @@
             this.showTooltipsToolStripMenuItem.Name = "showTooltipsToolStripMenuItem";
             this.showTooltipsToolStripMenuItem.Size = new System.Drawing.Size(300, 22);
             this.showTooltipsToolStripMenuItem.Text = "Show Tooltips";
-            this.showTooltipsToolStripMenuItem.Click += new System.EventHandler(this.showTooltipsToolStripMenuItem_Click);
+            this.showTooltipsToolStripMenuItem.Click += new System.EventHandler(this.ShowTooltipsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -354,7 +354,7 @@
             this.dontAnimateCaptureMenuItemToolStripMenuItem.Name = "dontAnimateCaptureMenuItemToolStripMenuItem";
             this.dontAnimateCaptureMenuItemToolStripMenuItem.Size = new System.Drawing.Size(300, 22);
             this.dontAnimateCaptureMenuItemToolStripMenuItem.Text = "Don\'t Animate Capture Menu Items";
-            this.dontAnimateCaptureMenuItemToolStripMenuItem.Click += new System.EventHandler(this.dontAnimateCaptureMenuItemToolStripMenuItem_Click);
+            this.dontAnimateCaptureMenuItemToolStripMenuItem.Click += new System.EventHandler(this.DontAnimateCaptureMenuItemToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -388,7 +388,7 @@
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.saveAsToolStripMenuItem.Text = "Save As...";
-            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
@@ -396,7 +396,7 @@
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
@@ -404,7 +404,7 @@
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.openToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.openToolStripMenuItem.Text = "Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // toolStripSeparator8
             // 
@@ -416,7 +416,7 @@
             this.viewConfigurationFileToolStripMenuItem.Name = "viewConfigurationFileToolStripMenuItem";
             this.viewConfigurationFileToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.viewConfigurationFileToolStripMenuItem.Text = "Open Configuration File";
-            this.viewConfigurationFileToolStripMenuItem.Click += new System.EventHandler(this.viewConfigurationFileToolStripMenuItem_Click);
+            this.viewConfigurationFileToolStripMenuItem.Click += new System.EventHandler(this.ViewConfigurationFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator9
             // 
@@ -428,7 +428,7 @@
             this.openConfigurationDirectoryToolStripMenuItem.Name = "openConfigurationDirectoryToolStripMenuItem";
             this.openConfigurationDirectoryToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
             this.openConfigurationDirectoryToolStripMenuItem.Text = "Open Configuration Directory";
-            this.openConfigurationDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openConfigurationDirectoryToolStripMenuItem_Click);
+            this.openConfigurationDirectoryToolStripMenuItem.Click += new System.EventHandler(this.OpenConfigurationDirectoryToolStripMenuItem_Click);
             // 
             // Main
             // 

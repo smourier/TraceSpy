@@ -91,11 +91,11 @@ namespace TraceSpyService
 
 		public static bool FlashConsoleWindow()
 		{
-			IntPtr hwnd = GetConsoleWindow();
+            var hwnd = GetConsoleWindow();
 			if (hwnd == IntPtr.Zero)
 				return false;
 
-			FLASHWINFO fw = new FLASHWINFO();
+            var fw = new FLASHWINFO();
 			fw.cbSize = Marshal.SizeOf(fw);
 			fw.hwnd = hwnd;
 			fw.dwFlags = FLASHFLAGS.FLASHW_CAPTION | FLASHFLAGS.FLASHW_TRAY | FLASHFLAGS.FLASHW_TIMERNOFG;
@@ -111,11 +111,7 @@ namespace TraceSpyService
 
 		private void OnEvent(ConsoleEventType consoleEvent)
 		{
-            EventHandler<ConsoleControlEventArgs> handler = Event;
-            if (handler != null)
-			{
-                handler(this, new ConsoleControlEventArgs(consoleEvent));
-			}
-		}
+            Event?.Invoke(this, new ConsoleControlEventArgs(consoleEvent));
+        }
 	}
 }

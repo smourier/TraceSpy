@@ -1,8 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using System.Threading;
+using System.Runtime.InteropServices;
 
 #if TRACESPY_SERVICE
 namespace TraceSpyService
@@ -31,13 +30,13 @@ namespace TraceSpy
         public EventRealtimeListener(Guid providerGuid, string sessionName, EtwTraceLevel level, long keyword)
         {
             if (providerGuid == Guid.Empty)
-                throw new ArgumentException(null, "guid");
+                throw new ArgumentException(null, nameof(providerGuid));
 
             if (sessionName == null)
-                throw new ArgumentNullException("sessionName");
+                throw new ArgumentNullException(nameof(sessionName));
 
             _cb = OnEvent;
-            
+
             ProviderGuid = providerGuid;
             SessionName = sessionName;
 
@@ -89,7 +88,7 @@ namespace TraceSpy
 
         public static void ProcessTraces(Guid providerGuid, string sessionName, EtwTraceLevel level, long keyword)
         {
-            using (EventRealtimeListener listener = new EventRealtimeListener(providerGuid, sessionName, level, keyword))
+            using (var listener = new EventRealtimeListener(providerGuid, sessionName, level, keyword))
             {
                 listener.ProcessTraces();
             }
@@ -117,7 +116,7 @@ namespace TraceSpy
                 return;
             }
 
-            EVENT_TRACE_LOGFILE etl = new EVENT_TRACE_LOGFILE();
+            var etl = new EVENT_TRACE_LOGFILE();
             etl.EventCallback = _cb;
             etl.LoggerName = SessionName;
             etl.ProcessTraceMode = PROCESS_TRACE_MODE_REAL_TIME;
@@ -140,7 +139,7 @@ namespace TraceSpy
         private IntPtr BuildProperties(bool stopping, out int size)
         {
             IntPtr properties;
-            EVENT_TRACE_PROPERTIES prop = new EVENT_TRACE_PROPERTIES();
+            var prop = new EVENT_TRACE_PROPERTIES();
             if (stopping)
             {
                 size = Marshal.SizeOf(typeof(EVENT_TRACE_PROPERTIES)) + (1024 + 1) * 2;
@@ -172,11 +171,7 @@ namespace TraceSpy
 
         private void OnRealtimeEvent(int processId, int threadId, string s)
         {
-            var handler = RealtimeEvent;
-            if (handler != null)
-            {
-                handler(this, new RealtimeEventArgs(processId, threadId, s));
-            }
+            RealtimeEvent?.Invoke(this, new RealtimeEventArgs(processId, threadId, s));
         }
 
         private void OnEvent(ref EVENT_TRACE eventRecord)
@@ -190,20 +185,18 @@ namespace TraceSpy
 
         private void StopTrace2()
         {
-            int count;
-            IntPtr[] a = new IntPtr[64];
+            var a = new IntPtr[64];
             for (int i = 0; i < a.Length; i++)
             {
-                int size;
-                a[i] = BuildProperties(true, out size);
+                a[i] = BuildProperties(true, out int size);
             }
 
-            int hr = QueryAllTraces(a, a.Length, out count);
+            int hr = QueryAllTraces(a, a.Length, out int count);
             if (hr == 0)
             {
                 for (int i = 0; i < count; i++)
                 {
-                    EVENT_TRACE_PROPERTIES propi = (EVENT_TRACE_PROPERTIES)Marshal.PtrToStructure(a[i], typeof(EVENT_TRACE_PROPERTIES));
+                    var propi = (EVENT_TRACE_PROPERTIES)Marshal.PtrToStructure(a[i], typeof(EVENT_TRACE_PROPERTIES));
                     if (propi.Wnode.Guid == ProviderGuid)
                     {
                         StopTrace(propi.Wnode.HistoricalContext, null, a[i]);
@@ -219,8 +212,7 @@ namespace TraceSpy
 
         private void StopTrace()
         {
-            int size;
-            IntPtr props = BuildProperties(true, out size);
+            IntPtr props = BuildProperties(true, out int size);
             try
             {
                 if (StopTrace(0, SessionName, props) != 0)
@@ -367,7 +359,7 @@ namespace TraceSpy
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         private struct EVENT_TRACE_LOGFILE
         {
-            [MarshalAs(UnmanagedType.LPWStr)] 
+            [MarshalAs(UnmanagedType.LPWStr)]
             public string LogFileName;
             [MarshalAs(UnmanagedType.LPWStr)]
             public string LoggerName;

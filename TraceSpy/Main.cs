@@ -108,7 +108,7 @@ namespace TraceSpy
 
             listView = new ListViewEx();
             listView.Columns.AddRange(new [] { columnHeaderIndex, columnHeaderTime, columnHeaderPid, columnHeaderText});
-            listView.DoubleClick += listView_DoubleClick;
+            listView.DoubleClick += ListView_DoubleClick;
             Controls.Add(this.listView);
             listView.AutoArrange = false;
             listView.Dock = DockStyle.Fill;
@@ -328,7 +328,7 @@ namespace TraceSpy
                 e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
             }
 
-            StringFormat format = StringFormat.GenericTypographic;
+            var format = StringFormat.GenericTypographic;
             format.FormatFlags = StringFormatFlags.LineLimit | StringFormatFlags.FitBlackBox | StringFormatFlags.MeasureTrailingSpaces;
             format.Trimming = StringTrimming.EllipsisCharacter;
             format.SetTabStops(0, new[] { _settings.TabSize });
@@ -353,7 +353,7 @@ namespace TraceSpy
                 }
 
                 SizeF size = e.Graphics.MeasureString(chunk, font, new PointF(), format);
-                RectangleF layout = new RectangleF(x, y + (e.Bounds.Height - size.Height) / 2, e.Bounds.Width - (x - e.Bounds.X), e.Bounds.Height);
+                var layout = new RectangleF(x, y + (e.Bounds.Height - size.Height) / 2, e.Bounds.Width - (x - e.Bounds.X), e.Bounds.Height);
                 if (range.ColorSet != null)
                 {
                     if (x + size.Width < e.Bounds.Right)
@@ -375,7 +375,7 @@ namespace TraceSpy
                 }
                 else
                 {
-                    using (Brush brush = new SolidBrush(listView.ForeColor))
+                    using (var brush = new SolidBrush(listView.ForeColor))
                     {
                         e.Graphics.DrawString(chunk, font, brush, layout, format);
                     }
@@ -584,7 +584,7 @@ namespace TraceSpy
 
         internal void Enqueue(int pid, string text, string description)
         {
-            Line line = new Line();
+            var line = new Line();
             line.Index = _id++;
             line.Pid = pid;
             line.Text = text;
@@ -776,14 +776,14 @@ namespace TraceSpy
 
         private void FiltersToolStripMenuItemClick(object sender, EventArgs e)
         {
-            Filters dlg = new Filters(_settings);
+            var dlg = new Filters(_settings);
             if (dlg.ShowDialog(this) != DialogResult.OK)
                 return;
         }
 
         private void AboutToolStripMenuItemClick(object sender, EventArgs e)
         {
-            About about = new About();
+            var about = new About();
             about.ShowDialog(this);
         }
 
@@ -817,9 +817,9 @@ namespace TraceSpy
 
         private void CopyAllLineToolStripMenuItemClick(object sender, EventArgs e)
         {
-            StringBuilder text = new StringBuilder();
+            var text = new StringBuilder();
             int count = 0;
-            foreach (TextLine line in SelectedLines)
+            foreach (var line in SelectedLines)
             {
                 text.Append(line.Index);
                 text.Append('\t');
@@ -838,9 +838,9 @@ namespace TraceSpy
 
         private void CopyToolStripMenuItemClick(object sender, EventArgs e)
         {
-            StringBuilder text = new StringBuilder();
+            var text = new StringBuilder();
             int count = 0;
-            foreach (TextLine line in SelectedLines)
+            foreach (var line in SelectedLines)
             {
                 text.AppendLine(line.Text);
                 count++;
@@ -861,7 +861,7 @@ namespace TraceSpy
 
             public static TextLine FromItem(ListViewItem item)
             {
-                TextLine line = new TextLine();
+                var line = new TextLine();
                 line.Index = item.Text;
                 line.Ticks = item.SubItems[1].Text;
                 line.ProcessName = item.SubItems[2].Text;
@@ -937,17 +937,17 @@ namespace TraceSpy
             UpdateShowProcessOptions();
         }
 
-        private void showProcessIdToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ShowProcessIdToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UpdateShowProcessOptions();
         }
 
-        private void showETWDescriptionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ShowETWDescriptionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UpdateShowProcessOptions();
         }
 
-        private void showTooltipsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ShowTooltipsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _settings.ShowTooltips = showTooltipsToolStripMenuItem.Checked;
             _settings.SerializeToConfiguration();
@@ -955,7 +955,7 @@ namespace TraceSpy
 
         private void FontToolStripMenuItemClick(object sender, EventArgs e)
         {
-            FontDialog dlg = new FontDialog();
+            var dlg = new FontDialog();
             dlg.Font = listView.Font;
             if (dlg.ShowDialog(this) != DialogResult.OK)
                 return;
@@ -979,14 +979,14 @@ namespace TraceSpy
 
         private void ColorizersToolStripMenuItemClick(object sender, EventArgs e)
         {
-            Colorizers dlg = new Colorizers(_settings);
+            var dlg = new Colorizers(_settings);
             if (dlg.ShowDialog(this) != DialogResult.OK)
                 return;
         }
 
-        private void quickColorizersToolStripMenuItem_Click(object sender, EventArgs e)
+        private void QuickColorizersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            QuickColorizers dlg = new QuickColorizers(_settings);
+            var dlg = new QuickColorizers(_settings);
             if (dlg.ShowDialog(this) != DialogResult.OK)
                 return;
         }
@@ -1018,7 +1018,7 @@ namespace TraceSpy
             ETWCaptureOnToolStripMenuItem.ForeColor = _settings.CaptureEtwTraces ? Color.Red : Color.Green;
         }
 
-        private void captureToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CaptureToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _settings.CaptureOutputDebugString = captureToolStripMenuItem.Checked;
             _settings.SerializeToConfiguration();
@@ -1026,7 +1026,7 @@ namespace TraceSpy
             UpdateControls();
         }
 
-        private void captureOnToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CaptureOnToolStripMenuItem_Click(object sender, EventArgs e)
         {
             captureToolStripMenuItem.Checked = !captureToolStripMenuItem.Checked;
             _settings.CaptureOutputDebugString = captureToolStripMenuItem.Checked;
@@ -1034,7 +1034,7 @@ namespace TraceSpy
             UpdateControls();
         }
 
-        private void stopETWCaptureToolStripMenuItem_Click(object sender, EventArgs e)
+        private void StopETWCaptureToolStripMenuItem_Click(object sender, EventArgs e)
         {
             captureETWProvidersTracesToolStripMenuItem.Checked = !captureETWProvidersTracesToolStripMenuItem.Checked;
             _settings.CaptureEtwTraces = captureETWProvidersTracesToolStripMenuItem.Checked;
@@ -1043,7 +1043,7 @@ namespace TraceSpy
             UpdateControls();
         }
 
-        private void dontAnimateCaptureMenuItemToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DontAnimateCaptureMenuItemToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _settings.DontAnimateCaptureMenuItem = dontAnimateCaptureMenuItemToolStripMenuItem.Checked;
             _settings.SerializeToConfiguration();
@@ -1052,16 +1052,16 @@ namespace TraceSpy
             ETWCaptureOnToolStripMenuItem.Image = _settings.DontAnimateCaptureMenuItem ? null : _animatedGif;
         }
 
-        private void eTWProvidersToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ETWProvidersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EtwProviders dlg = new EtwProviders(_settings);
+            var dlg = new EtwProviders(_settings);
             if (dlg.ShowDialog(this) != DialogResult.OK)
                 return;
 
             UpdateEtwEvents();
         }
 
-        private void captureETWProvidersTracesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CaptureETWProvidersTracesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _settings.CaptureEtwTraces = captureETWProvidersTracesToolStripMenuItem.Checked;
             _settings.SerializeToConfiguration();
@@ -1105,12 +1105,12 @@ namespace TraceSpy
                     if (provider.ProviderGuid == Guid.Empty)
                         continue;
 
-                    EtwTraceLevel level = (EtwTraceLevel)provider.TraceLevel;
+                    var level = (EtwTraceLevel)provider.TraceLevel;
 
                     listener = new EventRealtimeListener(provider.ProviderGuid, provider.ProviderGuid.ToString(), level);
                     listener.Description = provider.Description;
-                    
-                    Thread t = new Thread(ProcessEtwTrace);
+
+                    var t = new Thread(ProcessEtwTrace);
                     t.Start(listener);
 
                     listener.RealtimeEvent += OnEtwListenerRealtimeEvent;
@@ -1153,14 +1153,14 @@ namespace TraceSpy
             }
         }
 
-        private void fileToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        private void FileToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
             restartAsAdministratorToolStripMenuItem.Image = ShieldImage;
             bool admin = UacUtilities.IsAdministrator();
             restartAsAdministratorToolStripMenuItem.Enabled = !admin;
         }
 
-        private void restartAsAdministratorToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RestartAsAdministratorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (UacUtilities.RestartAsAdmin(true))
             {
@@ -1168,7 +1168,7 @@ namespace TraceSpy
             }
         }
 
-        private void listView_DoubleClick(object sender, EventArgs e)
+        private void ListView_DoubleClick(object sender, EventArgs e)
         {
             if (listView.SelectedItems.Count == 0)
                 return;
@@ -1184,13 +1184,13 @@ namespace TraceSpy
                 item = listView.Items[index];
             }
 
-            RecordView dlg = new RecordView(item);
+            var dlg = new RecordView(item);
             dlg.ShowDialog();
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
+            var dlg = new OpenFileDialog();
             dlg.AddExtension = true;
             dlg.CheckFileExists = true;
             dlg.CheckPathExists = true;
@@ -1206,11 +1206,11 @@ namespace TraceSpy
             Open(dlg.FileName);
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_saveFilePath == null)
             {
-                saveAsToolStripMenuItem_Click(sender, e);
+                SaveAsToolStripMenuItem_Click(sender, e);
                 return;
             }
 
@@ -1220,7 +1220,7 @@ namespace TraceSpy
         private void Open(string filePath)
         {
             listView.Items.Clear();
-            using (StreamReader reader = new StreamReader(filePath))
+            using (var reader = new StreamReader(filePath))
             {
                 do
                 {
@@ -1231,7 +1231,7 @@ namespace TraceSpy
                     string[] split = line.Split(new[] { '\t' }, 4);
                     if (split.Length > 0)
                     {
-                        ListViewItem item = new ListViewItem(split[0]);
+                        var item = new ListViewItem(split[0]);
                         if (split.Length > 1)
                         {
                             item.SubItems.Add(split[1]);
@@ -1253,7 +1253,7 @@ namespace TraceSpy
 
         private void Save(string filePath)
         {
-            using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
+            using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
             {
                 foreach (ListViewItem item in listView.Items)
                 {
@@ -1268,9 +1268,9 @@ namespace TraceSpy
             }
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog dlg = new SaveFileDialog();
+            var dlg = new SaveFileDialog();
             dlg.AddExtension = true;
             dlg.CheckPathExists = true;
             dlg.RestoreDirectory = true;
@@ -1287,12 +1287,12 @@ namespace TraceSpy
             Save(_saveFilePath);
         }
 
-        private void viewConfigurationFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ViewConfigurationFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("notepad.exe", Settings.ConfigurationFilePath);
         }
 
-        private void openConfigurationDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenConfigurationDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("\"" + Path.GetDirectoryName(Settings.ConfigurationFilePath) + "\"");
         }

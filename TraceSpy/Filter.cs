@@ -99,7 +99,7 @@ namespace TraceSpy
                 if (_regex == null && !_regexParsed && FilterType != FilterType.IncludeAll)
                 {
                     _regexParsed = true;
-                    RegexOptions options = RegexOptions.Compiled;
+                    var options = RegexOptions.Compiled;
                     if (IgnoreCase)
                     {
                         options |= RegexOptions.IgnoreCase;

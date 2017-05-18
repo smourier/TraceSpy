@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
 
 namespace TraceSpy
 {
@@ -48,9 +47,9 @@ namespace TraceSpy
             }
         }
 
-        private void buttonColor_Click(object sender, EventArgs e)
+        private void ButtonColor_Click(object sender, EventArgs e)
         {
-            ColorSetEdit edit = new ColorSetEdit(QuickColorizer.ColorSet, false);
+            var edit = new ColorSetEdit(QuickColorizer.ColorSet, false);
             DialogResult dr = edit.ShowDialog(this);
             if (dr != DialogResult.OK)
                 return;
@@ -59,7 +58,7 @@ namespace TraceSpy
             textBoxColor.Text = edit.ColorSet.ToString();
         }
 
-        private void textBoxColor_TextChanged(object sender, EventArgs e)
+        private void TextBoxColor_TextChanged(object sender, EventArgs e)
         {
             UpdateControls();
         }

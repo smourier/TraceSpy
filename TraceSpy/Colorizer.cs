@@ -64,7 +64,7 @@ namespace TraceSpy
             {
                 if (_regex == null)
                 {
-                    RegexOptions options = RegexOptions.Compiled;
+                    var options = RegexOptions.Compiled;
                     if (IgnoreCase)
                     {
                         options |= RegexOptions.IgnoreCase;

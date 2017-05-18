@@ -12,7 +12,7 @@ namespace TraceSpy
         public QuickColorizers(Settings settings)
         {
             if (settings == null)
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
 
             _settings = settings;
             InitializeComponent();
@@ -22,9 +22,9 @@ namespace TraceSpy
         private void LoadQuickColorizers()
         {
             listViewQuickColorizers.Items.Clear();
-            foreach (QuickColorizer colorizer in _settings.QuickColorizers)
+            foreach (var colorizer in _settings.QuickColorizers)
             {
-                ListViewItem item = GetQuickColorizerItem(colorizer);
+                var item = GetQuickColorizerItem(colorizer);
                 listViewQuickColorizers.Items.Add(item);
             }
         }
@@ -39,7 +39,7 @@ namespace TraceSpy
 
         private static ListViewItem GetQuickColorizerItem(QuickColorizer colorizer)
         {
-            ListViewItem item = new ListViewItem(colorizer.Active.ToString());
+            var item = new ListViewItem(colorizer.Active.ToString());
             item.SubItems.Add(colorizer.IgnoreCase.ToString());
             item.SubItems.Add(colorizer.WholeText.ToString());
             item.SubItems.Add(colorizer.ColorSet != null ? colorizer.ColorSet.ToString() : string.Empty);
@@ -85,14 +85,14 @@ namespace TraceSpy
 
         private void UpdateControls()
         {
-            QuickColorizer colorizer = GetSelectedQuickColorizer();
+            var colorizer = GetSelectedQuickColorizer();
             buttonRemoveQuickColorizer.Enabled = colorizer != null;
             buttonModifyQuickColorizer.Enabled = colorizer != null;
         }
 
         private void ListViewQuickColorizersMouseDoubleClick(object sender, MouseEventArgs e)
         {
-            buttonModifyQuickColorizer_Click(this, EventArgs.Empty);
+            ButtonModifyQuickColorizer_Click(this, EventArgs.Empty);
         }
 
         private void QuickColorizersFormClosing(object sender, FormClosingEventArgs e)
@@ -109,15 +109,15 @@ namespace TraceSpy
             }
         }
 
-        private void buttonAddQuickColorizer_Click(object sender, EventArgs e)
+        private void ButtonAddQuickColorizer_Click(object sender, EventArgs e)
         {
-            QuickColorizerEdit edit = new QuickColorizerEdit(null);
-            DialogResult dr = edit.ShowDialog(this);
+            var edit = new QuickColorizerEdit(null);
+            var dr = edit.ShowDialog(this);
             listViewQuickColorizers.Focus();
             if (dr != DialogResult.OK)
                 return;
 
-            QuickColorizer existing = GetExistingQuickColorizer(edit.QuickColorizer);
+            var existing = GetExistingQuickColorizer(edit.QuickColorizer);
             if (existing != null)
             {
                 GetQuickColorizerItem(existing).Selected = true;
@@ -127,35 +127,35 @@ namespace TraceSpy
             listViewQuickColorizers.Items.Add(GetQuickColorizerItem(edit.QuickColorizer)).Selected = true;
         }
 
-        private void buttonRemoveQuickColorizer_Click(object sender, EventArgs e)
+        private void ButtonRemoveQuickColorizer_Click(object sender, EventArgs e)
         {
-            QuickColorizer colorizer = GetSelectedQuickColorizer();
+            var colorizer = GetSelectedQuickColorizer();
             if (colorizer == null)
                 return;
 
             listViewQuickColorizers.SelectedItems[0].Remove();
         }
 
-        private void buttonModifyQuickColorizer_Click(object sender, EventArgs e)
+        private void ButtonModifyQuickColorizer_Click(object sender, EventArgs e)
         {
-            QuickColorizer colorizer = GetSelectedQuickColorizer();
+            var colorizer = GetSelectedQuickColorizer();
             if (colorizer == null)
                 return;
 
-            QuickColorizerEdit edit = new QuickColorizerEdit(colorizer);
-            DialogResult dr = edit.ShowDialog(this);
+            var edit = new QuickColorizerEdit(colorizer);
+            var dr = edit.ShowDialog(this);
             listViewQuickColorizers.Focus();
             if (dr != DialogResult.OK)
                 return;
 
-            QuickColorizer existing = GetExistingQuickColorizer(edit.QuickColorizer);
+            var existing = GetExistingQuickColorizer(edit.QuickColorizer);
             if ((existing != null) && (existing != edit.QuickColorizer))
             {
                 Remove(edit.QuickColorizer);
                 return;
             }
 
-            ListViewItem item = listViewQuickColorizers.SelectedItems[0];
+            var item = listViewQuickColorizers.SelectedItems[0];
             item.Text = edit.QuickColorizer.Active.ToString();
             item.SubItems[1].Text = edit.QuickColorizer.IgnoreCase.ToString();
             item.SubItems[2].Text = edit.QuickColorizer.WholeText.ToString();

@@ -125,8 +125,7 @@ namespace TraceSpyService
 
         public static T GetArgument<T>(int index, T defaultValue, IFormatProvider provider)
         {
-            string s;
-            if (!_positionArguments.TryGetValue(index, out s))
+            if (!_positionArguments.TryGetValue(index, out string s))
                 return defaultValue;
 
             return Extensions.ChangeType(s, defaultValue, provider);
@@ -139,8 +138,7 @@ namespace TraceSpyService
 
         public static object GetArgument(int index, object defaultValue, Type conversionType, IFormatProvider provider)
         {
-            string s;
-            if (!_positionArguments.TryGetValue(index, out s))
+            if (!_positionArguments.TryGetValue(index, out string s))
                 return defaultValue;
 
             return Extensions.ChangeType(s, conversionType, defaultValue, provider);
@@ -154,10 +152,9 @@ namespace TraceSpyService
         public static T GetArgument<T>(string name, T defaultValue, IFormatProvider provider)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
-            string s;
-            if (!_namedArguments.TryGetValue(name, out s))
+            if (!_namedArguments.TryGetValue(name, out string s))
                 return defaultValue;
 
             if (typeof(T) == typeof(bool) && string.IsNullOrEmpty(s))
@@ -169,10 +166,9 @@ namespace TraceSpyService
         public static bool HasArgument(string name)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
-            string s;
-            return _namedArguments.TryGetValue(name, out s);
+            return _namedArguments.TryGetValue(name, out string s);
         }
 
         public static object GetArgument(string name, object defaultValue, Type conversionType)
@@ -183,13 +179,12 @@ namespace TraceSpyService
         public static object GetArgument(string name, object defaultValue, Type conversionType, IFormatProvider provider)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
             if (conversionType == null)
-                throw new ArgumentNullException("conversionType");
+                throw new ArgumentNullException(nameof(conversionType));
 
-            string s;
-            if (!_namedArguments.TryGetValue(name, out s))
+            if (!_namedArguments.TryGetValue(name, out string s))
                 return defaultValue;
 
             if (conversionType == typeof(bool) && string.IsNullOrEmpty(s))

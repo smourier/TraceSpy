@@ -12,7 +12,7 @@ namespace TraceSpy
         public Filters(Settings settings)
         {
             if (settings == null)
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException(nameof(settings));
 
             _settings = settings;
             InitializeComponent();
@@ -21,7 +21,7 @@ namespace TraceSpy
 
         private static ListViewItem GetItem(Filter filter)
         {
-            ListViewItem item = new ListViewItem(filter.Active.ToString());
+            var item = new ListViewItem(filter.Active.ToString());
             item.SubItems.Add(filter.FilterColumn.ToString());
             item.SubItems.Add(filter.FilterType.ToString());
             item.SubItems.Add(filter.IgnoreCase.ToString());
@@ -33,7 +33,7 @@ namespace TraceSpy
         private void LoadFilters()
         {
             listView.Items.Clear();
-            foreach (Filter filter in _settings.Filters)
+            foreach (var filter in _settings.Filters)
             {
                 ListViewItem item = GetItem(filter);
                 listView.Items.Add(item);
@@ -50,7 +50,7 @@ namespace TraceSpy
 
         private void UpdateControls()
         {
-            Filter filter = GetSelectedFilter();
+            var filter = GetSelectedFilter();
             buttonRemove.Enabled = filter != null;
             buttonModify.Enabled = filter != null;
         }
@@ -66,7 +66,7 @@ namespace TraceSpy
             {
                 foreach (ListViewItem item in listView.Items)
                 {
-                    Filter filter = item.Tag as Filter;
+                    var filter = item.Tag as Filter;
                     if (filter != null)
                         yield return filter;
                 }
@@ -75,13 +75,13 @@ namespace TraceSpy
 
         private void ButtonAddClick(object sender, EventArgs e)
         {
-            FilterEdit edit = new FilterEdit(null);
-            DialogResult dr = edit.ShowDialog(this);
+            var edit = new FilterEdit(null);
+            var dr = edit.ShowDialog(this);
             listView.Focus();
             if (dr != DialogResult.OK)
                 return;
 
-            Filter existing = GetExisting(edit.Filter);
+            var existing = GetExisting(edit.Filter);
             if (existing != null)
             {
                 GetItem(existing).Selected = true;
@@ -105,7 +105,7 @@ namespace TraceSpy
 
         private void ButtonRemoveClick(object sender, EventArgs e)
         {
-            Filter filter = GetSelectedFilter();
+            var filter = GetSelectedFilter();
             if (filter == null)
                 return;
 
@@ -114,24 +114,24 @@ namespace TraceSpy
 
         private void ButtonModifyClick(object sender, EventArgs e)
         {
-            Filter filter = GetSelectedFilter();
+            var filter = GetSelectedFilter();
             if (filter == null)
                 return;
 
-            FilterEdit edit = new FilterEdit(filter);
-            DialogResult dr = edit.ShowDialog(this);
+            var edit = new FilterEdit(filter);
+            var dr = edit.ShowDialog(this);
             listView.Focus();
             if (dr != DialogResult.OK)
                 return;
 
-            Filter existing = GetExisting(edit.Filter);
+            var existing = GetExisting(edit.Filter);
             if ((existing != null) && (existing != edit.Filter))
             {
                 Remove(edit.Filter);
                 return;
             }
 
-            ListViewItem item = listView.SelectedItems[0];
+            var item = listView.SelectedItems[0];
             item.Text = edit.Filter.Active.ToString();
             item.SubItems[1].Text = edit.Filter.FilterColumn.ToString();
             item.SubItems[2].Text = edit.Filter.FilterType.ToString();

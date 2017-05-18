@@ -131,7 +131,7 @@
             this.textBoxColor.ReadOnly = true;
             this.textBoxColor.Size = new System.Drawing.Size(206, 20);
             this.textBoxColor.TabIndex = 6;
-            this.textBoxColor.TextChanged += new System.EventHandler(this.textBoxColor_TextChanged);
+            this.textBoxColor.TextChanged += new System.EventHandler(this.TextBoxColor_TextChanged);
             // 
             // buttonColor
             // 
@@ -141,7 +141,7 @@
             this.buttonColor.TabIndex = 7;
             this.buttonColor.Text = "...";
             this.buttonColor.UseVisualStyleBackColor = true;
-            this.buttonColor.Click += new System.EventHandler(this.buttonColor_Click);
+            this.buttonColor.Click += new System.EventHandler(this.ButtonColor_Click);
             // 
             // QuickColorizerEdit
             // 

@@ -18,7 +18,7 @@ namespace TraceSpyService
         public ConcurrentCircularBuffer(int capacity)
         {
             if (capacity <= 1) // need at least two items
-                throw new ArgumentException(null, "capacity");
+                throw new ArgumentException(null, nameof(capacity));
 
             Capacity = capacity;
             _items = new T[capacity];
@@ -125,19 +125,18 @@ namespace TraceSpyService
             if (startIndex < 0)
             {
                 if (throwOnError)
-                    throw new ArgumentOutOfRangeException("startIndex");
+                    throw new ArgumentOutOfRangeException(nameof(startIndex));
 
                 lostCount = -1;
                 totalCount = -1;
                 return null;
             }
 
-            int count;
-            T[] array = ToArray(out totalCount, out count);
+            T[] array = ToArray(out totalCount, out int count);
             if (startIndex > totalCount)
             {
                 if (throwOnError)
-                    throw new ArgumentOutOfRangeException("startIndex");
+                    throw new ArgumentOutOfRangeException(nameof(startIndex));
 
                 lostCount = -1;
                 return null;
@@ -188,9 +187,7 @@ namespace TraceSpyService
 
         public IEnumerator<T> GetEnumerator()
         {
-            long totalCount;
-            int count;
-            return ToArray(out totalCount, out count).AsEnumerable().GetEnumerator();
+            return ToArray(out long totalCount, out int count).AsEnumerable().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -206,19 +203,17 @@ namespace TraceSpyService
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
             if (array == null)
-                throw new ArgumentNullException("array");
+                throw new ArgumentNullException(nameof(array));
 
             if (array.Rank != 1)
-                throw new ArgumentException(null, "array");
+                throw new ArgumentException(null, nameof(array));
 
             if (arrayIndex < 0)
-                throw new ArgumentOutOfRangeException("arrayIndex");
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex));
 
-            long totalCount;
-            int count;
-            T[] thisArray = ToArray(out totalCount, out count);
+            T[] thisArray = ToArray(out long totalCount, out int count);
             if ((array.Length - arrayIndex) < count)
-                throw new ArgumentException(null, "array");
+                throw new ArgumentException(null, nameof(array));
 
             Array.Copy(thisArray, 0, array, arrayIndex, thisArray.Length);
         }

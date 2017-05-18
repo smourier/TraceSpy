@@ -30,9 +30,9 @@ namespace TraceSpy
             UpdateControls();
         }
 
-        private void comboBoxLevels_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxLevels_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ComboBox cb = (ComboBox)sender;
+            var cb = (ComboBox)sender;
             if (cb.SelectedItem is string)
             {
                 cb.SelectedItem = null;
@@ -41,7 +41,7 @@ namespace TraceSpy
 
         private void OnComboBoxLevelsMeasureItem(object sender, MeasureItemEventArgs e)
         {
-            ComboBox cb = (ComboBox)sender;
+            var cb = (ComboBox)sender;
             object o = cb.Items[e.Index];
             if (o is string)
             {
@@ -51,7 +51,7 @@ namespace TraceSpy
 
         private void OnComboBoxLevelsDrawItem(object sender, DrawItemEventArgs e)
         {
-            ComboBox cb = (ComboBox)sender;
+            var cb = (ComboBox)sender;
             const int ComboBoxColumnCount = 3;
 
             object o = cb.Items[e.Index];
@@ -102,8 +102,8 @@ namespace TraceSpy
 
             foreach(object o in comboBoxLevels.Items)
             {
-                LevelItem item = o as LevelItem;
-                if (item != null && item.Name == ((byte)EtwProvider.TraceLevel).ToString())
+                var item = o as LevelItem;
+                if (item != null && item.Name == EtwProvider.TraceLevel.ToString())
                 {
                     comboBoxLevels.SelectedItem = item;
                     return;
@@ -146,8 +146,7 @@ namespace TraceSpy
 
         private void UpdateControls()
         {
-            byte b;
-            buttonOK.Enabled = textBoxDescription.Text.Trim().Length > 0 & IsValidProviderId() && byte.TryParse(comboBoxLevels.Text, out b);
+            buttonOK.Enabled = textBoxDescription.Text.Trim().Length > 0 & IsValidProviderId() && byte.TryParse(comboBoxLevels.Text, out byte b);
         }
 
         private void EtwProviderEditFormClosing(object sender, FormClosingEventArgs e)
@@ -158,7 +157,7 @@ namespace TraceSpy
                 EtwProvider.Description = textBoxDescription.Text.Trim();
                 EtwProvider.Active = checkBoxActive.Checked;
 
-                byte level = Convert.ToByte(((LevelItem)comboBoxLevels.SelectedItem).Value);
+                var level = Convert.ToByte(((LevelItem)comboBoxLevels.SelectedItem).Value);
                 EtwProvider.TraceLevel = level;
             }
         }
@@ -168,17 +167,17 @@ namespace TraceSpy
             UpdateControls();
         }
 
-        private void textBoxGuid_TextChanged(object sender, EventArgs e)
+        private void TextBoxGuid_TextChanged(object sender, EventArgs e)
         {
             UpdateControls();
         }
 
-        private void checkBoxActive_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxActive_CheckedChanged(object sender, EventArgs e)
         {
             UpdateControls();
         }
 
-        private void comboBoxLevels_TextUpdate(object sender, EventArgs e)
+        private void ComboBoxLevels_TextUpdate(object sender, EventArgs e)
         {
             UpdateControls();
         }

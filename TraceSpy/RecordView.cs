@@ -13,7 +13,7 @@ namespace TraceSpy
             labelProcessValue.Text = item.SubItems[2].Text;
             labelTicksValue.Text = item.SubItems[1].Text;
 
-            StringBuilder sb = new StringBuilder(item.SubItems[3].Text);
+            var sb = new StringBuilder(item.SubItems[3].Text);
             int itemIndex = item.Index + 1;
             while (itemIndex < item.ListView.Items.Count)
             {

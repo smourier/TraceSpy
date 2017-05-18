@@ -74,7 +74,7 @@ namespace TraceSpy
 
         private void ButtonBackColorClick(object sender, EventArgs e)
         {
-            ColorDialog dialog = new ColorDialog();
+            var dialog = new ColorDialog();
             dialog.AnyColor = true;
             dialog.Color = ColorSet.ConvertColor(textBoxBackColor.Text, Color.White);
             if (dialog.ShowDialog(this) != DialogResult.OK)
@@ -85,7 +85,7 @@ namespace TraceSpy
 
         private void ButtonForeColorClick(object sender, EventArgs e)
         {
-            ColorDialog dialog = new ColorDialog();
+            var dialog = new ColorDialog();
             dialog.AnyColor = true;
             dialog.Color = ColorSet.ConvertColor(textBoxForeColor.Text, Color.Black);
             if (dialog.ShowDialog(this) != DialogResult.OK)
@@ -101,7 +101,7 @@ namespace TraceSpy
 
         private void ButtonFontClick(object sender, EventArgs e)
         {
-            FontDialog dlg = new FontDialog();
+            var dlg = new FontDialog();
             dlg.Font = ColorSet.Font;
             if (dlg.ShowDialog(this) != DialogResult.OK)
                 return;
@@ -109,12 +109,12 @@ namespace TraceSpy
             textBoxFont.Text = new FontConverter().ConvertToInvariantString(dlg.Font);
         }
 
-        private void textBoxForeColor_TextChanged(object sender, EventArgs e)
+        private void TextBoxForeColor_TextChanged(object sender, EventArgs e)
         {
             UpdateControls();
         }
 
-        private void textBoxBackColor_TextChanged(object sender, EventArgs e)
+        private void TextBoxBackColor_TextChanged(object sender, EventArgs e)
         {
             UpdateControls();
         }

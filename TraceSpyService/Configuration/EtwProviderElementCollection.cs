@@ -14,7 +14,7 @@ namespace TraceSpyService.Configuration
         protected override object GetElementKey(ConfigurationElement element)
         {
             if (element == null)
-                throw new ArgumentNullException("element");
+                throw new ArgumentNullException(nameof(element));
 
             return ((EtwProviderElement)element).Guid;
         }
@@ -24,7 +24,7 @@ namespace TraceSpyService.Configuration
             get
             {
                 if (name == null)
-                    throw new ArgumentNullException("name");
+                    throw new ArgumentNullException(nameof(name));
 
                 return (EtwProviderElement)BaseGet(name);
             }

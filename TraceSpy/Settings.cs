@@ -105,9 +105,9 @@ namespace TraceSpy
         public ColorSet GetColorSet(string name)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
-            foreach (ColorSet colorSet in _colorSets)
+            foreach (var colorSet in _colorSets)
             {
                 if (string.Compare(name, colorSet.Name, StringComparison.OrdinalIgnoreCase) == 0)
                     return colorSet;
@@ -194,7 +194,7 @@ namespace TraceSpy
 
         public IEnumerable<ColorRange> ComputeColorRanges(string line)
         {
-            List<ColorRange> list = new List<ColorRange>();
+            var list = new List<ColorRange>();
             if (string.IsNullOrEmpty(line))
             {
                 list.Add(new ColorRange(null, 0, 0));
@@ -217,7 +217,7 @@ namespace TraceSpy
             if (line == null)
                 return false;
 
-            foreach (Filter filter in _filters)
+            foreach (var filter in _filters)
             {
                 if (!filter.Active)
                     continue;
@@ -249,7 +249,7 @@ namespace TraceSpy
             if (line == null)
                 return true;
 
-            foreach (Filter filter in _filters)
+            foreach (var filter in _filters)
             {
                 if (!filter.Active)
                     continue;

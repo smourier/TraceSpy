@@ -29,7 +29,7 @@ namespace TraceSpy
         {
             try
             {
-                RegexOptions options = RegexOptions.None;
+                var options = RegexOptions.None;
                 if (checkBoxIgnoreCase.Checked)
                 {
                     options |= RegexOptions.IgnoreCase;

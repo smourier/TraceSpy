@@ -94,7 +94,7 @@ namespace TraceSpy
 
         internal static string ConvertColor(Color color)
         {
-            KnownColor kc = color.ToKnownColor();
+            var kc = color.ToKnownColor();
             if (kc != 0)
                 return kc.ToString();
 
@@ -271,7 +271,7 @@ namespace TraceSpy
         public int CompareTo(ColorSet other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             return Name.CompareTo(other.Name);
         }

@@ -165,7 +165,7 @@ namespace TraceSpyService
         {
             AddERExcludedApplication(Process.GetCurrentProcess().MainModule.ModuleName);
             Console.WriteLine("TraceSpy Service - " + (Environment.Is64BitProcess ? "64" : "32") + "-bit - Build Number " + Assembly.GetExecutingAssembly().GetInformationalVersion());
-            Console.WriteLine("Copyright (C) SoftFluent S.A.S 2012-" + DateTime.Now.Year + ". All rights reserved.");
+            Console.WriteLine("Copyright (C) Simon Mourier 2011-" + DateTime.Now.Year + ". All rights reserved.");
 
             var token = Extensions.GetTokenElevationType();
             if (token != TokenElevationType.Full)
@@ -251,8 +251,8 @@ namespace TraceSpyService
 
             if (OptionInstall)
             {
-                ServiceInstaller si = new ServiceInstaller();
-                ServiceProcessInstaller spi = new ServiceProcessInstaller();
+                var si = new ServiceInstaller();
+                var spi = new ServiceProcessInstaller();
                 si.ServicesDependedOn = OptionDependsOn;
                 Console.WriteLine("OptionAccount=" + OptionAccount);
                 Console.WriteLine("OptionUser=" + OptionUser);
@@ -313,8 +313,8 @@ namespace TraceSpyService
 
             if (OptionUninstall)
             {
-                ServiceInstaller si = new ServiceInstaller();
-                ServiceProcessInstaller spi = new ServiceProcessInstaller();
+                var si = new ServiceInstaller();
+                var spi = new ServiceProcessInstaller();
                 si.Parent = spi;
                 si.ServiceName = OptionName;
 
@@ -355,7 +355,7 @@ namespace TraceSpyService
 
                 Console.Title = OptionDisplayName;
 
-                ConsoleControl cc = new ConsoleControl();
+                var cc = new ConsoleControl();
                 cc.Event += OnConsoleControlEvent;
 
                 _service.InternalStart(args);
@@ -375,14 +375,13 @@ namespace TraceSpyService
                 return;
             }
 
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[] { _service };
-            Run(ServicesToRun);
+            var servicesToRun = new ServiceBase[] { _service };
+            Run(servicesToRun);
         }
 
         public static bool IsAdministrator()
         {
-            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            var identity = WindowsIdentity.GetCurrent();
             return identity != null && new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator);
         }
 
@@ -479,14 +478,14 @@ namespace TraceSpyService
             if (Configuration.StartServicesAsync)
             {
                 Log("Service Host '" + OptionName + "' starting asynchronously.");
-                List<IAsyncResult> _results = new List<IAsyncResult>(_services.Count);
-                List<WaitHandle> _waits = new List<WaitHandle>(_services.Count);
-                foreach (IService service in _services)
+                var _results = new List<IAsyncResult>(_services.Count);
+                var _waits = new List<WaitHandle>(_services.Count);
+                foreach (var service in _services)
                 {
                     if (service.Status != ServiceControllerStatus.StartPending && service.Status != ServiceControllerStatus.Running)
                     {
                         Log("Service '" + service.Name + "' starting");
-                        ServiceCallDelegate d = new ServiceCallDelegate(ServiceStart);
+                        var d = new ServiceCallDelegate(ServiceStart);
                         IAsyncResult result = d.BeginInvoke(service, null, service);
                         _results.Add(result);
                         _waits.Add(result.AsyncWaitHandle);
@@ -501,7 +500,7 @@ namespace TraceSpyService
                 int successCount = 0;
                 foreach (IAsyncResult result in _results)
                 {
-                    IService service = (IService)result.AsyncState;
+                    var service = (IService)result.AsyncState;
                     if (service.StartException == null)
                     {
                         successCount++;
@@ -523,7 +522,7 @@ namespace TraceSpyService
             else
             {
                 Log("Service Host '" + OptionName + "' starting");
-                foreach (IService service in _services)
+                foreach (var service in _services)
                 {
                     try
                     {
@@ -591,15 +590,15 @@ namespace TraceSpyService
                     maxWaitTime = Timeout.Infinite;
                 }
                 Log("Service Host '" + OptionName + "' stopping asynchronously. Max wait time: " + ((maxWaitTime == Timeout.Infinite) ? "infinite" : maxWaitTime + " ms"));
-                List<IAsyncResult> _results = new List<IAsyncResult>(_services.Count);
-                List<WaitHandle> _waits = new List<WaitHandle>(_services.Count);
-                foreach (IService service in _services)
+                var _results = new List<IAsyncResult>(_services.Count);
+                var _waits = new List<WaitHandle>(_services.Count);
+                foreach (var service in _services)
                 {
                     ServiceControllerStatus status = service.Status;
                     if (status == ServiceControllerStatus.Running || status == ServiceControllerStatus.Paused)
                     {
                         Log("Service '" + service.Name + "' stopping");
-                        ServiceCallDelegate d = new ServiceCallDelegate(ServiceStop);
+                        var d = new ServiceCallDelegate(ServiceStop);
                         IAsyncResult result = d.BeginInvoke(service, null, service);
                         _results.Add(result);
                         _waits.Add(result.AsyncWaitHandle);
@@ -613,14 +612,14 @@ namespace TraceSpyService
 
                 foreach (IAsyncResult result in _results)
                 {
-                    IService service = (IService)result.AsyncState;
+                    var service = (IService)result.AsyncState;
                     HandleServiceStopped(service);
                 }
             }
             else
             {
                 Log("Service Host '" + OptionName + "' stopping synchronously");
-                foreach (IService service in _services)
+                foreach (var service in _services)
                 {
                     ServiceControllerStatus status = service.Status;
                     if (status == ServiceControllerStatus.Running || status == ServiceControllerStatus.Paused)
@@ -656,6 +655,7 @@ namespace TraceSpyService
                 {
                     maxWaitTime = Timeout.Infinite;
                 }
+
                 Log("Service Host console closing. Max wait time: " + ((maxWaitTime == Timeout.Infinite) ? "infinite" : maxWaitTime + " ms"));
                 _closed.WaitOne(maxWaitTime, Configuration.WaitExitContext);
             }
@@ -665,6 +665,7 @@ namespace TraceSpyService
             {
                 Console.OutputEncoding = _oldEncoding;
             }
+
             Process.GetCurrentProcess().Kill();
         }
 
@@ -704,7 +705,7 @@ namespace TraceSpyService
             if (scm == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            IntPtr service = IntPtr.Zero;
+            var service = IntPtr.Zero;
             try
             {
                 service = OpenService(scm, serviceName, SERVICE_CHANGE_CONFIG);
@@ -795,7 +796,7 @@ namespace TraceSpyService
         private static void OnCurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             ConsoleControl.SetConsoleIcon(0);
-            Exception ex = e.ExceptionObject as Exception;
+            var ex = e.ExceptionObject as Exception;
             if (ex != null)
             {
                 Log("Fatal error. Details:");

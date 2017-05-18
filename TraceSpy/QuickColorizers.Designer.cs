@@ -125,7 +125,7 @@
             this.buttonModifyQuickColorizer.TabIndex = 4;
             this.buttonModifyQuickColorizer.Text = "&Modify";
             this.buttonModifyQuickColorizer.UseVisualStyleBackColor = true;
-            this.buttonModifyQuickColorizer.Click += new System.EventHandler(this.buttonModifyQuickColorizer_Click);
+            this.buttonModifyQuickColorizer.Click += new System.EventHandler(this.ButtonModifyQuickColorizer_Click);
             // 
             // buttonRemoveQuickColorizer
             // 
@@ -136,7 +136,7 @@
             this.buttonRemoveQuickColorizer.TabIndex = 3;
             this.buttonRemoveQuickColorizer.Text = "&Remove";
             this.buttonRemoveQuickColorizer.UseVisualStyleBackColor = true;
-            this.buttonRemoveQuickColorizer.Click += new System.EventHandler(this.buttonRemoveQuickColorizer_Click);
+            this.buttonRemoveQuickColorizer.Click += new System.EventHandler(this.ButtonRemoveQuickColorizer_Click);
             // 
             // buttonAddQuickColorizer
             // 
@@ -146,7 +146,7 @@
             this.buttonAddQuickColorizer.TabIndex = 2;
             this.buttonAddQuickColorizer.Text = "&Add";
             this.buttonAddQuickColorizer.UseVisualStyleBackColor = true;
-            this.buttonAddQuickColorizer.Click += new System.EventHandler(this.buttonAddQuickColorizer_Click);
+            this.buttonAddQuickColorizer.Click += new System.EventHandler(this.ButtonAddQuickColorizer_Click);
             // 
             // QuickColorizers
             // 
