@@ -1,0 +1,112 @@
+﻿<Window x:Class="TraceSpy.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TraceSpy"
+        mc:Ignorable="d"
+        Title="Trace Spy" Height="500" Width="700" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="MenuItem" x:Key="NotStarted">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="Red" />
+        </Style>
+        <Style TargetType="MenuItem" x:Key="Started">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="Green" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Menu Name="MainMenu" IsMainMenu="True" Grid.Row="0" >
+            <MenuItem Header="_File" Height="24">
+                <MenuItem Header="Open..." />
+                <Separator />
+                <MenuItem Header="Save" />
+                <MenuItem Header="Save As..." />
+                <Separator />
+                <MenuItem Name="MenuExit" Header="E_xit" InputGestureText="Alt+F4" Click="MenuExit_Click" />
+            </MenuItem>
+            <MenuItem Name="OdsTrace" Click="OdsTrace_Click" Header="{Binding OdsText}">
+                <MenuItem.Style>
+                    <Style TargetType="MenuItem">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding OdsStarted}" Value="True">
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Background" Value="Green" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding OdsStarted}" Value="false">
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Background" Value="Red" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </MenuItem.Style>
+            </MenuItem>
+            <MenuItem Header="{Binding EtwText}" Name="EtwTrace" Click="EtwTrace_Click">
+                <MenuItem.Style>
+                    <Style TargetType="MenuItem">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding EtwStarted}" Value="True">
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Background" Value="Green" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding EtwStarted}" Value="false">
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Background" Value="Red" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </MenuItem.Style>
+            </MenuItem>
+
+            <MenuItem Header="_View">
+                <MenuItem Header="Remove Empty Lines" IsChecked="{Binding RemoveEmptyLines, Mode=TwoWay}" IsCheckable="True" />
+                <MenuItem Header="Auto Scroll" IsChecked="{Binding AutoScroll, Mode=TwoWay}" IsCheckable="True" />
+                <MenuItem Header="Resolve Process Name" IsChecked="{Binding ResolveProcessName, Mode=TwoWay}" IsCheckable="True" />
+                <MenuItem Header="Show Process Id" IsChecked="{Binding ShowProcessId, Mode=TwoWay}" IsCheckable="True" />
+                <MenuItem Header="Show ETW Description" IsChecked="{Binding ShowEtwDescription, Mode=TwoWay}" IsCheckable="True" />
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="Copy Text" />
+                <MenuItem Header="Copy Full Line" />
+                <Separator />
+                <MenuItem Header="Find..." />
+                <MenuItem Header="Find Next" />
+                <Separator />
+                <MenuItem Header="Clear Traces" Name="ClearTraces" Click="ClearTraces_Click" />
+            </MenuItem>
+            <MenuItem Header="_Options">
+                <MenuItem Header="Font..." />
+                <MenuItem Header="Filters..." />
+                <MenuItem Header="Regex Colorizers..." />
+                <MenuItem Header="Quick Colorizers..." />
+                <MenuItem Header="ETW Providers..." />
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="About Trace Spy..." />
+            </MenuItem>
+        </Menu>
+        <ListView Grid.Row="1">
+            <ListView.View>
+                <GridView x:Name="GV">
+                    <GridViewColumn Header="#" x:Name="IndexColumn" Width="50" />
+                    <GridViewColumn Header="Ticks" x:Name="TicksColumn" Width="50"></GridViewColumn>
+                    <GridViewColumn Header="Process" x:Name="ProcessColumn" Width="100"></GridViewColumn>
+                    <GridViewColumn Header="Text" x:Name="TextColumn" Width="1000"></GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView Grid.Row="2" Name="LV" HorizontalContentAlignment="Stretch">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <local:TraceEventElement Event="{Binding}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Window>

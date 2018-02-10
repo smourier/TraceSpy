@@ -210,20 +210,6 @@ namespace TraceSpy
                 SetStyle(ControlStyles.Opaque, true);
                 DoubleBuffered = true;
             }
-
-            //protected override void WndProc(ref Message m)
-            //{
-            //    Log("DecodeMessage: " + DecodeMessage(m));
-            //    base.WndProc(ref m);
-            //}
-
-            //[StructLayout(LayoutKind.Sequential)]
-            //private struct NMHDR
-            //{
-            //    public IntPtr hwndFrom;
-            //    public IntPtr idFrom;
-            //    public int code;
-            //}
         }
 
         internal static string DecodeMessage(Message message)
@@ -296,10 +282,7 @@ namespace TraceSpy
             return "msg=0x" + message.Msg.ToString("x") + " (" + name + ") hwnd=0x" + message.HWnd.ToString("x") + " wparam=0x" + message.WParam.ToString("x") + " lparam=0x" + message.LParam.ToString("x") + " result=0x" + message.Result.ToString("x");
         }
 
-        internal void RefreshListView()
-        {
-            listView.Refresh();
-        }
+        internal void RefreshListView() => listView.Refresh();
 
         private void OnListViewDrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
@@ -322,7 +305,6 @@ namespace TraceSpy
                 return;
             }
 
-            //Log("State:" + e.Item.Selected);
             if (e.Item.Selected)
             {
                 e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
@@ -338,9 +320,7 @@ namespace TraceSpy
             int charIndex = 0;
             foreach (ColorRange range in _settings.ComputeColorRanges(e.SubItem.Text))
             {
-                //Log("OLVD charIndex:" + charIndex + " range.Length:" + range.Length + " Text:[" + e.SubItem.Text + "]");
                 string chunk = e.SubItem.Text.Substring(charIndex, range.Length);
-                //Log("Range:" + range + " chunk='" + chunk + "'");
 
                 Font font;
                 if (range.ColorSet == null || range.ColorSet.Font == null)
@@ -358,7 +338,6 @@ namespace TraceSpy
                 {
                     if (x + size.Width < e.Bounds.Right)
                     {
-                        //Log(" BackColor:" + range.ColorSet.BackColor + " ForeColor=" + range.ColorSet.ForeColor + " size=" + size);
                         switch (range.ColorSet.Mode)
                         {
                             case ColorSetDrawMode.Frame:
@@ -577,11 +556,7 @@ namespace TraceSpy
             }
         }
 
-        internal void Enqueue(int pid, string text)
-        {
-            Enqueue(pid, text, null);
-        }
-
+        internal void Enqueue(int pid, string text) => Enqueue(pid, text, null);
         internal void Enqueue(int pid, string text, string description)
         {
             var line = new Line();
@@ -608,7 +583,7 @@ namespace TraceSpy
         {
             try
             {
-                Line line = (Line)obj;
+                var line = (Line)obj;
                 if (_settings.ShowProcessName)
                 {
                     line.ProcessName = GetProcessName(line.Pid);
@@ -617,21 +592,18 @@ namespace TraceSpy
                 if (!_settings.IncludeLine(line.Text, line.ProcessName))
                 {
                     _skipped.Add(line.Index, null);
-                    //Log("Don't include '" + line.Text + "'");
                     return;
                 }
 
                 if (_settings.ExcludeLine(line.Text, line.ProcessName))
                 {
                     _skipped.Add(line.Index, null);
-                    //Log("Do Exclude '" + line.Text + "'");
                     return;
                 }
 
                 _lock.EnterWriteLock();
                 try
                 {
-                    //Log("Enqueue index=" + line.Index + " text=" + line.Text);
                     _queue.Add(line.Index, line);
                 }
                 finally
@@ -1014,6 +986,7 @@ namespace TraceSpy
                 ETWCaptureOnToolStripMenuItem.Image = null;
                 ETWCaptureOnToolStripMenuItem.Text = "Start ETW Capture";
             }
+
             captureOnToolStripMenuItem.ForeColor = _settings.CaptureOutputDebugString ? Color.Red : Color.Green;
             ETWCaptureOnToolStripMenuItem.ForeColor = _settings.CaptureEtwTraces ? Color.Red : Color.Green;
         }
@@ -1094,8 +1067,7 @@ namespace TraceSpy
 
             foreach (EtwProvider provider in _settings.EtwProviders)
             {
-                EventRealtimeListener listener;
-                _etwListeners.TryGetValue(provider.ProviderGuid, out listener);
+                _etwListeners.TryGetValue(provider.ProviderGuid, out EventRealtimeListener listener);
                 if (listener == null)
                 {
                     if (!provider.Active)
@@ -1131,13 +1103,13 @@ namespace TraceSpy
 
         private void ProcessEtwTrace(object state)
         {
-            EventRealtimeListener listener = (EventRealtimeListener)state;
+            var listener = (EventRealtimeListener)state;
             listener.ProcessTraces();
         }
 
         private void OnEtwListenerRealtimeEvent(object sender, RealtimeEventArgs e)
         {
-            EventRealtimeListener listener = (EventRealtimeListener)sender;
+            var listener = (EventRealtimeListener)sender;
             Enqueue(e.ProcessId, e.Message, listener.Description);
         }
 
@@ -1287,15 +1259,9 @@ namespace TraceSpy
             Save(_saveFilePath);
         }
 
-        private void ViewConfigurationFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("notepad.exe", Settings.ConfigurationFilePath);
-        }
+        private void ViewConfigurationFileToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start("notepad.exe", Settings.ConfigurationFilePath);
 
-        private void OpenConfigurationDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("\"" + Path.GetDirectoryName(Settings.ConfigurationFilePath) + "\"");
-        }
+        private void OpenConfigurationDirectoryToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start("\"" + Path.GetDirectoryName(Settings.ConfigurationFilePath) + "\"");
 
 #if DEBUG
         private void SendTestTraces()

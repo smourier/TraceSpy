@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraceSpy", "TraceSpy\TraceSpy.csproj", "{A64849FE-5B6C-44B6-8AE9-5583E67D3516}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraceSpyService", "TraceSpyService\TraceSpyService.csproj", "{29639D7A-2DA1-4F45-A697-096F31912233}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraceSpyTest", "TraceSpyTest\TraceSpyTest.csproj", "{04341C9B-44BB-49DE-A148-40F5AD5D18A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTraceSpy", "WpfTraceSpy\WpfTraceSpy.csproj", "{9F5C8933-04E6-47B4-B446-0B1A4972AB2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,8 +29,15 @@ Global
 		{04341C9B-44BB-49DE-A148-40F5AD5D18A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04341C9B-44BB-49DE-A148-40F5AD5D18A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04341C9B-44BB-49DE-A148-40F5AD5D18A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F5C8933-04E6-47B4-B446-0B1A4972AB2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F5C8933-04E6-47B4-B446-0B1A4972AB2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F5C8933-04E6-47B4-B446-0B1A4972AB2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F5C8933-04E6-47B4-B446-0B1A4972AB2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {85BB0614-B873-44AB-9E7D-D187E4E8BB59}
 	EndGlobalSection
 EndGlobal

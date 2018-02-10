@@ -1,7 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows;
 
-[assembly: AssemblyTitle("TraceSpy")]
+[assembly: AssemblyTitle("WpfTraceSpy")]
 [assembly: AssemblyDescription("An alternative to DbgView.")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
@@ -12,7 +13,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Trace Spy")]
 [assembly: AssemblyCopyright("Copyright © 2011-2018 Simon Mourier. All rights reserved.")]
 [assembly: ComVisible(false)]
-[assembly: Guid("dfc20d26-c4bd-440f-b248-81c68fc8c961")]
-[assembly: AssemblyVersion("2.4.0.0")]
-[assembly: AssemblyFileVersion("2.4.0.0")]
-[assembly: AssemblyInformationalVersion("2.4.0.0")]
+[assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
+[assembly: Guid("d28061de-725f-4149-b67c-31f31f2d0626")]
+[assembly: AssemblyVersion("2.5.0.0")]
+[assembly: AssemblyFileVersion("2.5.0.0")]
+[assembly: AssemblyInformationalVersion("2.5.0.0")]
