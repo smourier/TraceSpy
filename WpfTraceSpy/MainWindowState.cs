@@ -9,6 +9,7 @@
             ShowProcessId = true;
             ShowEtwDescription = true;
             AutoScroll = true;
+            OdsStarted = false;
         }
 
         public bool ResolveProcessName { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
