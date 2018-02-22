@@ -31,7 +31,7 @@
                 <Separator />
                 <MenuItem Name="MenuExit" Header="E_xit" InputGestureText="Alt+F4" Click="MenuExit_Click" />
             </MenuItem>
-            <MenuItem Name="OdsTrace" Click="OdsTrace_Click" Header="{Binding OdsText}">
+            <MenuItem Name="OdsTrace" Click="OdsTrace_Click" Header="{Binding OdsText}" ToolTipService.ShowOnDisabled="True">
                 <MenuItem.Style>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
@@ -42,6 +42,10 @@
                             <DataTrigger Binding="{Binding OdsStarted}" Value="false">
                                 <Setter Property="Foreground" Value="White" />
                                 <Setter Property="Background" Value="Red" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding OdsStarted}" Value="{x:Null}">
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="Background" Value="LightGray" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -85,7 +89,7 @@
                 <MenuItem Header="Filters..." />
                 <MenuItem Header="Regex Colorizers..." />
                 <MenuItem Header="Quick Colorizers..." />
-                <MenuItem Header="ETW Providers..." />
+                <MenuItem Header="ETW Providers..." Name="ETWProviders" Click="ETWProviders_Click" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="About Trace Spy..." />

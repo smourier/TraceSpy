@@ -29,9 +29,9 @@
             }
         }
 
-        public bool OdsStarted
+        public bool? OdsStarted
         {
-            get => DictionaryObjectGetPropertyValue<bool>();
+            get => DictionaryObjectGetPropertyValue<bool?>();
             set
             {
                 if (DictionaryObjectSetPropertyValue(value))
@@ -41,7 +41,23 @@
             }
         }
 
-        public string EtwText => OdsStarted ? "Stop ETW Traces" : "Start ETW Traces";
-        public string OdsText => OdsStarted ? "Stop ODS Traces" : "Start ODS Traces";
+        public string EtwText => EtwStarted ? "Stop ETW Traces" : "Start ETW Traces";
+        public string OdsText
+        {
+            get
+            {
+                switch (OdsStarted)
+                {
+                    case true:
+                        return "Stop ODS Traces";
+
+                    case false:
+                        return "Start ODS Traces";
+
+                    default:
+                        return "ODS Unavailable";
+                }
+            }
+        }
     }
 }

@@ -35,8 +35,22 @@ namespace TraceSpy
             _bufferReadyEvent = new EventWaitHandle(false, EventResetMode.AutoReset, "DBWIN_BUFFER_READY");
             _dataReadyEvent = new EventWaitHandle(false, EventResetMode.AutoReset, "DBWIN_DATA_READY");
 
-            _buffer = MemoryMappedFile.CreateNew("DBWIN_BUFFER", _odsBufferSize);
-            _bufferStream = _buffer.CreateViewStream(0, _odsBufferSize);
+            try
+            {
+                _buffer = MemoryMappedFile.CreateNew("DBWIN_BUFFER", _odsBufferSize);
+                _bufferStream = _buffer.CreateViewStream(0, _odsBufferSize);
+            }
+            catch (Exception e)
+            {
+                const int ERROR_ALREADY_EXISTS = unchecked((int)0x800700b7);
+                if (e.HResult != ERROR_ALREADY_EXISTS)
+                    throw;
+
+                OdsTrace.IsEnabled = false;
+                OdsTrace.Header = "ODS unavailable";
+                OdsTrace.ToolTip = "There's already an ODS trace listener running in the machine.";
+                _state.OdsStarted = null;
+            }
 
             IndexColumn.Width = App.Current.ColumnLayout.IndexColumnWidth;
             TicksColumn.Width = App.Current.ColumnLayout.TicksColumnWidth;
@@ -61,15 +75,18 @@ namespace TraceSpy
                 ((INotifyPropertyChanged)col).PropertyChanged += GridViewColumnPropertyChanged;
             }
 
-            _outputDebugStringThread = new Thread(ReadOutputDebugStringTraces);
-            _outputDebugStringThread.IsBackground = true;
-            _outputDebugStringThread.Start();
+            if (_buffer != null)
+            {
+                _outputDebugStringThread = new Thread(ReadOutputDebugStringTraces);
+                _outputDebugStringThread.IsBackground = true;
+                _outputDebugStringThread.Start();
+            }
         }
 
         protected override void OnClosed(EventArgs e)
         {
             _stopOutputDebugStringTraces = true;
-            _outputDebugStringThread.Join(1000);
+            _outputDebugStringThread?.Join(1000);
             _bufferStream?.Dispose();
             _buffer?.Dispose();
             _dataReadyEvent?.Dispose();
@@ -142,7 +159,7 @@ namespace TraceSpy
                 if (_stopOutputDebugStringTraces)
                     return;
 
-                if (!_state.OdsStarted)
+                if (!_state.OdsStarted.GetValueOrDefault())
                     continue;
 
                 if (result) // we don't care about other return values
@@ -224,6 +241,13 @@ namespace TraceSpy
         private void ClearTraces_Click(object sender, RoutedEventArgs e)
         {
             _dataSource.Clear();
+        }
+
+        private void ETWProviders_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new EtwProviders();
+            dlg.Owner = this;
+            dlg.ShowDialog();
         }
     }
 }
