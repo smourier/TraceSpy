@@ -14,13 +14,23 @@ using System.Windows.Shapes;
 
 namespace TraceSpy
 {
-    public partial class EtwProviders : Window
+    public partial class EtwProviderWindow : Window
     {
-        public EtwProviders()
+        public EtwProviderWindow()
         {
             InitializeComponent();
         }
 
-        private void Close_Click(object sender, RoutedEventArgs e) => Close();
+        private void OK_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+            Close();
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
+        }
     }
 }

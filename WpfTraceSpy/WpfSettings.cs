@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
@@ -120,26 +119,14 @@ namespace TraceSpy
 
         public Filter[] Filters
         {
-            get
-            {
-                return _filters.ToArray();
-            }
-            set
-            {
-                _filters = value == null ? new List<Filter>() : new List<Filter>(value);
-            }
+            get => _filters.ToArray();
+            set => _filters = value == null ? new List<Filter>() : new List<Filter>(value);
         }
 
         public EtwProvider[] EtwProviders
         {
-            get
-            {
-                return _etwProviders.ToArray();
-            }
-            set
-            {
-                _etwProviders = value == null ? new List<EtwProvider>() : new List<EtwProvider>(value);
-            }
+            get => _etwProviders.ToArray();
+            set => _etwProviders = value == null ? new List<EtwProvider>() : new List<EtwProvider>(value);
         }
 
         public ColorSet GetColorSet(string name)
@@ -157,38 +144,20 @@ namespace TraceSpy
 
         public ColorSet[] ColorSets
         {
-            get
-            {
-                return _colorSets.ToArray();
-            }
-            set
-            {
-                _colorSets = value == null ? new List<ColorSet>() : new List<ColorSet>(value);
-            }
+            get => _colorSets.ToArray();
+            set => _colorSets = value == null ? new List<ColorSet>() : new List<ColorSet>(value);
         }
 
         public Colorizer[] Colorizers
         {
-            get
-            {
-                return _colorizers.ToArray();
-            }
-            set
-            {
-                _colorizers = value == null ? new List<Colorizer>() : new List<Colorizer>(value);
-            }
+            get => _colorizers.ToArray();
+            set => _colorizers = value == null ? new List<Colorizer>() : new List<Colorizer>(value);
         }
 
         public QuickColorizer[] QuickColorizers
         {
-            get
-            {
-                return _quickColorizers.ToArray();
-            }
-            set
-            {
-                _quickColorizers = value == null ? new List<QuickColorizer>() : new List<QuickColorizer>(value);
-            }
+            get => _quickColorizers.ToArray();
+            set => _quickColorizers = value == null ? new List<QuickColorizer>() : new List<QuickColorizer>(value);
         }
 
         public IEnumerable<ColorRange> ComputeColorRanges(string line)

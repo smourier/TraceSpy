@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace TraceSpy
@@ -20,10 +19,7 @@ namespace TraceSpy
 
         public string Description
         {
-            get
-            {
-                return _description;
-            }
+            get => _description;
             set
             {
                 if (_description == value)
@@ -38,10 +34,7 @@ namespace TraceSpy
 
         public byte TraceLevel
         {
-            get
-            {
-                return _traceLevel;
-            }
+            get => _traceLevel;
             set
             {
                 if (_traceLevel == value)
@@ -57,10 +50,7 @@ namespace TraceSpy
 
         public string ProviderId
         {
-            get
-            {
-                return _providerId;
-            }
+            get => _providerId;
             set
             {
                 if (_providerId == value)
@@ -79,15 +69,9 @@ namespace TraceSpy
             return ProviderId + " '" + Description + "'";
         }
 
-        public override int GetHashCode()
-        {
-            return ProviderGuid.GetHashCode();
-        }
+        public override int GetHashCode() => ProviderGuid.GetHashCode();
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as EtwProvider);
-        }
+        public override bool Equals(object obj) => Equals(obj as EtwProvider);
 
         public bool Equals(EtwProvider other)
         {

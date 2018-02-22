@@ -245,7 +245,7 @@ namespace TraceSpy
 
         private void ETWProviders_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new EtwProviders();
+            var dlg = new EtwProvidersWindow();
             dlg.Owner = this;
             dlg.ShowDialog();
         }

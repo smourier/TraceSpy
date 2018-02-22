@@ -63,8 +63,11 @@
     <Compile Include="ColorSetDrawMode.cs" />
     <Compile Include="DictionaryObject.cs" />
     <Compile Include="EtwProvider.cs" />
-    <Compile Include="EtwProviders.xaml.cs">
-      <DependentUpon>EtwProviders.xaml</DependentUpon>
+    <Compile Include="EtwProvidersWindow.xaml.cs">
+      <DependentUpon>EtwProvidersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EtwProviderWindow.xaml.cs">
+      <DependentUpon>EtwProviderWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="EtwTraceLevel.cs" />
     <Compile Include="EventRealtimeListener.cs" />
@@ -81,7 +84,11 @@
     <Compile Include="TraceEventColumnLayout.cs" />
     <Compile Include="TraceEventElement.cs" />
     <Compile Include="UacUtilities.cs" />
-    <Page Include="EtwProviders.xaml">
+    <Page Include="EtwProvidersWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EtwProviderWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

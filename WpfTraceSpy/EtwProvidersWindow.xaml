@@ -1,11 +1,11 @@
-﻿<Window x:Class="TraceSpy.EtwProviders"
+﻿<Window x:Class="TraceSpy.EtwProvidersWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TraceSpy"
         mc:Ignorable="d"
-        Title="ETW Providers" Height="400" Width="600" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" >
+        Title="ETW Providers" Height="400" Width="600" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -21,6 +21,9 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button Name="Add" Grid.Row="1" Content="_Add" Margin="10,0,0,10" HorizontalAlignment="Left" Width="75" Height="23" VerticalAlignment="Bottom" Click="Add_Click" />
+        <Button Name="Remove" Grid.Row="1" Content="_Remove" Margin="95,0,0,10" HorizontalAlignment="Left" Width="75" Height="23" VerticalAlignment="Bottom" Click="Remove_Click" />
+        <Button Name="Modify" Grid.Row="1" Content="_Modify" Margin="180,0,0,10" HorizontalAlignment="Left" Width="75" Height="23" VerticalAlignment="Bottom" Click="Modify_Click" />
         <Button Name="Close" Grid.Row="1" IsDefault="True" IsCancel="True" Content="Close" Margin="0,0,10,10" HorizontalAlignment="Right" Width="75" Height="23" VerticalAlignment="Bottom" Click="Close_Click" />
     </Grid>
 </Window>

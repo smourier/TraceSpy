@@ -8,6 +8,20 @@ namespace TraceSpy
 {
     internal static class Extensions
     {
+        public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> enumerable)
+        {
+            if (collection == null)
+                throw new ArgumentException(nameof(collection));
+
+            if (enumerable == null)
+                return;
+
+            foreach (var item in enumerable)
+            {
+                collection.Add(item);
+            }
+        }
+
         public static IEnumerable<DependencyObject> EnumerateVisualChildren(this DependencyObject obj) => obj.EnumerateVisualChildren(true);
         public static IEnumerable<DependencyObject> EnumerateVisualChildren(this DependencyObject obj, bool recursive) => obj.EnumerateVisualChildren(recursive, true);
         public static IEnumerable<DependencyObject> EnumerateVisualChildren(this DependencyObject obj, bool recursive, bool sameLevelFirst)
