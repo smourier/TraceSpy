@@ -86,7 +86,7 @@
             </MenuItem>
             <MenuItem Header="_Options">
                 <MenuItem Header="Font..." />
-                <MenuItem Header="Filters..." />
+                <MenuItem Header="Filters..." Name="Filters" Click="Filters_Click" />
                 <MenuItem Header="Regex Colorizers..." />
                 <MenuItem Header="Quick Colorizers..." />
                 <MenuItem Header="ETW Providers..." Name="ETWProviders" Click="ETWProviders_Click" />

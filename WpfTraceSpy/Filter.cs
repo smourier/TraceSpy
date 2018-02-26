@@ -3,92 +3,49 @@ using System.Text.RegularExpressions;
 
 namespace TraceSpy
 {
-    public class Filter : IEquatable<Filter>
+    public class Filter : DictionaryObject, IEquatable<Filter>
     {
         private Regex _regex;
-        private string _definition;
-        private bool _ignoreCase;
-        private FilterType _filterType;
-        private FilterColumn _filterColumn;
         private bool _regexParsed;
 
         public Filter()
         {
             IgnoreCase = true;
-            Active = true;
+            IsActive = true;
         }
 
-        public Filter(FilterType filterType, string definition, bool ignoreCase)
+        public Filter(string definition, bool ignoreCase)
             : this()
         {
-            FilterType = filterType;
             Definition = definition;
             IgnoreCase = ignoreCase;
         }
 
-        public bool Active { get; set; }
-
-        public FilterType FilterType
-        {
-            get
-            {
-                return _filterType;
-            }
-            set
-            {
-                if (_filterType == value)
-                    return;
-
-                _filterType = value;
-                _regex = null;
-            }
-        }
-
-        public FilterColumn FilterColumn
-        {
-            get
-            {
-                return _filterColumn;
-            }
-            set
-            {
-                if (_filterColumn == value)
-                    return;
-
-                _filterColumn = value;
-                _regex = null;
-            }
-        }
-
+        public bool IsActive { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
+        public FilterColumn FilterColumn { get => DictionaryObjectGetPropertyValue<FilterColumn>(); set => DictionaryObjectSetPropertyValue(value); }
         public string Definition
         {
-            get
-            {
-                return _definition;
-            }
+            get => DictionaryObjectGetPropertyValue<string>();
             set
             {
-                if (_definition == value)
-                    return;
-
-                _definition = value;
-                _regex = null;
+                if (DictionaryObjectSetPropertyValue(value))
+                {
+                    _regex = null;
+                    _regexParsed = false;
+                }
             }
         }
 
         public bool IgnoreCase
         {
-            get
-            {
-                return _ignoreCase;
-            }
+            get => DictionaryObjectGetPropertyValue<bool>();
             set
             {
-                if (_ignoreCase == value)
-                    return;
-
-                _ignoreCase = value;
-                _regex = null;
+                if (DictionaryObjectSetPropertyValue(value))
+                {
+                    _regex = null;
+                    _regexParsed = false;
+                }
             }
         }
 
@@ -96,7 +53,7 @@ namespace TraceSpy
         {
             get
             {
-                if (_regex == null && !_regexParsed && FilterType != FilterType.IncludeAll)
+                if (_regex == null && !_regexParsed)
                 {
                     _regexParsed = true;
                     var options = RegexOptions.Compiled;
@@ -118,27 +75,23 @@ namespace TraceSpy
             }
         }
 
-        public override string ToString()
+        public override string ToString() => Definition + ":C" + (IgnoreCase ? "I" : "C");
+
+        public Filter Clone()
         {
-            return FilterType + ":" + Definition + ":C" + (IgnoreCase ? "I" : "C");
+            var clone = new Filter();
+            CopyTo(clone);
+            return clone;
         }
 
-        public override int GetHashCode()
-        {
-            return FilterType.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as Filter);
-        }
-
+        public override int GetHashCode() => FilterColumn.GetHashCode();
+        public override bool Equals(object obj) => Equals(obj as Filter);
         public bool Equals(Filter other)
         {
             if (other == null)
                 return false;
 
-            return FilterType == other.FilterType && Definition == other.Definition & IgnoreCase == other.IgnoreCase;
+            return Definition == other.Definition & IgnoreCase == other.IgnoreCase;
         }
     }
 }

@@ -1,76 +1,30 @@
 ﻿using System;
-using System.Xml.Serialization;
+using System.Collections;
 
 namespace TraceSpy
 {
-    public class EtwProvider : IEquatable<EtwProvider>
+    public class EtwProvider : DictionaryObject, IEquatable<EtwProvider>
     {
-        private string _description;
-        private string _providerId;
-        private byte _traceLevel;
-
         public EtwProvider()
         {
-            Active = true;
+            IsActive = true;
             TraceLevel = (byte)EtwTraceLevel.Verbose;
         }
 
-        public bool Active { get; set; }
-
-        public string Description
-        {
-            get => _description;
-            set
-            {
-                if (_description == value)
-                    return;
-
-                _description = value;
-            }
-        }
-
-        [XmlIgnore]
-        public Guid ProviderGuid { get; private set; }
-
-        public byte TraceLevel
-        {
-            get => _traceLevel;
-            set
-            {
-                if (_traceLevel == value)
-                    return;
-
-                _traceLevel = value;
-                if (_traceLevel == (byte)EtwTraceLevel.None)
-                {
-                    _traceLevel = (byte)EtwTraceLevel.Verbose;
-                }
-            }
-        }
-
-        public string ProviderId
-        {
-            get => _providerId;
-            set
-            {
-                if (_providerId == value)
-                    return;
-
-                _providerId = value;
-                ProviderGuid = new Guid(value);
-            }
-        }
+        public bool IsActive { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
+        public string Description { get => DictionaryObjectGetPropertyValue<string>(); set => DictionaryObjectSetPropertyValue(value); }
+        public Guid Guid { get => DictionaryObjectGetPropertyValue<Guid>(); set => DictionaryObjectSetPropertyValue(value); }
+        public byte TraceLevel { get => DictionaryObjectGetPropertyValue<byte>(); set => DictionaryObjectSetPropertyValue(value); }
 
         public override string ToString()
         {
             if (string.IsNullOrEmpty(Description))
-                return ProviderId;
+                return Guid.ToString();
 
-            return ProviderId + " '" + Description + "'";
+            return Guid + " '" + Description + "'";
         }
 
-        public override int GetHashCode() => ProviderGuid.GetHashCode();
-
+        public override int GetHashCode() => Guid.GetHashCode();
         public override bool Equals(object obj) => Equals(obj as EtwProvider);
 
         public bool Equals(EtwProvider other)
@@ -78,7 +32,29 @@ namespace TraceSpy
             if (other == null)
                 return false;
 
-            return ProviderGuid.Equals(other.ProviderGuid); 
+            return Guid.Equals(other.Guid);
+        }
+
+        public EtwProvider Clone()
+        {
+            var clone = new EtwProvider();
+            CopyTo(clone);
+            return clone;
+        }
+
+        protected override IEnumerable DictionaryObjectGetErrors(string propertyName)
+        {
+            if (propertyName == null || propertyName == nameof(Guid))
+            {
+                if (Guid == Guid.Empty)
+                    yield return "Guid cannot be empty.";
+            }
+
+            if (propertyName == null || propertyName == nameof(Description))
+            {
+                if (string.IsNullOrWhiteSpace(Description))
+                    yield return "Description cannot be empty nor whitespaces only.";
+            }
         }
     }
 }

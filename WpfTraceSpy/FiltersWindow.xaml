@@ -1,11 +1,11 @@
-﻿<Window x:Class="TraceSpy.EtwProvidersWindow"
+﻿<Window x:Class="TraceSpy.FiltersWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TraceSpy"
         mc:Ignorable="d"
-        Title="ETW Providers" Height="400" Width="600" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+        Title="Filters" Height="400" Width="600" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -15,9 +15,9 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Active" Width="40" DisplayMemberBinding="{Binding IsActive}" ></GridViewColumn>
-                    <GridViewColumn Header="Level" Width="40" DisplayMemberBinding="{Binding TraceLevel}"></GridViewColumn>
-                    <GridViewColumn Header="Guid" Width="250" DisplayMemberBinding="{Binding Guid}"></GridViewColumn>
-                    <GridViewColumn Header="Description" Width="300" DisplayMemberBinding="{Binding Description}"></GridViewColumn>
+                    <GridViewColumn Header="Ignore Case" Width="80" DisplayMemberBinding="{Binding IgnoreCase}"></GridViewColumn>
+                    <GridViewColumn Header="Column" Width="80" DisplayMemberBinding="{Binding FilterColumn}"></GridViewColumn>
+                    <GridViewColumn Header="Definition" Width="300" DisplayMemberBinding="{Binding Definition}"></GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

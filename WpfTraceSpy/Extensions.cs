@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 
@@ -8,6 +9,69 @@ namespace TraceSpy
 {
     internal static class Extensions
     {
+        public static string GetProduct() => Assembly.GetEntryAssembly().GetProduct();
+        public static string GetProduct(this Assembly assembly)
+        {
+            if (assembly == null)
+                throw new ArgumentNullException(nameof(assembly));
+
+            object[] atts = assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+            if (atts != null && atts.Length > 0)
+                return ((AssemblyProductAttribute)atts[0]).Product;
+
+            return null;
+        }
+
+        public static Window GetActiveWindow()
+        {
+            var app = Application.Current;
+            if (app == null)
+                return null;
+
+            return app.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
+        }
+
+        public static void ShowMessage(this Window window, string text)
+        {
+            if (window == null)
+            {
+                window = GetActiveWindow();
+            }
+            MessageBox.Show(window, text, GetProduct(), MessageBoxButton.OK);
+        }
+
+        public static void ShowError(this Window window, string text)
+        {
+            ShowMessage(window, text, MessageBoxImage.Error);
+        }
+
+        public static void ShowMessage(this Window window, string text, MessageBoxImage image)
+        {
+            if (window == null)
+            {
+                window = GetActiveWindow();
+            }
+            MessageBox.Show(window, text, GetProduct(), MessageBoxButton.OK, image);
+        }
+
+        public static MessageBoxResult ShowConfirm(this Window window, string text)
+        {
+            if (window == null)
+            {
+                window = GetActiveWindow();
+            }
+            return MessageBox.Show(window, text, GetProduct(), MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+        }
+
+        public static MessageBoxResult ShowConfirmCancel(this Window window, string text)
+        {
+            if (window == null)
+            {
+                window = GetActiveWindow();
+            }
+            return MessageBox.Show(window, text, GetProduct(), MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
+        }
+
         public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> enumerable)
         {
             if (collection == null)

@@ -3,19 +3,19 @@ using System.Windows;
 
 namespace TraceSpy
 {
-    public partial class EtwProviderWindow : Window
+    public partial class FilterWindow : Window
     {
-        public EtwProviderWindow(EtwProvider provider)
+        public FilterWindow(Filter filter)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+            if (filter == null)
+                throw new ArgumentNullException(nameof(filter));
 
             InitializeComponent();
-            Provider = provider;
-            DataContext = provider;
+            Filter = filter;
+            DataContext = filter;
         }
 
-        public EtwProvider Provider { get; }
+        public Filter Filter { get; }
 
         private void OK_Click(object sender, RoutedEventArgs e)
         {

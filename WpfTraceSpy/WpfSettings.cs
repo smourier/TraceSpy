@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
@@ -33,7 +34,7 @@ namespace TraceSpy
             Height = 600;
             FontName = "Lucida Console";
             FontSize = 10;
-            _filters.Add(new Filter(FilterType.IncludeAll, null, false));
+            _filters.Add(new Filter(null, false));
         }
 
         public bool ShowProcessName { get; set; }
@@ -123,10 +124,72 @@ namespace TraceSpy
             set => _filters = value == null ? new List<Filter>() : new List<Filter>(value);
         }
 
+        public bool AddFilter(Filter filter)
+        {
+            if (filter == null)
+                throw new ArgumentNullException(nameof(filter));
+
+            var existing = _filters.FirstOrDefault(p => p.Equals(filter));
+            if (existing != null)
+            {
+                existing.IsActive = filter.IsActive;
+                existing.FilterColumn = filter.FilterColumn;
+                existing.Definition = filter.Definition;
+                existing.IgnoreCase = filter.IgnoreCase;
+                return false;
+            }
+
+            _filters.Add(filter);
+            return true;
+        }
+
+        public bool RemoveFilter(Filter filter)
+        {
+            if (filter == null)
+                throw new ArgumentNullException(nameof(filter));
+
+            return _filters.Remove(filter);
+        }
+
         public EtwProvider[] EtwProviders
         {
             get => _etwProviders.ToArray();
             set => _etwProviders = value == null ? new List<EtwProvider>() : new List<EtwProvider>(value);
+        }
+
+        public bool AddEtwProvider(EtwProvider provider)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
+            var existing = _etwProviders.FirstOrDefault(p => p.Equals(provider));
+            if (existing != null)
+            {
+                existing.IsActive = provider.IsActive;
+                existing.Description = provider.Description;
+                existing.TraceLevel = provider.TraceLevel;
+                return false;
+            }
+
+            _etwProviders.Add(provider);
+            return true;
+        }
+
+        public bool RemoveEtwProvider(Guid guid)
+        {
+            var existing = _etwProviders.FirstOrDefault(p => p.Guid == guid);
+            if (existing == null)
+                return false;
+
+            return _etwProviders.Remove(existing);
+        }
+
+        public bool RemoveEtwProvider(EtwProvider provider)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
+            return _etwProviders.Remove(provider);
         }
 
         public ColorSet GetColorSet(string name)
@@ -187,23 +250,18 @@ namespace TraceSpy
 
             foreach (var filter in _filters)
             {
-                if (!filter.Active)
+                if (!filter.IsActive)
                     continue;
 
                 if (filter.FilterColumn == FilterColumn.Process && processName == null)
                     continue;
 
-                if (filter.FilterType == FilterType.IncludeAll)
-                    return true;
-
-                if (filter.FilterType == FilterType.Include &&
-                    filter.FilterColumn == FilterColumn.Text &&
+                if (filter.FilterColumn == FilterColumn.Text &&
                     filter.Regex != null &&
                     filter.Regex.Match(line).Success)
                     return true;
 
-                if (filter.FilterType == FilterType.Include &&
-                    filter.FilterColumn == FilterColumn.Process &&
+                if (filter.FilterColumn == FilterColumn.Process &&
                     filter.Regex != null &&
                     processName != null &&
                     filter.Regex.Match(processName).Success)
@@ -219,23 +277,18 @@ namespace TraceSpy
 
             foreach (var filter in _filters)
             {
-                if (!filter.Active)
+                if (!filter.IsActive)
                     continue;
 
                 if (filter.FilterColumn == FilterColumn.Process && processName == null)
                     continue;
 
-                if (filter.FilterType == FilterType.IncludeAll)
-                    continue;
-
-                if (filter.FilterType == FilterType.Exclude &&
-                    filter.FilterColumn == FilterColumn.Text &&
+                if (filter.FilterColumn == FilterColumn.Text &&
                     filter.Regex != null &&
                     filter.Regex.Match(line).Success)
                     return true;
 
-                if (filter.FilterType == FilterType.Exclude &&
-                    filter.FilterColumn == FilterColumn.Process &&
+                if (filter.FilterColumn == FilterColumn.Process &&
                     filter.Regex != null &&
                     processName != null &&
                     filter.Regex.Match(processName).Success)

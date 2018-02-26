@@ -249,5 +249,12 @@ namespace TraceSpy
             dlg.Owner = this;
             dlg.ShowDialog();
         }
+
+        private void Filters_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new FiltersWindow();
+            dlg.Owner = this;
+            dlg.ShowDialog();
+        }
     }
 }

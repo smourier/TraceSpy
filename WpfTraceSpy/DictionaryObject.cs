@@ -22,6 +22,8 @@ namespace TraceSpy
             DictionaryObjectRaiseOnErrorsChanged = true;
         }
 
+        public virtual bool IsValid => !DictionaryObjectHasErrors;
+
         protected virtual ConcurrentDictionary<string, DictionaryObjectProperty> DictionaryObjectProperties => _properties;
 
         // these PropertyChangxxx are public and don't start with BaseObject because used by everyone
@@ -36,6 +38,20 @@ namespace TraceSpy
 
         protected string DictionaryObjectError => DictionaryObjectGetError(null);
         protected bool DictionaryObjectHasErrors => (DictionaryObjectGetErrors(null)?.Cast<object>().Any()).GetValueOrDefault();
+
+        protected virtual void CopyTo(DictionaryObject other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            if (other == this)
+                return;
+
+            foreach (var kv in DictionaryObjectProperties)
+            {
+                other.DictionaryObjectProperties[kv.Key] = kv.Value;
+            }
+        }
 
         protected virtual string DictionaryObjectGetError(string propertyName)
         {
@@ -65,6 +81,7 @@ namespace TraceSpy
         {
             if (propertyName == null)
                 throw new ArgumentNullException(nameof(propertyName));
+
             OnPropertyChanging(this, new PropertyChangingEventArgs(propertyName));
         }
 
@@ -78,7 +95,14 @@ namespace TraceSpy
             OnPropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected virtual void OnPropertyChanged(object sender, PropertyChangedEventArgs e) => PropertyChanged?.Invoke(sender, e);
+        protected virtual void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(sender, e);
+            if (e?.PropertyName != nameof(IsValid))
+            {
+                OnPropertyChanged(nameof(IsValid));
+            }
+        }
 
         protected T DictionaryObjectGetPropertyValue<T>([CallerMemberName] string name = null) => DictionaryObjectGetPropertyValue(default(T), name);
         protected virtual T DictionaryObjectGetPropertyValue<T>(T defaultValue, [CallerMemberName] string name = null)
