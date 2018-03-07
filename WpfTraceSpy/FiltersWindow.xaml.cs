@@ -77,11 +77,24 @@ namespace TraceSpy
                 };
                 Filters = new ObservableCollection<Filter>();
                 Filters.AddRange(App.Current.Settings.Filters);
+                DisableAll = App.Current.Settings.DisableAllFilters;
             }
 
             public ObservableCollection<Filter> Filters { get; }
             public bool ModifyEnabled => _window.LV.SelectedIndex >= 0;
             public bool RemoveEnabled => _window.LV.SelectedIndex >= 0;
+
+            public bool DisableAll
+            {
+                get => DictionaryObjectGetPropertyValue<bool>();
+                set
+                {
+                    if (DictionaryObjectSetPropertyValue(value))
+                    {
+                        App.Current.Settings.DisableAllFilters = DisableAll;
+                    }
+                }
+            }
         }
     }
 }

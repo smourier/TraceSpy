@@ -1,14 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace TraceSpy
 {
     internal static class Extensions
     {
+        public static void OpenInDefaultBrowser(this string url)
+        {
+            if (url == null)
+                throw new ArgumentNullException(nameof(url));
+
+            var psi = new ProcessStartInfo(url);
+            Process.Start(psi);
+        }
+
+        public static void RaiseMenuItemClickOnKeyGesture(this ItemsControl control, KeyEventArgs args) => RaiseMenuItemClickOnKeyGesture(control, args, true);
+        public static void RaiseMenuItemClickOnKeyGesture(this ItemsControl control, KeyEventArgs args, bool throwOnError)
+        {
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
+
+            if (control == null)
+                return;
+
+            var kgc = new KeyGestureConverter();
+            foreach (var item in control.Items.OfType<MenuItem>())
+            {
+                if (!string.IsNullOrWhiteSpace(item.InputGestureText))
+                {
+                    KeyGesture gesture = null;
+                    if (throwOnError)
+                    {
+                        gesture = kgc.ConvertFrom(item.InputGestureText) as KeyGesture;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            gesture = kgc.ConvertFrom(item.InputGestureText) as KeyGesture;
+                        }
+                        catch
+                        {
+                        }
+                    }
+
+                    if (gesture != null && gesture.Matches(null, args))
+                    {
+                        item.RaiseEvent(new RoutedEventArgs(MenuItem.ClickEvent));
+                        args.Handled = true;
+                        return;
+                    }
+                }
+
+                RaiseMenuItemClickOnKeyGesture(item, args, throwOnError);
+                if (args.Handled)
+                    return;
+            }
+        }
+
         public static string GetProduct() => Assembly.GetEntryAssembly().GetProduct();
         public static string GetProduct(this Assembly assembly)
         {
@@ -40,11 +96,7 @@ namespace TraceSpy
             MessageBox.Show(window, text, GetProduct(), MessageBoxButton.OK);
         }
 
-        public static void ShowError(this Window window, string text)
-        {
-            ShowMessage(window, text, MessageBoxImage.Error);
-        }
-
+        public static void ShowError(this Window window, string text) => ShowMessage(window, text, MessageBoxImage.Error);
         public static void ShowMessage(this Window window, string text, MessageBoxImage image)
         {
             if (window == null)

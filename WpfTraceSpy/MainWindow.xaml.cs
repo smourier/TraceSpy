@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -10,6 +11,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -28,10 +30,21 @@ namespace TraceSpy
         private ObservableCollection<TraceEvent> _dataSource = new ObservableCollection<TraceEvent>();
         private MainWindowState _state;
         private ConcurrentDictionary<int, string> _processes = new ConcurrentDictionary<int, string>();
+        private FindWindow _findWindow;
+        private int _scrollingTo;
+        private TraceEvent _scrollTo;
 
         public MainWindow()
         {
             _state = new MainWindowState();
+            _state.AutoScroll = App.Current.Settings.AutoScroll;
+            _state.RemoveEmptyLines = App.Current.Settings.RemoveEmptyLines;
+            _state.ResolveProcessName = App.Current.Settings.ResolveProcessName;
+            _state.ShowEtwDescription = App.Current.Settings.ShowEtwDescription;
+            _state.ShowProcessId = App.Current.Settings.ShowProcessId;
+            _state.WrapText = App.Current.Settings.WrapText;
+            _state.PropertyChanged += OnStatePropertyChanged;
+
             InitializeComponent();
             DataContext = _state;
 
@@ -64,15 +77,16 @@ namespace TraceSpy
 
             App.Current.ColumnLayout.PropertyChanged += OnColumnLayoutPropertyChanged;
 
-            var rnd = new Random(Environment.TickCount);
-            for (int i = 0; i < 10000; i++)
-            {
-                var te = new TraceEvent();
-                te.ProcessName = "test";
-                te.Height = 10 + rnd.Next(0, 20);
-                te.Background = (i % 2) == 0 ? Brushes.White : Brushes.LightGray;
-                AddTrace(te);
-            }
+            //var rnd = new Random(Environment.TickCount);
+            //for (int i = 0; i < 10000; i++)
+            //{
+            //    var te = new TraceEvent();
+            //    te.ProcessName = "test process " + i;
+            //    te.Text = "text another world " + i;
+            //    te.Height = 10 + rnd.Next(0, 20);
+            //    //te.Background = (i % 2) == 0 ? Brushes.Transparent : Brushes.LightGray;
+            //    AddTrace(te);
+            //}
 
             LV.ItemsSource = _dataSource;
             foreach (var col in GV.Columns)
@@ -88,8 +102,31 @@ namespace TraceSpy
             }
         }
 
+        protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            MainMenu.RaiseMenuItemClickOnKeyGesture(e);
+        }
+
+        private void OnStatePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            App.Current.Settings.AutoScroll = _state.AutoScroll;
+            App.Current.Settings.RemoveEmptyLines = _state.RemoveEmptyLines;
+            App.Current.Settings.ResolveProcessName = _state.ResolveProcessName;
+            App.Current.Settings.ShowEtwDescription = _state.ShowEtwDescription;
+            App.Current.Settings.ShowProcessId = _state.ShowProcessId;
+            App.Current.Settings.WrapText = _state.WrapText;
+            App.Current.Settings.SerializeToConfiguration();
+
+            if (e.PropertyName == "WrapText")
+            {
+                OnColumnLayoutPropertyChanged(null, null);
+            }
+        }
+
         protected override void OnClosed(EventArgs e)
         {
+            _findWindow?.Close();
             _stopOutputDebugStringTraces = true;
             _outputDebugStringThread?.Join(1000);
             _bufferStream?.Dispose();
@@ -104,6 +141,7 @@ namespace TraceSpy
             var panel = LV.FindVisualChild<VirtualizingStackPanel>();
             foreach (var item in panel.EnumerateVisualChildren(true).OfType<TraceEventElement>())
             {
+                item.InvalidateMeasure();
                 item.InvalidateVisual();
             }
         }
@@ -131,6 +169,8 @@ namespace TraceSpy
                 App.Current.ColumnLayout.TextColumnWidth = col.Width;
                 col.Width = App.Current.ColumnLayout.TextColumnWidth;
             }
+
+            OnColumnLayoutPropertyChanged(null, null);
         }
 
         private void MenuExit_Click(object sender, RoutedEventArgs e)
@@ -150,18 +190,27 @@ namespace TraceSpy
             if (evt == null || evt.ProcessName == null)
                 return;
 
+            if (App.Current.Settings.ExcludeLine(evt.Text, evt.ProcessName))
+                return;
+
             _dataSource.Add(evt);
 
             if (_state.AutoScroll)
             {
-                Dispatcher.BeginInvoke(() =>
+                // only ask to scroll if nothing is scrolling
+                _scrollTo = evt;
+                if (Interlocked.CompareExchange(ref _scrollingTo, 1, 0) == 0)
                 {
-                    var last = _dataSource.LastOrDefault();
-                    if (last != null)
+                    Dispatcher.BeginInvoke(() =>
                     {
-                        LV.ScrollIntoView(last);
-                    }
-                }, DispatcherPriority.SystemIdle);
+                        var st = _scrollTo;
+                        if (st != null)
+                        {
+                            LV.ScrollIntoView(st);
+                        }
+                        Interlocked.Exchange(ref _scrollingTo, 0);
+                    }, DispatcherPriority.SystemIdle);
+                }
             }
         }
 
@@ -186,7 +235,7 @@ namespace TraceSpy
                     int pid = BitConverter.ToInt32(pidBytes, 0);
                     _bufferStream.Read(strBytes, 0, strBytes.Length);
                     string text = GetNullTerminatedString(strBytes).Trim();
-                    if (string.IsNullOrWhiteSpace(text) && _state.RemoveEmptyLines)
+                    if (_state.RemoveEmptyLines && string.IsNullOrWhiteSpace(text))
                         continue;
 
                     var evt = new TraceEvent();
@@ -299,9 +348,120 @@ namespace TraceSpy
             SetFont();
         }
 
-        private void SendTestTrace_Click(object sender, RoutedEventArgs e)
+        private void SendTestTrace_Click(object sender, RoutedEventArgs e) => App.AddTrace("Test " + DateTime.Now);
+        private void LV_ScrollChanged(object sender, ScrollChangedEventArgs e) => LVH.Margin = new Thickness(-e.HorizontalOffset, 0, 0, 0);
+
+        private void CopyText_Click(object sender, RoutedEventArgs e)
         {
-            App.AddTrace("Test " + DateTime.Now);
+            var sb = new StringBuilder();
+            foreach (var evt in LV.SelectedItems.OfType<TraceEvent>())
+            {
+                sb.AppendLine(evt.Text);
+            }
+            System.Windows.Clipboard.SetText(sb.ToString());
+        }
+
+        private void CopyFullLine_Click(object sender, RoutedEventArgs e)
+        {
+            var sb = new StringBuilder();
+            foreach (var evt in LV.SelectedItems.OfType<TraceEvent>())
+            {
+                sb.AppendLine(evt.FullText);
+            }
+            System.Windows.Clipboard.SetText(sb.ToString());
+        }
+
+        private void Find_Click(object sender, RoutedEventArgs e)
+        {
+            if (_findWindow == null)
+            {
+                if (LV.Items.Count == 0)
+                    return;
+
+                _findWindow = new FindWindow();
+                _findWindow.Owner = this;
+                _findWindow.FindingNext += (s, e2) => DoFind(true);
+                _findWindow.FindingPrev += (s, e2) => DoFind(false);
+            }
+
+            _findWindow.Show();
+            _findWindow.Searches.Focus();
+        }
+
+        private void FindNext_Click(object sender, RoutedEventArgs e) => DoFind(true);
+        private void FindPrev_Click(object sender, RoutedEventArgs e) => DoFind(false);
+
+        private void DoFind(bool next)
+        {
+            if (_findWindow == null)
+                return;
+
+            int start = Math.Max(0, LV.SelectedIndex);
+            var sc = _findWindow.CaseMatch ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+            foreach (int i in EnumerateItems(start, next))
+            {
+                var evt = (TraceEvent)LV.Items[i];
+                if (evt.Text == null)
+                    continue;
+
+                if (evt.Text.IndexOf(_findWindow.Search, sc) > 0)
+                {
+                    LV.SelectedIndex = i;
+                    LV.ScrollIntoView(evt);
+                    return;
+                }
+            }
+
+            LV.SelectedIndex = -1;
+            this.ShowMessage("Cannot find '" + _findWindow.Search + "'.", MessageBoxImage.Information);
+        }
+
+        private IEnumerable<int> EnumerateItems(int start, bool next)
+        {
+            if (next)
+            {
+                for (int i = start + 1; i < LV.Items.Count; i++)
+                {
+                    yield return i;
+                }
+                yield break;
+            }
+
+            for (int i = start - 1; i >= 0; i--)
+            {
+                yield return i;
+            }
+        }
+
+        private void Edit_SubmenuOpened(object sender, RoutedEventArgs e)
+        {
+            CopyFullLine.IsEnabled = LV.SelectedItems.Count > 0;
+            CopyText.IsEnabled = LV.SelectedItems.Count > 0;
+            Find.IsEnabled = LV.Items.Count > 0;
+            FindNext.IsEnabled = _findWindow != null && !string.IsNullOrWhiteSpace(_findWindow.Search);
+            FindPrev.IsEnabled = FindNext.IsEnabled;
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SaveAs_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Open_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new AboutWindow();
+            dlg.Owner = this;
+            dlg.ShowDialog();
         }
     }
 }

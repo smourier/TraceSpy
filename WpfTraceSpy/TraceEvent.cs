@@ -21,5 +21,6 @@ namespace TraceSpy
 
         public int Height { get; set; }
         public Brush Background { get; set; }
+        public string FullText => Index + "\t" + Ticks + "\t" + ProcessName + "\t" + Text;
     }
 }

@@ -24,11 +24,11 @@
         </Grid.RowDefinitions>
         <Menu Name="MainMenu" IsMainMenu="True" Grid.Row="0" >
             <MenuItem Header="_File" Height="24">
-                <MenuItem Header="Open..." />
-                <Separator />
-                <MenuItem Header="Save" />
-                <MenuItem Header="Save As..." />
-                <Separator />
+                <MenuItem Header="_Open..." Name="Open" Click="Open_Click" Visibility="Collapsed" />
+                <Separator Visibility="Collapsed" />
+                <MenuItem Header="_Save" Name="Save" InputGestureText="Ctrl+S" Click="Save_Click" Visibility="Collapsed" />
+                <MenuItem Header="Save _As..." Name="SaveAs" Click="SaveAs_Click" Visibility="Collapsed" />
+                <Separator Visibility="Collapsed" />
                 <MenuItem Name="MenuExit" Header="E_xit" InputGestureText="Alt+F4" Click="MenuExit_Click" />
             </MenuItem>
             <MenuItem Name="OdsTrace" Click="OdsTrace_Click" Header="{Binding OdsText}" ToolTipService.ShowOnDisabled="True">
@@ -69,34 +69,36 @@
             </MenuItem>
 
             <MenuItem Header="_View">
-                <MenuItem Header="Remove Empty Lines" IsChecked="{Binding RemoveEmptyLines, Mode=TwoWay}" IsCheckable="True" />
-                <MenuItem Header="Auto Scroll" IsChecked="{Binding AutoScroll, Mode=TwoWay}" IsCheckable="True" />
-                <MenuItem Header="Resolve Process Name" IsChecked="{Binding ResolveProcessName, Mode=TwoWay}" IsCheckable="True" />
-                <MenuItem Header="Show Process Id" IsChecked="{Binding ShowProcessId, Mode=TwoWay}" IsCheckable="True" />
-                <MenuItem Header="Show ETW Description" IsChecked="{Binding ShowEtwDescription, Mode=TwoWay}" IsCheckable="True" />
+                <MenuItem Header="_Remove Empty Lines" IsChecked="{Binding RemoveEmptyLines, Mode=TwoWay}" IsCheckable="True" />
+                <MenuItem Header="_Auto Scroll" IsChecked="{Binding AutoScroll, Mode=TwoWay}" IsCheckable="True" />
+                <MenuItem Header="Resolve _Process Name" IsChecked="{Binding ResolveProcessName, Mode=TwoWay}" IsCheckable="True" />
+                <MenuItem Header="Show Process _Id" IsChecked="{Binding ShowProcessId, Mode=TwoWay}" IsCheckable="True" />
+                <MenuItem Header="Show ETW _Description" IsChecked="{Binding ShowEtwDescription, Mode=TwoWay}" IsCheckable="True" />
+                <MenuItem Header="_Wrap Text" IsChecked="{Binding WrapText, Mode=TwoWay}" IsCheckable="True" />
             </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem Header="Copy Text" />
-                <MenuItem Header="Copy Full Line" />
+            <MenuItem Header="_Edit" Name="Edit" SubmenuOpened="Edit_SubmenuOpened">
+                <MenuItem Header="_Copy Text" Name="CopyText" InputGestureText="Ctrl+C" Click="CopyText_Click" />
+                <MenuItem Header="Copy Full _Line" Name="CopyFullLine" Click="CopyFullLine_Click" />
                 <Separator />
-                <MenuItem Header="Find..." />
-                <MenuItem Header="Find Next" />
+                <MenuItem Header="_Find..." Name="Find" InputGestureText="Ctrl+F" Click="Find_Click" />
+                <MenuItem Header="Find _Next" Name="FindNext" InputGestureText="F3" Click="FindNext_Click" />
+                <MenuItem Header="Find _Prev" Name="FindPrev" InputGestureText="Shift+F3" Click="FindPrev_Click" />
                 <Separator />
-                <MenuItem Header="Clear Traces" Name="ClearTraces" Click="ClearTraces_Click" />
-                <MenuItem Header="Send Test Trace" Name="SendTestTrace" Click="SendTestTrace_Click" />
+                <MenuItem Header="_Clear Traces" Name="ClearTraces" Click="ClearTraces_Click" />
+                <MenuItem Header="_Send Test Trace" Name="SendTestTrace" Click="SendTestTrace_Click" Visibility="Collapsed" />
             </MenuItem>
             <MenuItem Header="_Options">
-                <MenuItem Header="Font..." Name="Font" Click="Font_Click" />
-                <MenuItem Header="Exclusion Filters..." Name="Filters" Click="Filters_Click" />
-                <MenuItem Header="Regex Colorizers..." Visibility="Collapsed" />
-                <MenuItem Header="Quick Colorizers..." Visibility="Collapsed" />
-                <MenuItem Header="ETW Providers..." Name="ETWProviders" Click="ETWProviders_Click" />
+                <MenuItem Header="_Font..." Name="Font" Click="Font_Click" />
+                <MenuItem Header="E_xclusion Filters..." Name="Filters" Click="Filters_Click" />
+                <MenuItem Header="_Regex Colorizers..." Visibility="Collapsed" />
+                <MenuItem Header="_Quick Colorizers..." Visibility="Collapsed" />
+                <MenuItem Header="_ETW Providers..." Name="ETWProviders" Click="ETWProviders_Click" />
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="About Trace Spy..." />
+                <MenuItem Header="_About Trace Spy..." Name="About" Click="About_Click" />
             </MenuItem>
         </Menu>
-        <ListView Grid.Row="1">
+        <ListView Grid.Row="1" Name="LVH">
             <ListView.View>
                 <GridView x:Name="GV">
                     <GridViewColumn Header="#" x:Name="IndexColumn" Width="50" />
@@ -106,7 +108,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView Grid.Row="2" Name="LV" HorizontalContentAlignment="Stretch">
+        <ListView Grid.Row="2" Name="LV" HorizontalContentAlignment="Stretch" ScrollViewer.ScrollChanged="LV_ScrollChanged">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <local:TraceEventElement Event="{Binding}" />

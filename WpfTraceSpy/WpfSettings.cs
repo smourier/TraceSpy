@@ -12,6 +12,7 @@ namespace TraceSpy
         private Lazy<Typeface> _typeFace;
         private string _alternateColor;
         private Lazy<Brush> _alternateBrush;
+        private List<string> _searches = new List<string>();
         private List<Filter> _filters = new List<Filter>();
         private List<EtwProvider> _etwProviders = new List<EtwProvider>();
         private List<Colorizer> _colorizers = new List<Colorizer>();
@@ -24,7 +25,7 @@ namespace TraceSpy
             _typeFace = new Lazy<Typeface>(CreateTypeFace);
             RemoveEmptyLines = true;
             AutoScroll = true;
-            ShowProcessName = true;
+            ResolveProcessName = true;
             CaptureOutputDebugString = true;
             Left = 50;
             Top = 50;
@@ -37,7 +38,7 @@ namespace TraceSpy
             _filters.Add(new Filter(null, false));
         }
 
-        public bool ShowProcessName { get; set; }
+        public bool ResolveProcessName { get; set; }
         public bool ShowProcessId { get; set; }
         public bool ShowTooltips { get; set; }
         public bool ShowEtwDescription { get; set; }
@@ -45,6 +46,7 @@ namespace TraceSpy
         public bool CaptureEtwTraces { get; set; }
         public bool CaptureOutputDebugString { get; set; }
         public bool RemoveEmptyLines { get; set; }
+        public bool WrapText { get; set; }
         public int Left { get; set; }
         public int Top { get; set; }
         public int Width { get; set; }
@@ -53,6 +55,9 @@ namespace TraceSpy
         public int FindTop { get; set; }
         public double FontSize { get; set; }
         public bool DontAnimateCaptureMenuItem { get; set; }
+
+        [XmlIgnore] // we don't persist this one
+        public bool DisableAllFilters { get; set; }
 
         public string FontName
         {
@@ -116,6 +121,23 @@ namespace TraceSpy
             {
                 return null;
             }
+        }
+
+        public string[] Searches
+        {
+            get => _searches.ToArray();
+            set => _searches = value == null ? new List<string>() : new List<string>(value);
+        }
+
+        public void ClearSearches() => _searches = new List<string>();
+
+        public void AddSearch(string search)
+        {
+            if (string.IsNullOrWhiteSpace(search))
+                return;
+
+            _searches.RemoveAll(s => s == search);
+            _searches.Insert(0, search);
         }
 
         public Filter[] Filters
@@ -246,7 +268,10 @@ namespace TraceSpy
 
         public bool ExcludeLine(string line, string processName)
         {
-            if (line == null)
+            if (RemoveEmptyLines && string.IsNullOrWhiteSpace(line))
+                return true;
+
+            if (App.Current.Settings.DisableAllFilters)
                 return true;
 
             foreach (var filter in _filters.Where(f => f.IsActive))

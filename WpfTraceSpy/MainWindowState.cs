@@ -10,6 +10,7 @@
             ShowEtwDescription = true;
             AutoScroll = true;
             OdsStarted = false;
+            WrapText = true;
         }
 
         public bool ResolveProcessName { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
@@ -17,6 +18,7 @@
         public bool ShowProcessId { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
         public bool ShowEtwDescription { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
         public bool AutoScroll { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
+        public bool WrapText { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
 
         public bool EtwStarted
         {

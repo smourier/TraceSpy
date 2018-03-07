@@ -59,6 +59,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AutoCompleteComboBox.cs" />
     <Compile Include="Colorizer.cs" />
     <Compile Include="ColorRange.cs" />
     <Compile Include="ColorSet.cs" />
@@ -80,6 +84,9 @@
       <DependentUpon>FiltersWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="FilterType.cs" />
+    <Compile Include="FindWindow.xaml.cs">
+      <DependentUpon>FindWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FilterWindow.xaml.cs">
       <DependentUpon>FilterWindow.xaml</DependentUpon>
     </Compile>
@@ -92,6 +99,10 @@
     <Compile Include="TraceEventColumnLayout.cs" />
     <Compile Include="TraceEventElement.cs" />
     <Compile Include="UacUtilities.cs" />
+    <Page Include="AboutWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="EtwProvidersWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -103,6 +114,10 @@
     <Page Include="FiltersWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FindWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="FilterWindow.xaml">
       <SubType>Designer</SubType>

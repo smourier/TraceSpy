@@ -1,0 +1,19 @@
+﻿<Window x:Class="TraceSpy.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TraceSpy"
+        mc:Ignorable="d"
+        Title="About WPF TraceSpy" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+    <Grid MinHeight="58" MinWidth="208" MaxWidth="208" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock TextAlignment="Center" >WPF TraceSpy V1.0 <LineBreak/> Copyright (C) 2011-2018 Simon Mourier<LineBreak/>All rights reserved.<LineBreak/></TextBlock>
+        <Button Grid.Row="1" Click="Button_Click" Width="230" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
+            <Image Name="WB" Height="58" Width="208" Source="http://stackoverflow.com/users/flair/403671.png?theme=clean" />
+        </Button>
+    </Grid>
+</Window>

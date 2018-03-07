@@ -24,7 +24,7 @@ namespace TraceSpy
         protected override Size MeasureOverride(Size availableSize)
         {
             double height = 0;
-            if (Event != null && Event.Text != null)
+            if (Event != null && Event.Text != null && App.Current.Settings.WrapText)
             {
                 var formattedText = new FormattedText(
                     Event.Text,
@@ -47,12 +47,19 @@ namespace TraceSpy
             if (evt == null)
                 return;
 
-            if ((evt.Index % 2) == 1)
+            if (evt.Background != null)
             {
-                var altBrush = App.Current.Settings.AlternateBrush;
-                if (altBrush != null)
+                drawingContext.DrawRectangle(evt.Background, null, new Rect(RenderSize));
+            }
+            else
+            {
+                if ((evt.Index % 2) == 1)
                 {
-                    drawingContext.DrawRectangle(altBrush, null, new Rect(RenderSize));
+                    var altBrush = App.Current.Settings.AlternateBrush;
+                    if (altBrush != null)
+                    {
+                        drawingContext.DrawRectangle(altBrush, null, new Rect(RenderSize));
+                    }
                 }
             }
 
@@ -112,6 +119,11 @@ namespace TraceSpy
                     FontSize,
                     Brushes.Black);
 
+                if (!App.Current.Settings.WrapText)
+                {
+                    formattedText.MaxLineCount = 1;
+                }
+                formattedText.Trimming = TextTrimming.CharacterEllipsis;
                 formattedText.MaxTextWidth = App.Current.ColumnLayout.TextColumnWidth;
                 drawingContext.DrawText(formattedText, new Point(offset, 0));
             }
