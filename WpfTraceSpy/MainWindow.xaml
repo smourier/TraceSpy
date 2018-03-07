@@ -83,12 +83,13 @@
                 <MenuItem Header="Find Next" />
                 <Separator />
                 <MenuItem Header="Clear Traces" Name="ClearTraces" Click="ClearTraces_Click" />
+                <MenuItem Header="Send Test Trace" Name="SendTestTrace" Click="SendTestTrace_Click" />
             </MenuItem>
             <MenuItem Header="_Options">
-                <MenuItem Header="Font..." />
-                <MenuItem Header="Filters..." Name="Filters" Click="Filters_Click" />
-                <MenuItem Header="Regex Colorizers..." />
-                <MenuItem Header="Quick Colorizers..." />
+                <MenuItem Header="Font..." Name="Font" Click="Font_Click" />
+                <MenuItem Header="Exclusion Filters..." Name="Filters" Click="Filters_Click" />
+                <MenuItem Header="Regex Colorizers..." Visibility="Collapsed" />
+                <MenuItem Header="Quick Colorizers..." Visibility="Collapsed" />
                 <MenuItem Header="ETW Providers..." Name="ETWProviders" Click="ETWProviders_Click" />
             </MenuItem>
             <MenuItem Header="_Help">

@@ -9,6 +9,9 @@ using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace TraceSpy
@@ -52,6 +55,8 @@ namespace TraceSpy
                 _state.OdsStarted = null;
             }
 
+            SetFont();
+
             IndexColumn.Width = App.Current.ColumnLayout.IndexColumnWidth;
             TicksColumn.Width = App.Current.ColumnLayout.TicksColumnWidth;
             ProcessColumn.Width = App.Current.ColumnLayout.ProcessColumnWidth;
@@ -59,20 +64,20 @@ namespace TraceSpy
 
             App.Current.ColumnLayout.PropertyChanged += OnColumnLayoutPropertyChanged;
 
-            //var rnd = new Random(Environment.TickCount);
-            //for (int i = 0; i < 1000000; i++)
-            //{
-            //    var te = new TraceEvent();
-            //    te.Index = i;
-            //    te.Height = 10 + rnd.Next(0, 20);
-            //    te.Background = (i % 2) == 0 ? Brushes.White : Brushes.LightGray;
-            //    _dataSource.Add(te);
-            //}
+            var rnd = new Random(Environment.TickCount);
+            for (int i = 0; i < 10000; i++)
+            {
+                var te = new TraceEvent();
+                te.ProcessName = "test";
+                te.Height = 10 + rnd.Next(0, 20);
+                te.Background = (i % 2) == 0 ? Brushes.White : Brushes.LightGray;
+                AddTrace(te);
+            }
 
             LV.ItemsSource = _dataSource;
             foreach (var col in GV.Columns)
             {
-                ((INotifyPropertyChanged)col).PropertyChanged += GridViewColumnPropertyChanged;
+                ((INotifyPropertyChanged)col).PropertyChanged += OnGridViewColumnPropertyChanged;
             }
 
             if (_buffer != null)
@@ -103,7 +108,7 @@ namespace TraceSpy
             }
         }
 
-        private void GridViewColumnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnGridViewColumnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var col = (GridViewColumn)sender;
             if (col == IndexColumn)
@@ -142,10 +147,22 @@ namespace TraceSpy
 
         public void AddTrace(TraceEvent evt)
         {
-            if (evt == null)
+            if (evt == null || evt.ProcessName == null)
                 return;
 
             _dataSource.Add(evt);
+
+            if (_state.AutoScroll)
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    var last = _dataSource.LastOrDefault();
+                    if (last != null)
+                    {
+                        LV.ScrollIntoView(last);
+                    }
+                }, DispatcherPriority.SystemIdle);
+            }
         }
 
         private void ReadOutputDebugStringTraces()
@@ -173,12 +190,11 @@ namespace TraceSpy
                         continue;
 
                     var evt = new TraceEvent();
-                    evt.ProcessId = pid;
                     evt.ProcessName = GetProcessName(pid);
                     evt.Text = text;
                     Dispatcher.BeginInvoke(() =>
                     {
-                        _dataSource.Add(evt);
+                        AddTrace(evt);
                     });
                 }
             }
@@ -235,6 +251,11 @@ namespace TraceSpy
                 }
                 _processes[id] = name;
             }
+
+            if (_state.ShowProcessId)
+            {
+                name += " (" + id + ")";
+            }
             return name;
         }
 
@@ -255,6 +276,32 @@ namespace TraceSpy
             var dlg = new FiltersWindow();
             dlg.Owner = this;
             dlg.ShowDialog();
+        }
+
+        private void SetFont()
+        {
+            LV.FontFamily = new FontFamily(App.Current.Settings.FontName);
+            LV.FontSize = App.Current.Settings.FontSize;
+        }
+
+        private void Font_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new FontDialog();
+            dlg.AllowVerticalFonts = false;
+            dlg.FontMustExist = true;
+            dlg.Font = new System.Drawing.Font(LV.FontFamily.Source, (float)LV.FontSize);
+            if (dlg.ShowDialog(NativeWindow.FromHandle(new WindowInteropHelper(this).Handle)) != System.Windows.Forms.DialogResult.OK)
+                return;
+
+            App.Current.Settings.FontName = dlg.Font.Name;
+            App.Current.Settings.FontSize = dlg.Font.Size;
+            App.Current.Settings.SerializeToConfiguration();
+            SetFont();
+        }
+
+        private void SendTestTrace_Click(object sender, RoutedEventArgs e)
+        {
+            App.AddTrace("Test " + DateTime.Now);
         }
     }
 }

@@ -11,11 +11,16 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="45" />
         </Grid.RowDefinitions>
-        <Label Content="Guid:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" />
-        <TextBox Name="PageName" Style="{StaticResource ResourceKey=ValidationTextBox}" Text="{Binding Guid, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Margin="0,10,10,0" Width="349" Height="23" VerticalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Right" />
-        <Label Content="Description:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" />
-        <TextBox Name="Description" Style="{StaticResource ResourceKey=ValidationTextBox}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Margin="0,40,10,0" Width="349" Height="23" VerticalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Right" />
-        <CheckBox Content="Active" IsChecked="{Binding IsActive, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" HorizontalAlignment="Left" Height="15" VerticalAlignment="Bottom" Margin="15,0,0,20" />
+        <Label Content="Filter On:" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" Width="98" />
+        <RadioButton Name="FilterColumnText" IsChecked="{Binding IsFilterColumnText}" GroupName="FilterColumn" Content="Text" Margin="135,10,0,0" Width="63" Height="23" VerticalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" />
+        <RadioButton Name="FilterColumnProcessName" IsChecked="{Binding IsFilterColumnProcessName}" GroupName="FilterColumn" Content="Process Name" Margin="198,10,0,0" Width="113" Height="23" VerticalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" />
+        <Label Content="Filter Type:" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Width="98" />
+        <RadioButton Name="FilterTypeText" IsChecked="{Binding IsFilterTypeText}" GroupName="FilterType" Content="Text" Margin="135,38,0,0" Width="63" Height="23" VerticalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" />
+        <RadioButton Name="FilterTypeRegex" IsChecked="{Binding IsFilterTypeRegex}"  GroupName="FilterType" Content="Regular Expression" Margin="198,38,0,0" Width="193" Height="23" VerticalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" />
+        <Label Content="Definition:" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top" Width="98" />
+        <TextBox Name="Definition" Style="{StaticResource ResourceKey=ValidationTextBox}" Text="{Binding Definition, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Margin="135,69,0,0" Width="336" Height="23" VerticalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" />
+        <CheckBox Name="IsActive" Content="Active" IsChecked="{Binding IsActive, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" HorizontalAlignment="Left" Height="15" VerticalAlignment="Bottom" Margin="15,0,0,20" />
+        <CheckBox Name="IgnoreCase" Content="Ignore Case" IsChecked="{Binding IgnoreCase, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" HorizontalAlignment="Left" Height="15" VerticalAlignment="Bottom" Margin="135,0,0,20" />
         <Button Name="OK" IsEnabled="{Binding IsValid}" Grid.Row="1" Content="_Save" IsDefault="True" Margin="0,0,95,10" HorizontalAlignment="Right" Width="75" Height="23" VerticalAlignment="Bottom" Click="OK_Click" />
         <Button Name="Cancel" Grid.Row="1" IsCancel="True" Content="_Cancel" Margin="0,0,10,10" HorizontalAlignment="Right" Width="75" Height="23" VerticalAlignment="Bottom" Click="Close_Click" />
     </Grid>

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
@@ -27,11 +23,22 @@ namespace TraceSpy
 
         protected override Size MeasureOverride(Size availableSize)
         {
-            //if (Event != null)
-            //{
-            //    return new Size(100, 20 + 5 * (Event.Id % 10));
-            //}
-            return new Size(App.Current.ColumnLayout.RowWidth, FontSize + 2);
+            double height = 0;
+            if (Event != null && Event.Text != null)
+            {
+                var formattedText = new FormattedText(
+                    Event.Text,
+                    Culture,
+                    FlowDirection.LeftToRight,
+                    App.Current.Settings.TypeFace,
+                    FontSize,
+                    Brushes.Black);
+
+                formattedText.MaxTextWidth = App.Current.ColumnLayout.TextColumnWidth;
+                height = formattedText.Height;
+            }
+
+            return new Size(App.Current.ColumnLayout.RowWidth, Math.Max(FontSize + 2, height));
         }
 
         protected override void OnRender(DrawingContext drawingContext)
@@ -77,16 +84,22 @@ namespace TraceSpy
             drawingContext.DrawText(formattedText, new Point(offset, 0));
             offset += App.Current.ColumnLayout.TicksColumnWidth;
 
-            formattedText = new FormattedText(
-                evt.ProcessName,
-                Culture,
-                FlowDirection.LeftToRight,
-                App.Current.Settings.TypeFace,
-                FontSize,
-                Brushes.Black);
+            if (evt.ProcessName != null)
+            {
+                formattedText = new FormattedText(
+                    evt.ProcessName,
+                    Culture,
+                    FlowDirection.LeftToRight,
+                    App.Current.Settings.TypeFace,
+                    FontSize,
+                    Brushes.Black);
 
-            formattedText.MaxTextWidth = App.Current.ColumnLayout.ProcessColumnWidth;
-            drawingContext.DrawText(formattedText, new Point(offset, 0));
+                formattedText.MaxLineCount = 1;
+                formattedText.Trimming = TextTrimming.CharacterEllipsis;
+                formattedText.MaxTextWidth = App.Current.ColumnLayout.ProcessColumnWidth;
+                drawingContext.DrawText(formattedText, new Point(offset, 0));
+            }
+
             offset += App.Current.ColumnLayout.ProcessColumnWidth;
 
             if (evt.Text != null)

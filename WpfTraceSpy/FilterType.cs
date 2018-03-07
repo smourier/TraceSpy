@@ -1,8 +1,8 @@
 ﻿namespace TraceSpy
 {
-    public enum FilterColumn
+    public enum FilterType
     {
         Text,
-        ProcessName,
+        Regex
     }
 }

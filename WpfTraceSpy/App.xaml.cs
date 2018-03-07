@@ -23,7 +23,6 @@ namespace TraceSpy
         public static TraceEvent AddTrace(string text)
         {
             var evt = new TraceEvent();
-            evt.ProcessId = _processId.Value;
             evt.ProcessName = _processName.Value;
             evt.Text = text;
             AddTrace(evt);

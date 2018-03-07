@@ -16,7 +16,6 @@ namespace TraceSpy
 
         public long Index { get; }
         public long Ticks { get; set; }
-        public int ProcessId { get; set; }
         public string ProcessName { get; set; }
         public string Text { get; set; }
 

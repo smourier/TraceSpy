@@ -30,7 +30,7 @@ namespace TraceSpy
             if (!dlg.ShowDialog().GetValueOrDefault())
                 return;
 
-            App.Current.Settings.AddFilter(dlg.Filter);
+            App.Current.Settings.AddFilter(filter, dlg.Filter);
             App.Current.Settings.SerializeToConfiguration();
         }
 
@@ -43,7 +43,7 @@ namespace TraceSpy
             if (this.ShowConfirm("Are you sure you want to remove the '" + filter + "' Filter?") != MessageBoxResult.Yes)
                 return;
 
-            _context.Providers.Remove(filter);
+            _context.Filters.Remove(filter);
             App.Current.Settings.RemoveFilter(filter);
             App.Current.Settings.SerializeToConfiguration();
         }
@@ -55,11 +55,11 @@ namespace TraceSpy
             if (!dlg.ShowDialog().GetValueOrDefault())
                 return;
 
-            bool added = App.Current.Settings.AddFilter(dlg.Filter);
+            bool added = App.Current.Settings.AddFilter(null, dlg.Filter);
             App.Current.Settings.SerializeToConfiguration();
             if (added)
             {
-                _context.Providers.Add(dlg.Filter);
+                _context.Filters.Add(dlg.Filter);
             }
         }
 
@@ -75,11 +75,11 @@ namespace TraceSpy
                     OnPropertyChanged(nameof(ModifyEnabled));
                     OnPropertyChanged(nameof(RemoveEnabled));
                 };
-                Providers = new ObservableCollection<Filter>();
-                Providers.AddRange(App.Current.Settings.Filters);
+                Filters = new ObservableCollection<Filter>();
+                Filters.AddRange(App.Current.Settings.Filters);
             }
 
-            public ObservableCollection<Filter> Providers { get; }
+            public ObservableCollection<Filter> Filters { get; }
             public bool ModifyEnabled => _window.LV.SelectedIndex >= 0;
             public bool RemoveEnabled => _window.LV.SelectedIndex >= 0;
         }

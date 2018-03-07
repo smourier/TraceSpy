@@ -124,16 +124,17 @@ namespace TraceSpy
             set => _filters = value == null ? new List<Filter>() : new List<Filter>(value);
         }
 
-        public bool AddFilter(Filter filter)
+        public bool AddFilter(Filter old, Filter filter)
         {
             if (filter == null)
                 throw new ArgumentNullException(nameof(filter));
 
-            var existing = _filters.FirstOrDefault(p => p.Equals(filter));
+            var existing = _filters.FirstOrDefault(p => p.Equals(old));
             if (existing != null)
             {
                 existing.IsActive = filter.IsActive;
-                existing.FilterColumn = filter.FilterColumn;
+                existing.Column = filter.Column;
+                existing.Type = filter.Type;
                 existing.Definition = filter.Definition;
                 existing.IgnoreCase = filter.IgnoreCase;
                 return false;
@@ -243,55 +244,14 @@ namespace TraceSpy
             return list;
         }
 
-        public bool IncludeLine(string line, string processName)
-        {
-            if (line == null)
-                return false;
-
-            foreach (var filter in _filters)
-            {
-                if (!filter.IsActive)
-                    continue;
-
-                if (filter.FilterColumn == FilterColumn.Process && processName == null)
-                    continue;
-
-                if (filter.FilterColumn == FilterColumn.Text &&
-                    filter.Regex != null &&
-                    filter.Regex.Match(line).Success)
-                    return true;
-
-                if (filter.FilterColumn == FilterColumn.Process &&
-                    filter.Regex != null &&
-                    processName != null &&
-                    filter.Regex.Match(processName).Success)
-                    return true;
-            }
-            return false;
-        }
-
         public bool ExcludeLine(string line, string processName)
         {
             if (line == null)
                 return true;
 
-            foreach (var filter in _filters)
+            foreach (var filter in _filters.Where(f => f.IsActive))
             {
-                if (!filter.IsActive)
-                    continue;
-
-                if (filter.FilterColumn == FilterColumn.Process && processName == null)
-                    continue;
-
-                if (filter.FilterColumn == FilterColumn.Text &&
-                    filter.Regex != null &&
-                    filter.Regex.Match(line).Success)
-                    return true;
-
-                if (filter.FilterColumn == FilterColumn.Process &&
-                    filter.Regex != null &&
-                    processName != null &&
-                    filter.Regex.Match(processName).Success)
+                if (filter.ExcludeLine(line, processName))
                     return true;
             }
             return false;
