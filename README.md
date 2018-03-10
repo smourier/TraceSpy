@@ -70,3 +70,5 @@ This is a WPF version of TraceSpy. Wpf TraceSpy is *much* faster than the Winfor
 Things that are in TraceSpy but not in WpfTraceSpy:
 * File Open, File Save, File Save As are not there. I'm not sure it' so useful since we can copy all lines to the clipboard.
 * Quick Colorizers and Regex Colorizers are not part of WpfTraceSpy. I may add them in the future.
+
+![wpftracespy.png](doc/wpftracespy.png?raw=true)
