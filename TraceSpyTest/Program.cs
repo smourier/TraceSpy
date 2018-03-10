@@ -67,7 +67,7 @@ namespace TraceSpyTest
             var etwProvider = CommandLineUtilities.GetArgument("etw", Guid.Empty);
             Console.WriteLine("TraceSpy Test.");
             Console.WriteLine();
-            Console.WriteLine("Press Q (or CTRL-C) to quit");
+            Console.WriteLine("Press Q, ESC, or CTRL-C to quit");
             Console.WriteLine();
             Console.WriteLine("OutputDebugString");
             Console.WriteLine(" Press O to send an OutputDebugString trace.");
@@ -92,6 +92,9 @@ namespace TraceSpyTest
                 int num = GetFinalNumber(info);
                 switch (info.Key)
                 {
+                    case ConsoleKey.Escape:
+                        return;
+
                     case ConsoleKey.Q:
                         if (_etw != null)
                         {
@@ -119,7 +122,10 @@ namespace TraceSpyTest
                             for (int i = 1; i <= num; i++)
                             {
                                 t = "Trace #" + count + ", " + i + "/" + num + " from TraceSpyTest. Date:" + DateTime.Now;
-                                Console.WriteLine("Sending: '" + t + "'");
+                                if (num < 1000 || (i % 1000) == 0)
+                                {
+                                    Console.WriteLine("Sending: '" + t + "'");
+                                }
                                 _etw.WriteMessageEvent(t);
                                 count++;
                             }

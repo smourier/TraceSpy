@@ -11,7 +11,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -30,6 +29,7 @@ namespace TraceSpy
         private ObservableCollection<TraceEvent> _dataSource = new ObservableCollection<TraceEvent>();
         private MainWindowState _state;
         private ConcurrentDictionary<int, string> _processes = new ConcurrentDictionary<int, string>();
+        private Dictionary<Guid, EventRealtimeListener> _etwListeners = new Dictionary<Guid, EventRealtimeListener>();
         private FindWindow _findWindow;
         private int _scrollingTo;
         private TraceEvent _scrollTo;
@@ -126,6 +126,7 @@ namespace TraceSpy
 
         protected override void OnClosed(EventArgs e)
         {
+            DisposeEtwEvents();
             _findWindow?.Close();
             _stopOutputDebugStringTraces = true;
             _outputDebugStringThread?.Join(1000);
@@ -276,6 +277,7 @@ namespace TraceSpy
         private void EtwTrace_Click(object sender, RoutedEventArgs e)
         {
             _state.EtwStarted = !_state.EtwStarted;
+            UpdateEtwEvents();
         }
 
         private string GetProcessName(int id)
@@ -318,6 +320,7 @@ namespace TraceSpy
             var dlg = new EtwProvidersWindow();
             dlg.Owner = this;
             dlg.ShowDialog();
+            UpdateEtwEvents();
         }
 
         private void Filters_Click(object sender, RoutedEventArgs e)
@@ -463,5 +466,92 @@ namespace TraceSpy
             dlg.Owner = this;
             dlg.ShowDialog();
         }
+
+        private void DisposeEtwEvents()
+        {
+            foreach (var kvp in _etwListeners)
+            {
+                try
+                {
+                    kvp.Value.RealtimeEvent -= OnEtwListenerRealtimeEvent;
+                    kvp.Value.Dispose();
+                }
+                catch
+                {
+                    // do nothing, continue
+                }
+            }
+            _etwListeners.Clear();
+        }
+
+        private void ProcessEtwTrace(object state)
+        {
+            var listener = (EventRealtimeListener)state;
+            listener.ProcessTraces();
+        }
+
+        private void OnEtwListenerRealtimeEvent(object sender, EventRealtimeEventArgs e)
+        {
+            var listener = (EventRealtimeListener)sender;
+
+            var evt = new TraceEvent();
+            evt.ProcessName = GetProcessName(e.ProcessId);
+            if (listener.Description != null && _state.ShowEtwDescription)
+            {
+                evt.ProcessName += " (" + listener.Description + ")";
+            }
+            evt.Text = e.Message;
+
+            ThreadPool.QueueUserWorkItem((state) =>
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    AddTrace(evt);
+                }, DispatcherPriority.SystemIdle);
+            });
+        }
+
+        private void UpdateEtwEvents()
+        {
+            DisposeEtwEvents();
+            if (!_state.EtwStarted)
+                return;
+
+            foreach (EtwProvider provider in App.Current.Settings.EtwProviders)
+            {
+                _etwListeners.TryGetValue(provider.Guid, out EventRealtimeListener listener);
+                if (listener == null)
+                {
+                    if (!provider.IsActive)
+                        continue;
+
+                    // this would be a serialization bug
+                    if (provider.Guid == Guid.Empty)
+                        continue;
+
+                    var level = (EtwTraceLevel)provider.TraceLevel;
+
+                    listener = new EventRealtimeListener(provider.Guid, provider.Guid.ToString(), level);
+                    listener.Description = provider.Description;
+
+                    var t = new Thread(ProcessEtwTrace);
+                    t.Start(listener);
+
+                    listener.RealtimeEvent += OnEtwListenerRealtimeEvent;
+                    _etwListeners.Add(provider.Guid, listener);
+                }
+                else
+                {
+                    if (!provider.IsActive)
+                    {
+                        listener.RealtimeEvent -= OnEtwListenerRealtimeEvent;
+                        listener.Dispose();
+                        _etwListeners.Remove(provider.Guid);
+                        continue;
+                    }
+                }
+            }
+        }
+
     }
 }

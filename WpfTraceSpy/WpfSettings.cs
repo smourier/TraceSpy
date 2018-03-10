@@ -26,7 +26,6 @@ namespace TraceSpy
             RemoveEmptyLines = true;
             AutoScroll = true;
             ResolveProcessName = true;
-            CaptureOutputDebugString = true;
             Left = 50;
             Top = 50;
             FindLeft = 50;
@@ -43,8 +42,6 @@ namespace TraceSpy
         public bool ShowTooltips { get; set; }
         public bool ShowEtwDescription { get; set; }
         public bool AutoScroll { get; set; }
-        public bool CaptureEtwTraces { get; set; }
-        public bool CaptureOutputDebugString { get; set; }
         public bool RemoveEmptyLines { get; set; }
         public bool WrapText { get; set; }
         public int Left { get; set; }

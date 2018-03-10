@@ -12,18 +12,6 @@
             <RowDefinition Height="45" />
         </Grid.RowDefinitions>
         <ListView Name="LV" SelectionMode="Single" ItemsSource="{Binding Providers}" MouseDoubleClick="LV_MouseDoubleClick">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsActive}" Value="True">
-                            <Setter Property="Background" Value="Transparent" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding IsActive}" Value="False">
-                            <Setter Property="Background" Value="#E0E0E0" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ListBox.ItemContainerStyle>
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Active" Width="40" DisplayMemberBinding="{Binding IsActive}" ></GridViewColumn>
