@@ -1,5 +1,7 @@
 # TraceSpy
-TraceSpy is a pure .NET alternative to the very popular SysInternals DebugView tool
+TraceSpy is a pure .NET, 100% free and open source, alternative to the very popular SysInternals DebugView tool.
+
+**Update 2018/03/10** : we have just released the first version of a WPF version that's *much* faster than the original Winforms one when tracing millions of trace events. More info at the end of this page.
 
 *** This is the new home of https://tracespy.codeplex.com/ ***
 
@@ -61,3 +63,10 @@ One last note: for these traces to be read, TraceSpy *must* be started as Admini
 * Save & Log to file (it's easy to do with a copy / paste)
 * Append comment
 * Remote connect
+
+# ** NEW *** WpfTraceSpy
+This is a WPF version of TraceSpy. Wpf TraceSpy is *much* faster than the Winforms version. You can send a million traces to it and it will digest them without any pain (but it will take a while before the million traces will be visible).
+
+Things that are in TraceSpy but not in WpfTraceSpy:
+* File Open, File Save, File Save As are not there. I'm not sure it' so useful since we can copy all lines to the clipboard.
+* Quick Colorizers and Regex Colorizers are not part of WpfTraceSpy. I may add them in the future.
