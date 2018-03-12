@@ -120,6 +120,41 @@
             </ListView.View>
         </ListView>
         <ListView Grid.Row="2" Name="LV" HorizontalContentAlignment="Stretch" ScrollViewer.ScrollChanged="LV_ScrollChanged" MouseDoubleClick="LV_MouseDoubleClick">
+            <ListView.Resources>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        Background="{TemplateBinding Background}"
+                                        Padding="{TemplateBinding Padding}"
+                                        SnapsToDevicePixels="true">
+                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="Selector.IsSelectionActive" Value="False" />
+                                            <Condition Property="IsSelected" Value="True" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background" TargetName="Bd" Value="LightSkyBlue" />
+                                    </MultiTrigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="Selector.IsSelectionActive" Value="True" />
+                                            <Condition Property="IsSelected" Value="True" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background" TargetName="Bd" Value="LightSteelBlue" />
+                                    </MultiTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.Resources>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <local:TraceEventElement Event="{Binding}" />

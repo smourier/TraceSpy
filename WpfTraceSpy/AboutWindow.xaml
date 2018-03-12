@@ -11,7 +11,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock TextAlignment="Center" >WPF TraceSpy V1.0 <LineBreak/> Copyright (C) 2011-2018 Simon Mourier<LineBreak/>All rights reserved.<LineBreak/></TextBlock>
+        <TextBlock TextAlignment="Center" >WPF TraceSpy V2.5 <LineBreak/> Copyright (C) 2011-2018 Simon Mourier<LineBreak/>All rights reserved.<LineBreak/></TextBlock>
         <Button Grid.Row="1" Click="Button_Click" Width="230" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
             <Image Name="WB" Height="58" Width="208" Source="http://stackoverflow.com/users/flair/403671.png?theme=clean" />
         </Button>

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace TraceSpy
 {
@@ -42,10 +43,22 @@ namespace TraceSpy
             }
         }
 
+        protected override void OnActivated(EventArgs e)
+        {
+            _context.Searches.Clear();
+            _context.Searches.AddRange(App.Current.Settings.Searches);
+            base.OnActivated(e);
+        }
+
         protected override void OnClosing(CancelEventArgs e)
         {
             e.Cancel = true;
             Hide();
+        }
+
+        private void Searches_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _context.UpdateValid();
         }
 
         private class Context : DictionaryObject
@@ -58,6 +71,11 @@ namespace TraceSpy
                 Searches = new ObservableCollection<string>();
                 Searches.AddRange(App.Current.Settings.Searches);
                 _window.Searches.ItemsSource = Searches;
+            }
+
+            public void UpdateValid()
+            {
+                OnPropertyChanged(nameof(IsValid));
             }
 
             public ObservableCollection<string> Searches { get; }
