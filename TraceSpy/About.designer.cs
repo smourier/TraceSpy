@@ -47,22 +47,22 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(79, 13);
+            this.label1.Location = new System.Drawing.Point(46, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(128, 26);
+            this.label1.Size = new System.Drawing.Size(194, 39);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Trace Spy V2.4\r\nWritten by Simon Mourier.";
+            this.label1.Text = "Trace Spy V2.4\r\n(C) Copyright Simon Mourier 2011-2018.\r\nAll rights reserved.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(78, 47);
+            this.linkLabel1.Location = new System.Drawing.Point(50, 52);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(140, 13);
+            this.linkLabel1.Size = new System.Drawing.Size(190, 13);
             this.linkLabel1.TabIndex = 3;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "http://www.magnumdb.com";
+            this.linkLabel1.Text = "https://github.com/smourier/TraceSpy";
             // 
             // About
             // 
