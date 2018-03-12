@@ -43,6 +43,7 @@ namespace TraceSpy
             _state.ShowEtwDescription = App.Current.Settings.ShowEtwDescription;
             _state.ShowProcessId = App.Current.Settings.ShowProcessId;
             _state.WrapText = App.Current.Settings.WrapText;
+            _state.ShowTicksMode = App.Current.Settings.ShowTicksMode;
             _state.PropertyChanged += OnStatePropertyChanged;
 
             InitializeComponent();
@@ -116,9 +117,11 @@ namespace TraceSpy
             App.Current.Settings.ShowEtwDescription = _state.ShowEtwDescription;
             App.Current.Settings.ShowProcessId = _state.ShowProcessId;
             App.Current.Settings.WrapText = _state.WrapText;
+            App.Current.Settings.ShowTicksMode = _state.ShowTicksMode;
             App.Current.Settings.SerializeToConfiguration();
 
-            if (e.PropertyName == "WrapText")
+            if (e.PropertyName == nameof(MainWindowState.WrapText) ||
+                e.PropertyName == nameof(MainWindowState.ShowTicksMode))
             {
                 OnColumnLayoutPropertyChanged(null, null);
             }
@@ -194,6 +197,8 @@ namespace TraceSpy
             if (App.Current.Settings.ExcludeLine(evt.Text, evt.ProcessName))
                 return;
 
+            var last = _dataSource.LastOrDefault();
+            evt.PreviousTicks = last != null ? last.Ticks : evt.Ticks;
             _dataSource.Add(evt);
 
             if (_state.AutoScroll)

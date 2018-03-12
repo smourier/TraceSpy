@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows.Media;
 
@@ -11,11 +12,12 @@ namespace TraceSpy
         public TraceEvent()
         {
             Index = Interlocked.Increment(ref _index);
-            Ticks = DateTime.Now.Ticks;
+            Ticks = Stopwatch.GetTimestamp();
         }
 
         public long Index { get; }
         public long Ticks { get; set; }
+        public long PreviousTicks { get; set; }
         public string ProcessName { get; set; }
         public string Text { get; set; }
 

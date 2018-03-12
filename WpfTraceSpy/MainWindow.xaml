@@ -75,6 +75,15 @@
                 <MenuItem Header="Show Process _Id" IsChecked="{Binding ShowProcessId, Mode=TwoWay}" IsCheckable="True" />
                 <MenuItem Header="Show ETW _Description" IsChecked="{Binding ShowEtwDescription, Mode=TwoWay}" IsCheckable="True" />
                 <MenuItem Header="_Wrap Text" IsChecked="{Binding WrapText, Mode=TwoWay}" IsCheckable="True" />
+                <MenuItem Header="_Ticks">
+                    <MenuItem Header="As _Ticks" IsChecked="{Binding ShowTicksAsTicks, Mode=TwoWay}" IsCheckable="True" />
+                    <MenuItem Header="As T_ime" IsChecked="{Binding ShowTicksAsTime, Mode=TwoWay}" IsCheckable="True" />
+                    <MenuItem Header="As _Seconds" IsChecked="{Binding ShowTicksAsSeconds, Mode=TwoWay}" IsCheckable="True" />
+                    <MenuItem Header="As _Milliseconds" IsChecked="{Binding ShowTicksAsMilliseconds, Mode=TwoWay}" IsCheckable="True" />
+                    <MenuItem Header="As _Delta Ticks" IsChecked="{Binding ShowTicksAsDeltaTicks, Mode=TwoWay}" IsCheckable="True" />
+                    <MenuItem Header="As D_elta Seconds" IsChecked="{Binding ShowTicksAsDeltaSeconds, Mode=TwoWay}" IsCheckable="True" />
+                    <MenuItem Header="As Delta Mi_lliseconds" IsChecked="{Binding ShowTicksAsDeltaMilliseconds, Mode=TwoWay}" IsCheckable="True" />
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_Edit" Name="Edit" SubmenuOpened="Edit_SubmenuOpened">
                 <MenuItem Header="_Copy Text" Name="CopyText" InputGestureText="Ctrl+C" Click="CopyText_Click" />

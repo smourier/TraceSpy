@@ -94,6 +94,7 @@
     <Compile Include="QuickColorizer.cs" />
     <Compile Include="EventRealtimeEventArgs.cs" />
     <Compile Include="Serializable.cs" />
+    <Compile Include="ShowTicksMode.cs" />
     <Compile Include="WpfSettings.cs" />
     <Compile Include="TraceEvent.cs" />
     <Compile Include="TraceEventColumnLayout.cs" />

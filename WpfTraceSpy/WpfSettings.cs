@@ -44,6 +44,7 @@ namespace TraceSpy
         public bool AutoScroll { get; set; }
         public bool RemoveEmptyLines { get; set; }
         public bool WrapText { get; set; }
+        public ShowTicksMode ShowTicksMode { get; set; }
         public int Left { get; set; }
         public int Top { get; set; }
         public int Width { get; set; }
