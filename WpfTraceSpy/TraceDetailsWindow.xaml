@@ -1,0 +1,23 @@
+﻿<Window x:Class="TraceSpy.TraceDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TraceSpy"
+        mc:Ignorable="d"
+        Title="Event" Height="450" Width="800" WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="45" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBlock Padding="10" Text="{Binding Index, StringFormat={}Index: {0}}" />
+            <TextBlock Padding="10" Text="{Binding TicksText, StringFormat={}Ticks: {0}}" />
+            <TextBlock Padding="10" Text="{Binding ProcessName, StringFormat={}Process: {0}}" />
+        </StackPanel>
+        <TextBox Padding="10" Name="TB" Grid.Row="1" IsReadOnly="true" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Text="{Binding Text}" />
+        <Button Name="CloseButton" Grid.Row="2" IsDefault="True" IsCancel="True" Content="Close" Margin="0,0,10,10" HorizontalAlignment="Right" Width="75" Height="23" VerticalAlignment="Bottom" Click="Close_Click"/>
+    </Grid>
+</Window>

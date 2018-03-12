@@ -79,48 +79,16 @@ namespace TraceSpy
             drawingContext.DrawText(formattedText, new Point(0, 0));
             offset += App.Current.ColumnLayout.IndexColumnWidth;
 
-            string ticks;
-            const string decFormat = "0.00000000";
-            switch (App.Current.Settings.ShowTicksMode)
-            {
-                case ShowTicksMode.AsTime:
-                    ticks = new TimeSpan(evt.Ticks).ToString();
-                    break;
-
-                case ShowTicksMode.AsSeconds:
-                    ticks = (evt.Ticks / (double)Stopwatch.Frequency).ToString() + " s";
-                    break;
-
-                case ShowTicksMode.AsMilliseconds:
-                    ticks = (evt.Ticks / (double)Stopwatch.Frequency / 1000).ToString() + " ms";
-                    break;
-
-                case ShowTicksMode.AsDeltaTicks:
-                    ticks = (evt.Ticks - evt.PreviousTicks).ToString();
-                    break;
-
-                case ShowTicksMode.AsDeltaSeconds:
-                    ticks = ((evt.Ticks - evt.PreviousTicks) / (double)Stopwatch.Frequency).ToString(decFormat) + " s";
-                    break;
-
-                case ShowTicksMode.AsDeltaMilliseconds:
-                    ticks = ((1000 * (evt.Ticks - evt.PreviousTicks)) / (double)Stopwatch.Frequency).ToString(decFormat) + " ms";
-                    break;
-
-                case ShowTicksMode.AsTicks:
-                default:
-                    ticks = evt.Ticks.ToString();
-                    break;
-            }
-
             formattedText = new FormattedText(
-                ticks,
+                evt.TicksText,
                 Culture,
                 FlowDirection.LeftToRight,
                 App.Current.Settings.TypeFace,
                 FontSize,
                 Brushes.Black);
 
+            formattedText.MaxLineCount = 1;
+            formattedText.Trimming = TextTrimming.CharacterEllipsis;
             formattedText.MaxTextWidth = App.Current.ColumnLayout.TicksColumnWidth;
             drawingContext.DrawText(formattedText, new Point(offset, 0));
             offset += App.Current.ColumnLayout.TicksColumnWidth;

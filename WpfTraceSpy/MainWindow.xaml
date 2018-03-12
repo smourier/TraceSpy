@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TraceSpy"
         mc:Ignorable="d"
-        Title="Trace Spy" Height="500" Width="700" WindowStartupLocation="CenterScreen">
+        Title="Trace Spy" Height="500" Width="700" WindowStartupLocation="Manual" SizeChanged="Window_SizeChanged">
     <Window.Resources>
         <Style TargetType="MenuItem" x:Key="NotStarted">
             <Setter Property="Foreground" Value="White" />
@@ -102,6 +102,8 @@
                 <MenuItem Header="_Regex Colorizers..." Visibility="Collapsed" />
                 <MenuItem Header="_Quick Colorizers..." Visibility="Collapsed" />
                 <MenuItem Header="_ETW Providers..." Name="ETWProviders" Click="ETWProviders_Click" />
+                <Separator />
+                <MenuItem Header="Open _Configuration Folder" Name="OpenConfig" Click="OpenConfig_Click" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About Trace Spy..." Name="About" Click="About_Click" />
@@ -117,7 +119,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView Grid.Row="2" Name="LV" HorizontalContentAlignment="Stretch" ScrollViewer.ScrollChanged="LV_ScrollChanged">
+        <ListView Grid.Row="2" Name="LV" HorizontalContentAlignment="Stretch" ScrollViewer.ScrollChanged="LV_ScrollChanged" MouseDoubleClick="LV_MouseDoubleClick">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <local:TraceEventElement Event="{Binding}" />

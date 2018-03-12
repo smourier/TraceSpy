@@ -15,9 +15,6 @@ namespace TraceSpy
         private List<string> _searches = new List<string>();
         private List<Filter> _filters = new List<Filter>();
         private List<EtwProvider> _etwProviders = new List<EtwProvider>();
-        private List<Colorizer> _colorizers = new List<Colorizer>();
-        private List<QuickColorizer> _quickColorizers = new List<QuickColorizer>();
-        private List<ColorSet> _colorSets = new List<ColorSet>();
 
         public WpfSettings()
         {
@@ -34,6 +31,10 @@ namespace TraceSpy
             Height = 600;
             FontName = "Lucida Console";
             FontSize = 10;
+            IndexColumnWidth = 75;
+            TicksColumnWidth = 96;
+            ProcessColumnWidth = 102;
+            TextColumnWidth = 681;
             _filters.Add(new Filter(null, false));
         }
 
@@ -44,14 +45,20 @@ namespace TraceSpy
         public bool AutoScroll { get; set; }
         public bool RemoveEmptyLines { get; set; }
         public bool WrapText { get; set; }
+        public bool CaptureEtwTraces { get; set; }
+        public bool CaptureOdsTraces { get; set; }
         public ShowTicksMode ShowTicksMode { get; set; }
-        public int Left { get; set; }
-        public int Top { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public int FindLeft { get; set; }
-        public int FindTop { get; set; }
+        public double Left { get; set; }
+        public double Top { get; set; }
+        public double Width { get; set; }
+        public double Height { get; set; }
+        public double FindLeft { get; set; }
+        public double FindTop { get; set; }
         public double FontSize { get; set; }
+        public double IndexColumnWidth { get; set; }
+        public double TicksColumnWidth { get; set; }
+        public double ProcessColumnWidth { get; set; }
+        public double TextColumnWidth { get; set; }
         public bool DontAnimateCaptureMenuItem { get; set; }
 
         [XmlIgnore] // we don't persist this one
@@ -211,57 +218,6 @@ namespace TraceSpy
                 throw new ArgumentNullException(nameof(provider));
 
             return _etwProviders.Remove(provider);
-        }
-
-        public ColorSet GetColorSet(string name)
-        {
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            foreach (var colorSet in _colorSets)
-            {
-                if (string.Compare(name, colorSet.Name, StringComparison.OrdinalIgnoreCase) == 0)
-                    return colorSet;
-            }
-            return null;
-        }
-
-        public ColorSet[] ColorSets
-        {
-            get => _colorSets.ToArray();
-            set => _colorSets = value == null ? new List<ColorSet>() : new List<ColorSet>(value);
-        }
-
-        public Colorizer[] Colorizers
-        {
-            get => _colorizers.ToArray();
-            set => _colorizers = value == null ? new List<Colorizer>() : new List<Colorizer>(value);
-        }
-
-        public QuickColorizer[] QuickColorizers
-        {
-            get => _quickColorizers.ToArray();
-            set => _quickColorizers = value == null ? new List<QuickColorizer>() : new List<QuickColorizer>(value);
-        }
-
-        public IEnumerable<ColorRange> ComputeColorRanges(string line)
-        {
-            var list = new List<ColorRange>();
-            if (string.IsNullOrEmpty(line))
-            {
-                list.Add(new ColorRange(null, 0, 0));
-                return list;
-            }
-
-            ColorRange.ComputeColorizersColorRanges(list, this, line);
-            ColorRange.ComputeQuickColorizersColorRanges(list, this, line);
-            ColorRange.FinishRanges(list, line);
-
-            if (list.Count == 0)
-            {
-                list.Add(new ColorRange(null, 0, line.Length));
-            }
-            return list;
         }
 
         public bool ExcludeLine(string line, string processName)

@@ -24,6 +24,6 @@
         <Button Name="Add" Grid.Row="1" Content="_Add" Margin="10,0,0,10" HorizontalAlignment="Left" Width="75" Height="23" VerticalAlignment="Bottom" Click="Add_Click" />
         <Button Name="Remove" Grid.Row="1" IsEnabled="{Binding RemoveEnabled, UpdateSourceTrigger=PropertyChanged}" Content="_Remove" Margin="95,0,0,10" HorizontalAlignment="Left" Width="75" Height="23" VerticalAlignment="Bottom" Click="Remove_Click" />
         <Button Name="Modify" Grid.Row="1" IsEnabled="{Binding ModifyEnabled, UpdateSourceTrigger=PropertyChanged}" Content="_Modify" Margin="180,0,0,10" HorizontalAlignment="Left" Width="75" Height="23" VerticalAlignment="Bottom" Click="Modify_Click" />
-        <Button Name="Close" Grid.Row="1" IsDefault="True" IsCancel="True" Content="Close" Margin="0,0,10,10" HorizontalAlignment="Right" Width="75" Height="23" VerticalAlignment="Bottom" Click="Close_Click" />
+        <Button Name="CloseButton" Grid.Row="1" IsDefault="True" IsCancel="True" Content="Close" Margin="0,0,10,10" HorizontalAlignment="Right" Width="75" Height="23" VerticalAlignment="Bottom" Click="Close_Click" />
     </Grid>
 </Window>

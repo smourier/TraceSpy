@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -47,7 +49,11 @@ namespace TraceSpy
             _state.PropertyChanged += OnStatePropertyChanged;
 
             InitializeComponent();
+            LoadSettings();
             DataContext = _state;
+            _state.EtwStarted = App.Current.Settings.CaptureEtwTraces;
+            _state.OdsStarted = App.Current.Settings.CaptureOdsTraces;
+            UpdateEtwEvents();
 
             _bufferReadyEvent = new EventWaitHandle(false, EventResetMode.AutoReset, "DBWIN_BUFFER_READY");
             _dataReadyEvent = new EventWaitHandle(false, EventResetMode.AutoReset, "DBWIN_DATA_READY");
@@ -127,6 +133,53 @@ namespace TraceSpy
             }
         }
 
+        private void LoadSettings()
+        {
+            Left = App.Current.Settings.Left;
+            Top = App.Current.Settings.Top;
+            Width = App.Current.Settings.Width;
+            Height = App.Current.Settings.Height;
+
+            App.Current.ColumnLayout.IndexColumnWidth = App.Current.Settings.IndexColumnWidth;
+            IndexColumn.Width = App.Current.Settings.IndexColumnWidth;
+
+            App.Current.ColumnLayout.TicksColumnWidth = App.Current.Settings.TicksColumnWidth;
+            TicksColumn.Width = App.Current.Settings.TicksColumnWidth;
+
+            App.Current.ColumnLayout.ProcessColumnWidth = App.Current.Settings.ProcessColumnWidth;
+            ProcessColumn.Width = App.Current.Settings.ProcessColumnWidth;
+
+            App.Current.ColumnLayout.TextColumnWidth = App.Current.Settings.TextColumnWidth;
+            TextColumn.Width = App.Current.Settings.TextColumnWidth;
+        }
+
+        private void SaveSettings()
+        {
+            if (WindowState != WindowState.Minimized)
+            {
+                App.Current.Settings.Left = Left;
+                App.Current.Settings.Top = Top;
+                App.Current.Settings.Width = Width;
+                App.Current.Settings.Height = Height;
+            }
+
+            if (_findWindow != null)
+            {
+                App.Current.Settings.FindLeft = _findWindow.Left - Left;
+                App.Current.Settings.FindTop = _findWindow.Top - Top;
+            }
+
+            App.Current.Settings.IndexColumnWidth = App.Current.ColumnLayout.IndexColumnWidth;
+            App.Current.Settings.TicksColumnWidth = App.Current.ColumnLayout.TicksColumnWidth;
+            App.Current.Settings.ProcessColumnWidth = App.Current.ColumnLayout.ProcessColumnWidth;
+            App.Current.Settings.TextColumnWidth = App.Current.ColumnLayout.TextColumnWidth;
+
+            App.Current.Settings.SerializeToConfiguration();
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e) => SaveSettings();
+        protected override void OnLocationChanged(EventArgs e) => SaveSettings();
+
         protected override void OnClosed(EventArgs e)
         {
             DisposeEtwEvents();
@@ -174,6 +227,7 @@ namespace TraceSpy
                 col.Width = App.Current.ColumnLayout.TextColumnWidth;
             }
 
+            SaveSettings();
             OnColumnLayoutPropertyChanged(null, null);
         }
 
@@ -277,11 +331,18 @@ namespace TraceSpy
         private void OdsTrace_Click(object sender, RoutedEventArgs e)
         {
             _state.OdsStarted = !_state.OdsStarted;
+            if (_state.OdsStarted.GetValueOrDefault())
+            {
+                App.Current.Settings.CaptureOdsTraces = true;
+            }
+            SaveSettings();
         }
 
         private void EtwTrace_Click(object sender, RoutedEventArgs e)
         {
             _state.EtwStarted = !_state.EtwStarted;
+            App.Current.Settings.CaptureEtwTraces = _state.EtwStarted;
+            SaveSettings();
             UpdateEtwEvents();
         }
 
@@ -388,8 +449,11 @@ namespace TraceSpy
 
                 _findWindow = new FindWindow();
                 _findWindow.Owner = this;
+                _findWindow.Left = Left + App.Current.Settings.FindLeft;
+                _findWindow.Top = Top + App.Current.Settings.FindTop;
                 _findWindow.FindingNext += (s, e2) => DoFind(true);
                 _findWindow.FindingPrev += (s, e2) => DoFind(false);
+                _findWindow.LocationChanged += (s, e2) => SaveSettings();
             }
 
             _findWindow.Show();
@@ -558,5 +622,17 @@ namespace TraceSpy
             }
         }
 
+        private void OpenConfig_Click(object sender, RoutedEventArgs e) => Process.Start("\"" + Path.GetDirectoryName(WpfSettings.ConfigurationFilePath) + "\"");
+
+        private void LV_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var evt = (TraceEvent)LV.SelectedItem;
+            if (evt == null)
+                return;
+
+            var dlg = new TraceDetailsWindow(evt);
+            dlg.Owner = this;
+            dlg.ShowDialog();
+        }
     }
 }
