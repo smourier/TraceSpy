@@ -91,7 +91,7 @@
                 <Separator />
                 <MenuItem Header="_Find..." Name="Find" InputGestureText="Ctrl+F" Click="Find_Click" />
                 <MenuItem Header="Find _Next" Name="FindNext" InputGestureText="F3" Click="FindNext_Click" />
-                <MenuItem Header="Find _Prev" Name="FindPrev" InputGestureText="Shift+F3" Click="FindPrev_Click" />
+                <MenuItem Header="Find _Prev" Name="FindPrev" InputGestureText="Ctrl+F3" Click="FindPrev_Click" />
                 <Separator />
                 <MenuItem Header="_Clear Traces" Name="ClearTraces" Click="ClearTraces_Click" InputGestureText="Ctrl+X" />
                 <MenuItem Header="_Send Test Trace" Name="SendTestTrace" Click="SendTestTrace_Click" Visibility="Collapsed" />

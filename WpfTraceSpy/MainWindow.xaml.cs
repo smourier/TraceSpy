@@ -468,6 +468,8 @@ namespace TraceSpy
             if (_findWindow == null)
                 return;
 
+            var focused = FocusManager.GetFocusedElement(_findWindow) is System.Windows.Controls.TextBox;
+
             int start = Math.Max(0, LV.SelectedIndex);
             var sc = _findWindow.CaseMatch ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
             foreach (int i in EnumerateItems(start, next))
@@ -479,13 +481,18 @@ namespace TraceSpy
                 if (evt.Text.IndexOf(_findWindow.Search, sc) > 0)
                 {
                     LV.SelectedIndex = i;
+                    ((System.Windows.Controls.ListViewItem)LV.ItemContainerGenerator.ContainerFromIndex(i)).Focus();
                     LV.ScrollIntoView(evt);
+                    if (focused)
+                    {
+                        _findWindow.Searches.Focus();
+                    }
                     return;
                 }
             }
 
             LV.SelectedIndex = -1;
-            this.ShowMessage("Cannot find '" + _findWindow.Search + "'.", MessageBoxImage.Information);
+            _findWindow.ShowMessage("Cannot find '" + _findWindow.Search + "'.", MessageBoxImage.Information);
         }
 
         private IEnumerable<int> EnumerateItems(int start, bool next)
