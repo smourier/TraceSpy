@@ -21,7 +21,6 @@ namespace TraceSpy
             DataContext = _context;
         }
 
-        public string Search => Searches.Text;
         public bool CaseMatch => _context.MatchCase;
 
         private void Close_Click(object sender, RoutedEventArgs e) => Hide();
@@ -45,9 +44,10 @@ namespace TraceSpy
 
         protected override void OnActivated(EventArgs e)
         {
+            string search = Searches.Text;
             _context.Searches.Clear();
             _context.Searches.AddRange(App.Current.Settings.Searches);
-            base.OnActivated(e);
+            Searches.Text = search;
         }
 
         protected override void OnClosing(CancelEventArgs e)

@@ -119,7 +119,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView Grid.Row="2" Name="LV" HorizontalContentAlignment="Stretch" ScrollViewer.ScrollChanged="LV_ScrollChanged" MouseDoubleClick="LV_MouseDoubleClick">
+        <ListView Grid.Row="2" Name="LV" FocusManager.IsFocusScope="True"  HorizontalContentAlignment="Stretch" ScrollViewer.ScrollChanged="LV_ScrollChanged" MouseDoubleClick="LV_MouseDoubleClick">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Template">

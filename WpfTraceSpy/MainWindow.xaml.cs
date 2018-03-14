@@ -81,19 +81,7 @@ namespace TraceSpy
             TicksColumn.Width = App.Current.ColumnLayout.TicksColumnWidth;
             ProcessColumn.Width = App.Current.ColumnLayout.ProcessColumnWidth;
             TextColumn.Width = App.Current.ColumnLayout.TextColumnWidth;
-
             App.Current.ColumnLayout.PropertyChanged += OnColumnLayoutPropertyChanged;
-
-            //var rnd = new Random(Environment.TickCount);
-            //for (int i = 0; i < 10000; i++)
-            //{
-            //    var te = new TraceEvent();
-            //    te.ProcessName = "test process " + i;
-            //    te.Text = "text another world " + i;
-            //    te.Height = 10 + rnd.Next(0, 20);
-            //    //te.Background = (i % 2) == 0 ? Brushes.Transparent : Brushes.LightGray;
-            //    AddTrace(te);
-            //}
 
             LV.ItemsSource = _dataSource;
             foreach (var col in GV.Columns)
@@ -107,6 +95,11 @@ namespace TraceSpy
                 _outputDebugStringThread.IsBackground = true;
                 _outputDebugStringThread.Start();
             }
+
+
+#if DEBUG
+//            new MonitorFocusScopes().Show();
+#endif
         }
 
         protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e)
@@ -454,6 +447,13 @@ namespace TraceSpy
                 _findWindow.FindingNext += (s, e2) => DoFind(true);
                 _findWindow.FindingPrev += (s, e2) => DoFind(false);
                 _findWindow.LocationChanged += (s, e2) => SaveSettings();
+                _findWindow.IsVisibleChanged += (s, e2) =>
+                {
+                    if (false.Equals(e2.NewValue))
+                    {
+                        LV.Focus();
+                    }
+                };
             }
 
             _findWindow.Show();
@@ -468,6 +468,10 @@ namespace TraceSpy
             if (_findWindow == null)
                 return;
 
+            var search = _findWindow.Searches.Text;
+            if (string.IsNullOrWhiteSpace(search))
+                return;
+
             var focused = FocusManager.GetFocusedElement(_findWindow) is System.Windows.Controls.TextBox;
 
             int start = Math.Max(0, LV.SelectedIndex);
@@ -478,21 +482,28 @@ namespace TraceSpy
                 if (evt.Text == null)
                     continue;
 
-                if (evt.Text.IndexOf(_findWindow.Search, sc) > 0)
+                if (evt.Text.IndexOf(search, sc) > 0)
                 {
-                    LV.SelectedIndex = i;
-                    ((System.Windows.Controls.ListViewItem)LV.ItemContainerGenerator.ContainerFromIndex(i)).Focus();
+                    LV.SelectedItem = evt;
+                    ((System.Windows.Controls.ListViewItem)LV.ItemContainerGenerator.ContainerFromItem(evt))?.Focus();
                     LV.ScrollIntoView(evt);
                     if (focused)
                     {
-                        _findWindow.Searches.Focus();
+                        if (next)
+                        {
+                            _findWindow.FindNext.Focus();
+                        }
+                        else
+                        {
+                            _findWindow.FindPrev.Focus();
+                        }
                     }
+                    _findWindow.Searches.SelectedItem = search;
                     return;
                 }
             }
 
-            LV.SelectedIndex = -1;
-            _findWindow.ShowMessage("Cannot find '" + _findWindow.Search + "'.", MessageBoxImage.Information);
+            _findWindow.ShowMessage("Cannot find '" + search + "'.", MessageBoxImage.Information);
         }
 
         private IEnumerable<int> EnumerateItems(int start, bool next)
@@ -517,7 +528,7 @@ namespace TraceSpy
             CopyFullLine.IsEnabled = LV.SelectedItems.Count > 0;
             CopyText.IsEnabled = LV.SelectedItems.Count > 0;
             Find.IsEnabled = LV.Items.Count > 0;
-            FindNext.IsEnabled = _findWindow != null && !string.IsNullOrWhiteSpace(_findWindow.Search);
+            FindNext.IsEnabled = _findWindow != null && !string.IsNullOrWhiteSpace(_findWindow.Searches.Text);
             FindPrev.IsEnabled = FindNext.IsEnabled;
         }
 

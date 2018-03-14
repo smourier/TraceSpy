@@ -1,0 +1,29 @@
+﻿<Window x:Class="TraceSpy.MonitorFocusScopes"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    WindowStartupLocation="Manual" Left="0" Top="0" ResizeMode="NoResize" SizeToContent="WidthAndHeight"  WindowStyle="None" ShowActivated="False"
+    Title="Monitor Focus Scopes" Height="300" Width="300">
+    <StackPanel Orientation="Vertical" >
+        <ListBox Margin="10" ItemsSource="{Binding}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Focus Scope:" FontWeight="Bold" />
+                            <TextBlock Margin="5,0" Text="{Binding FocusScope}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                            <TextBlock Text="Focused Element:" FontWeight="Bold" />
+                            <TextBlock Margin="5,0" Text="{Binding FocusedElement}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
+                            <TextBlock Text="Has Keyboard Focus:" FontWeight="Bold" />
+                            <TextBlock Margin="5,0" Text="{Binding IsKeyboardFocused}" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <TextBlock Margin="10" Name="Log" FontFamily="Lucida Console" FontSize="9" />
+    </StackPanel>
+</Window>
