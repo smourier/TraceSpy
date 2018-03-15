@@ -644,7 +644,11 @@ namespace TraceSpy
 
         private void LV_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var evt = (TraceEvent)LV.SelectedItem;
+            var item = ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource) as ListBoxItem;
+            if (item == null)
+                return;
+
+            var evt = (TraceEvent)item.DataContext;
             if (evt == null)
                 return;
 
