@@ -204,5 +204,20 @@ namespace TraceSpy
             }
             return null;
         }
+
+        public static T GetVisualParent<T>(this DependencyObject obj) where T : DependencyObject
+        {
+            if (obj == null)
+                return null;
+
+            DependencyObject parent = VisualTreeHelper.GetParent(obj);
+            if (parent == null)
+                return null;
+
+            if (typeof(T).IsAssignableFrom(parent.GetType()))
+                return (T)parent;
+
+            return parent.GetVisualParent<T>();
+        }
     }
 }

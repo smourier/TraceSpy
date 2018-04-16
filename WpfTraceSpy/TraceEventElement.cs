@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace TraceSpy
@@ -14,8 +15,16 @@ namespace TraceSpy
             DependencyProperty.Register(nameof(Event), typeof(TraceEvent), typeof(TraceEventElement),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange));
 
+        private ListView _listView;
+
         public TraceEventElement()
         {
+        }
+
+        protected override void OnVisualParentChanged(DependencyObject oldParent)
+        {
+            base.OnVisualParentChanged(oldParent);
+            _listView = this.GetVisualParent<ListView>();
         }
 
         private static double FontSize => Math.Max(App.Current.Settings.FontSize, 5);
@@ -38,6 +47,8 @@ namespace TraceSpy
                 formattedText.MaxTextWidth = App.Current.ColumnLayout.TextColumnWidth;
                 height = formattedText.Height;
             }
+
+            height = Math.Min((_listView.ActualHeight * 2) / 3, height);
 
             return new Size(App.Current.ColumnLayout.RowWidth, Math.Max(FontSize + 2, height));
         }
@@ -127,6 +138,7 @@ namespace TraceSpy
                 }
                 formattedText.Trimming = TextTrimming.CharacterEllipsis;
                 formattedText.MaxTextWidth = App.Current.ColumnLayout.TextColumnWidth;
+                formattedText.MaxTextHeight = (_listView.ActualHeight * 2) / 3;
                 drawingContext.DrawText(formattedText, new Point(offset, 0));
             }
         }
