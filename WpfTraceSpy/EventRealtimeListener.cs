@@ -9,7 +9,7 @@ namespace TraceSpy
     {
         private ulong _handle;
         private bool _traceOn;
-        private EventCallback _cb;
+        private readonly EventCallback _cb;
 
         public event EventHandler<EventRealtimeEventArgs> RealtimeEvent;
 
@@ -37,8 +37,7 @@ namespace TraceSpy
             SessionName = sessionName;
 
             int status;
-            int size;
-            IntPtr properties = BuildProperties(false, out size);
+            IntPtr properties = BuildProperties(false, out int size);
             try
             {
                 status = StartTrace(out _handle, SessionName, properties);
@@ -73,11 +72,7 @@ namespace TraceSpy
             _traceOn = true;
         }
 
-        public static void ProcessTraces(Guid providerGuid, string sessionName)
-        {
-            ProcessTraces(providerGuid, sessionName, EtwTraceLevel.Verbose, 0);
-        }
-
+        public static void ProcessTraces(Guid providerGuid, string sessionName) => ProcessTraces(providerGuid, sessionName, EtwTraceLevel.Verbose, 0);
         public static void ProcessTraces(Guid providerGuid, string sessionName, EtwTraceLevel level, long keyword)
         {
             using (var listener = new EventRealtimeListener(providerGuid, sessionName, level, keyword))
@@ -161,11 +156,7 @@ namespace TraceSpy
         public string Description { get; set; }
         public bool ConsoleOutput { get; set; }
 
-        private void OnRealtimeEvent(int processId, int threadId, string s)
-        {
-            RealtimeEvent?.Invoke(this, new EventRealtimeEventArgs(processId, threadId, s));
-        }
-
+        private void OnRealtimeEvent(int processId, int threadId, string s) => RealtimeEvent?.Invoke(this, new EventRealtimeEventArgs(processId, threadId, s));
         private void OnEvent(ref EVENT_TRACE eventRecord)
         {
             string s = Marshal.PtrToStringUni(eventRecord.MofData);

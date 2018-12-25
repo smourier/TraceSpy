@@ -8,8 +8,8 @@ namespace TraceSpy
     {
         public static new App Current => (App)Application.Current;
 
-        private static Lazy<int> _processId = new Lazy<int>(() => Process.GetCurrentProcess().Id);
-        private static Lazy<string> _processName = new Lazy<string>(() => Process.GetCurrentProcess().ProcessName);
+        private static readonly Lazy<int> _processId = new Lazy<int>(() => Process.GetCurrentProcess().Id);
+        private static readonly Lazy<string> _processName = new Lazy<string>(() => Process.GetCurrentProcess().ProcessName);
 
         public App()
         {
@@ -34,8 +34,7 @@ namespace TraceSpy
             if (evt == null)
                 return;
 
-            var window = Current.MainWindow as MainWindow;
-            if (window == null)
+            if (!(Current.MainWindow is MainWindow window))
                 return;
 
             window.AddTrace(evt);

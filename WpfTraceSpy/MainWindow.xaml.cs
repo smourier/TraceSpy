@@ -224,10 +224,7 @@ namespace TraceSpy
             OnColumnLayoutPropertyChanged(null, null);
         }
 
-        private void MenuExit_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+        private void MenuExit_Click(object sender, RoutedEventArgs e) => Close();
 
         private void Gif_MediaEnded(object sender, RoutedEventArgs e)
         {
@@ -369,10 +366,7 @@ namespace TraceSpy
             return name;
         }
 
-        private void ClearTraces_Click(object sender, RoutedEventArgs e)
-        {
-            _dataSource.Clear();
-        }
+        private void ClearTraces_Click(object sender, RoutedEventArgs e) => _dataSource.Clear();
 
         private void ETWProviders_Click(object sender, RoutedEventArgs e)
         {
@@ -644,8 +638,7 @@ namespace TraceSpy
 
         private void LV_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var item = ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource) as ListBoxItem;
-            if (item == null)
+            if (!(ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource) is ListBoxItem item))
                 return;
 
             var evt = (TraceEvent)item.DataContext;

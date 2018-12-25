@@ -56,10 +56,7 @@ namespace TraceSpy
             Hide();
         }
 
-        private void Searches_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _context.UpdateValid();
-        }
+        private void Searches_TextChanged(object sender, TextChangedEventArgs e) => _context.UpdateValid();
 
         private class Context : DictionaryObject
         {
@@ -73,14 +70,11 @@ namespace TraceSpy
                 _window.Searches.ItemsSource = Searches;
             }
 
-            public void UpdateValid()
-            {
-                OnPropertyChanged(nameof(IsValid));
-            }
-
             public ObservableCollection<string> Searches { get; }
             public bool FindEnabled => !string.IsNullOrWhiteSpace(_window.Searches.Text);
             public bool MatchCase { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
+
+            public void UpdateValid() => OnPropertyChanged(nameof(IsValid));
 
             protected override IEnumerable DictionaryObjectGetErrors(string propertyName)
             {

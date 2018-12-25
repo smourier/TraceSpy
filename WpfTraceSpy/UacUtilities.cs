@@ -54,31 +54,5 @@ namespace TraceSpy
 
         [DllImport("Shell32.dll", CharSet = CharSet.Unicode)]
         private static extern int SHGetStockIconInfo(int siid, SHGSI uFlags, ref SHSTOCKICONINFO psii);
-
-        //public static Image GetShieldImage(SHGSI flags)
-        //{
-        //    using (var icon = GetShieldIcon(flags))
-        //    {
-        //        if (icon == null)
-        //            return null;
-
-        //        return icon.ToBitmap();
-        //    }
-        //}
-
-        //private static Icon GetStockIcon(int id, SHGSI flags)
-        //{
-        //    var info = new SHSTOCKICONINFO();
-        //    info.cbSize = Marshal.SizeOf(typeof(SHSTOCKICONINFO));
-        //    if (SHGetStockIconInfo(id, flags, ref info) == 0)
-        //        return Icon.FromHandle(info.hIcon);
-
-        //    return null;
-        //}
-
-        //public static Icon GetShieldIcon(SHGSI flags)
-        //{
-        //    return GetStockIcon(SHIELD, flags);
-        //}
     }
 }

@@ -16,7 +16,6 @@ namespace TraceSpy
         }
 
         private void Close_Click(object sender, RoutedEventArgs e) => Close();
-
         private void LV_MouseDoubleClick(object sender, MouseButtonEventArgs e) => ModifyProvider((e.OriginalSource as FrameworkElement)?.DataContext as EtwProvider);
         private void Modify_Click(object sender, RoutedEventArgs e) => ModifyProvider(LV.SelectedValue as EtwProvider);
 
