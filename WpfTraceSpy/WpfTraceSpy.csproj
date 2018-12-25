@@ -63,6 +63,7 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AutoCompleteComboBox.cs" />
+    <Compile Include="ConcurrentList.cs" />
     <Compile Include="DictionaryObject.cs" />
     <Compile Include="EtwProvider.cs" />
     <Compile Include="EtwProvidersWindow.xaml.cs">

@@ -35,6 +35,7 @@ namespace TraceSpy
         private FindWindow _findWindow;
         private int _scrollingTo;
         private TraceEvent _scrollTo;
+        private readonly ConcurrentLinkedList<TraceEvent> _events = new ConcurrentLinkedList<TraceEvent>();
 
         public MainWindow()
         {
@@ -233,6 +234,15 @@ namespace TraceSpy
             me.Play();
         }
 
+        private void DequeueTraces()
+        {
+            var events = _events.GetAndClear();
+            foreach (var evt in events)
+            {
+                AddTrace(evt);
+            }
+        }
+
         public void AddTrace(TraceEvent evt)
         {
             if (evt == null || evt.ProcessName == null)
@@ -291,9 +301,10 @@ namespace TraceSpy
                     var evt = new TraceEvent();
                     evt.ProcessName = GetProcessName(pid);
                     evt.Text = text;
+                    _events.Add(evt);
                     Dispatcher.BeginInvoke(() =>
                     {
-                        AddTrace(evt);
+                        DequeueTraces();
                     });
                 }
             }
@@ -582,12 +593,13 @@ namespace TraceSpy
                 evt.ProcessName += " (" + listener.Description + ")";
             }
             evt.Text = e.Message;
+            _events.Add(evt);
 
             ThreadPool.QueueUserWorkItem((state) =>
             {
                 Dispatcher.BeginInvoke(() =>
                 {
-                    AddTrace(evt);
+                    DequeueTraces();
                 }, DispatcherPriority.SystemIdle);
             });
         }

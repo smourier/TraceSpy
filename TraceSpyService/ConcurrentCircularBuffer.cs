@@ -15,6 +15,20 @@ namespace TraceSpyService
         private int _index;
         private bool _full;
 
+        private static object _syncObject;
+        private static object SyncObject
+        {
+            get
+            {
+                if (_syncObject == null)
+                {
+                    object obj = new object();
+                    Interlocked.CompareExchange(ref _syncObject, obj, null);
+                }
+                return _syncObject;
+            }
+        }
+
         public ConcurrentCircularBuffer(int capacity)
         {
             if (capacity <= 1) // need at least two items
@@ -65,11 +79,7 @@ namespace TraceSpyService
             return index;
         }
 
-        public void Add(T item)
-        {
-            AddAndGetIndex(item);
-        }
-
+        public void Add(T item) => AddAndGetIndex(item);
         public long AddAndGetIndex(T item)
         {
             lock (SyncObject)
@@ -90,36 +100,12 @@ namespace TraceSpyService
         }
 
         // this gives raw access to the underlying buffer. not sure I should keep that
-        public T this[int index]
-        {
-            get
-            {
-                return _items[index];
-            }
-        }
+        public T this[int index] => _items[index];
 
-        public T[] GetTail(long startIndex)
-        {
-            return GetTail(startIndex, long.MaxValue, true);
-        }
-
-        public T[] GetTail(long startIndex, long maxCount)
-        {
-            return GetTail(startIndex, maxCount, true);
-        }
-
-        public T[] GetTail(long startIndex, long maxCount, bool throwOnError)
-        {
-            long totalCount;
-            return GetTail(startIndex, maxCount, throwOnError, out totalCount);
-        }
-
-        public T[] GetTail(long startIndex, long maxCount, bool throwOnError, out long totalCount)
-        {
-            long lostCount;
-            return GetTail(startIndex, maxCount, throwOnError,  out totalCount, out lostCount);
-        }
-
+        public T[] GetTail(long startIndex) => GetTail(startIndex, long.MaxValue, true);
+        public T[] GetTail(long startIndex, long maxCount) => GetTail(startIndex, maxCount, true);
+        public T[] GetTail(long startIndex, long maxCount, bool throwOnError) => GetTail(startIndex, maxCount, throwOnError, out long totalCount);
+        public T[] GetTail(long startIndex, long maxCount, bool throwOnError, out long totalCount) => GetTail(startIndex, maxCount, throwOnError, out totalCount, out long lostCount);
         public T[] GetTail(long startIndex, long maxCount, bool throwOnError, out long totalCount, out long lostCount)
         {
             if (startIndex < 0)
@@ -132,7 +118,7 @@ namespace TraceSpyService
                 return null;
             }
 
-            T[] array = ToArray(out totalCount, out int count);
+            var array = ToArray(out totalCount, out int count);
             if (startIndex > totalCount)
             {
                 if (throwOnError)
@@ -150,7 +136,7 @@ namespace TraceSpyService
 
             // this maybe could optimized to not allocate the initial array
             // but in multi-threading environment, I suppose this is arguable (and more difficult).
-            T[] chunk = new T[Math.Min(totalCount - startIndex, maxCount)];
+            var chunk = new T[Math.Min(totalCount - startIndex, maxCount)];
             if (chunk.Length > 0)
             {
                 Array.Copy(array, array.Length - (totalCount - startIndex), chunk, 0, chunk.Length);
@@ -162,7 +148,7 @@ namespace TraceSpyService
         {
             lock (SyncObject)
             {
-                T[] items = new T[_full ? Capacity : _index];
+                var items = new T[_full ? Capacity : _index];
                 if (_full)
                 {
                     if (_index == 0)
@@ -185,21 +171,6 @@ namespace TraceSpyService
             }
         }
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            return ToArray(out long totalCount, out int count).AsEnumerable().GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        bool ICollection<T>.Contains(T item)
-        {
-            return _items.Contains(item);
-        }
-
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
             if (array == null)
@@ -218,31 +189,11 @@ namespace TraceSpyService
             Array.Copy(thisArray, 0, array, arrayIndex, thisArray.Length);
         }
 
-        bool ICollection<T>.IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
 
-        bool ICollection<T>.Remove(T item)
-        {
-            return false;
-        }
-
-        private static object _syncObject;
-        private static object SyncObject
-        {
-            get
-            {
-                if (_syncObject == null)
-                {
-                    object obj = new object();
-                    Interlocked.CompareExchange(ref _syncObject, obj, null);
-                }
-                return _syncObject;
-            }
-        }
+        public IEnumerator<T> GetEnumerator() => ToArray(out long totalCount, out int count).AsEnumerable().GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        bool ICollection<T>.Contains(T item) => _items.Contains(item);
+        bool ICollection<T>.IsReadOnly => false;
+        bool ICollection<T>.Remove(T item) => false;
     }
 }
