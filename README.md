@@ -4,6 +4,7 @@
 TraceSpy is a pure .NET, 100% free and open source, alternative to the very popular SysInternals DebugView tool.
 
 **Update 2019/08/16** : WPFTraceSpy now can log UWP (Universal Windows Application) LoggingChannel messages.
+
 **Update 2018/03/10** : we have just released the first version of a WPF version "WPFTraceSpy" that's *much* faster than the original Winforms one when tracing millions of trace events. More info at the end of this page.
 
 Notables points of interest are:
@@ -73,13 +74,14 @@ Things that are in TraceSpy but not in WpfTraceSpy:
 
 ![wpftracespy.png](doc/wpftracespy.png?raw=true)
 
-WpfTraceSpy can also log traces from UWP (Universal Windows Applications) LoggingChannel classes. To emit a trace from your app, it's super simple:
+# Using WpfTraceSpy for .NET UWP (Universal Windows Application) Applications logging
+WpfTraceSpy (not TraceSpy) can also log traces from UWP (Universal Windows Applications) LoggingChannel classes. To emit a trace from your app, it's super simple:
 
-		// somewhere in your initialization code
-        private readonly static LoggingChannel _channel = new LoggingChannel("MyApp", new LoggingChannelOptions(), new Guid("01234567-01234-01234-01234-012345678901")); // change this guid, make it yours!
+    // somewhere in your initialization code
+    private readonly static LoggingChannel _channel = new LoggingChannel("MyApp", new LoggingChannelOptions(), new Guid("01234567-01234-01234-01234-012345678901")); // change this guid, make it yours!
 
-		// everywhere in your code. add simple string traces
-        _channel.LogMessage("hello from UWP!");
+    // everywhere in your code. add simple string traces
+    _channel.LogMessage("hello from UWP!");
 
 Note you must configure the ETW provider specifically for that, like this:
 
