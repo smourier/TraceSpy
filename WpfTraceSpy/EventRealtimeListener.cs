@@ -10,6 +10,7 @@ namespace TraceSpy
         private ulong _handle;
         private bool _traceOn;
         private readonly EventCallback _cb;
+        private readonly EventRecordCallback _rcb;
 
         public event EventHandler<EventRealtimeEventArgs> RealtimeEvent;
 
@@ -32,6 +33,7 @@ namespace TraceSpy
                 throw new ArgumentNullException(nameof(sessionName));
 
             _cb = OnEvent;
+            _rcb = OnRecordEvent;
 
             ProviderGuid = providerGuid;
             SessionName = sessionName;
@@ -94,20 +96,33 @@ namespace TraceSpy
 
                 if (!admin)
                 {
-                    OnRealtimeEvent(Process.GetCurrentProcess().Id, GetCurrentThreadId(), "ETW Traces will not be displayed. TraceSpy must be run as administrator to display these traces.");
+                    OnRealtimeEvent(Process.GetCurrentProcess().Id, GetCurrentThreadId(), "ETW Traces will not be displayed. TraceSpy must be run as administrator to display these traces.", EtwTraceLevel.Fatal);
                 }
                 else
                 {
-                    OnRealtimeEvent(Process.GetCurrentProcess().Id, GetCurrentThreadId(), "ETW Traces are not started. An error occured during initialization.");
+                    OnRealtimeEvent(Process.GetCurrentProcess().Id, GetCurrentThreadId(), "ETW Traces are not started. An error occured during initialization.", EtwTraceLevel.Fatal);
                 }
                 return;
             }
 
-            var etl = new EVENT_TRACE_LOGFILE();
-            etl.EventCallback = _cb;
-            etl.LoggerName = SessionName;
-            etl.ProcessTraceMode = PROCESS_TRACE_MODE_REAL_TIME;
-            long oh = OpenTrace(ref etl);
+            long oh;
+            if (Environment.OSVersion.Version.Major >= 6)
+            {
+                var etl = new EVENT_TRACE_LOGFILE_VISTA();
+                etl.EventCallback = _rcb;
+                etl.LoggerName = SessionName;
+                etl.ProcessTraceMode = PROCESS_TRACE_MODE_REAL_TIME | PROCESS_TRACE_MODE_EVENT_RECORD;
+                oh = OpenTrace(ref etl);
+            }
+            else
+            {
+                var etl = new EVENT_TRACE_LOGFILE();
+                etl.EventCallback = _cb;
+                etl.LoggerName = SessionName;
+                etl.ProcessTraceMode = PROCESS_TRACE_MODE_REAL_TIME;
+                oh = OpenTrace(ref etl);
+            }
+
             if (oh == INVALID_PROCESSTRACE_HANDLE)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
@@ -151,18 +166,52 @@ namespace TraceSpy
             return properties;
         }
 
-        public Guid ProviderGuid { get; private set; }
-        public string SessionName { get; private set; }
+        public Guid ProviderGuid { get; }
+        public string SessionName { get; }
         public string Description { get; set; }
+        public bool StringMessageMode { get; set; }
         public bool ConsoleOutput { get; set; }
 
-        private void OnRealtimeEvent(int processId, int threadId, string s) => RealtimeEvent?.Invoke(this, new EventRealtimeEventArgs(processId, threadId, s));
+        private void OnRealtimeEvent(int processId, int threadId, string s, EtwTraceLevel level) => RealtimeEvent?.Invoke(this, new EventRealtimeEventArgs(processId, threadId, s, level));
         private void OnEvent(ref EVENT_TRACE eventRecord)
         {
+            if (eventRecord.MofData == IntPtr.Zero)
+                return;
+
             string s = Marshal.PtrToStringUni(eventRecord.MofData);
             if (!string.IsNullOrEmpty(s))
             {
-                OnRealtimeEvent(eventRecord.Header.ProcessId, eventRecord.Header.ThreadId, s);
+                OnRealtimeEvent(eventRecord.Header.ProcessId, eventRecord.Header.ThreadId, s, eventRecord.Header.Level);
+            }
+        }
+
+        private void OnRecordEvent(ref EVENT_RECORD eventRecord)
+        {
+            if (eventRecord.UserData == IntPtr.Zero)
+                return;
+
+            string s;
+            try
+            {
+                if (StringMessageMode)
+                {
+                    var len = (int)(ushort)Marshal.ReadInt16(eventRecord.UserData);
+                    s = Marshal.PtrToStringUni(eventRecord.UserData + 2, len / 2);
+                }
+                else
+                {
+                    s = Marshal.PtrToStringUni(eventRecord.UserData);
+                }
+            }
+            catch
+            {
+                OnRealtimeEvent(Process.GetCurrentProcess().Id, GetCurrentThreadId(), "ETW last trace had an error. This provider may not be logging string message.", EtwTraceLevel.Fatal);
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(s))
+            {
+                OnRealtimeEvent(eventRecord.EventHeader.ProcessId, eventRecord.EventHeader.ThreadId, s, eventRecord.EventHeader.EventDescriptor.Level);
             }
         }
 
@@ -315,6 +364,46 @@ namespace TraceSpy
         }
 
         [StructLayout(LayoutKind.Sequential)]
+        private struct EVENT_DESCRIPTOR
+        {
+            public ushort Id;
+            public byte Version;
+            public byte Channel;
+            public EtwTraceLevel Level;
+            public byte Opcode;
+            public ushort Task;
+            public ulong Keyword;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct EVENT_HEADER
+        {
+            public ushort Size;
+            public ushort HeaderType;
+            public ushort Flags;
+            public ushort EventProperty;
+            public int ThreadId;
+            public int ProcessId;
+            public long TimeStamp;
+            public Guid ProviderId;
+            public EVENT_DESCRIPTOR EventDescriptor;
+            public ulong ProcessorTime;
+            public Guid ActivityId;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct EVENT_RECORD
+        {
+            public EVENT_HEADER EventHeader;
+            public ETW_BUFFER_CONTEXT BufferContext;
+            public ushort ExtendedDataCount;
+            public ushort UserDataLength;
+            public IntPtr ExtendedData;
+            public IntPtr UserData;
+            public IntPtr UserContext;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
         private struct EVENT_TRACE
         {
             public EVENT_TRACE_HEADER Header;
@@ -331,7 +420,9 @@ namespace TraceSpy
         {
             public ushort Size;
             public ushort FieldTypeFlags;
-            public uint Version;
+            public byte Type;
+            public EtwTraceLevel Level;
+            public ushort Version;
             public int ThreadId;
             public int ProcessId;
             public ulong TimeStamp;
@@ -360,14 +451,37 @@ namespace TraceSpy
             public IntPtr Context;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        private struct EVENT_TRACE_LOGFILE_VISTA
+        {
+            [MarshalAs(UnmanagedType.LPWStr)]
+            public string LogFileName;
+            [MarshalAs(UnmanagedType.LPWStr)]
+            public string LoggerName;
+            public long CurrentTime;
+            public uint BuffersRead;
+            public uint ProcessTraceMode;
+            public EVENT_TRACE CurrentEvent;
+            public TRACE_LOGFILE_HEADER LogfileHeader;
+            public BufferCallback BufferCallback;
+            public uint BufferSize;
+            public uint Filled;
+            public uint EventsLost;
+            public EventRecordCallback EventCallback;
+            public uint IsKernelTrace;
+            public IntPtr Context;
+        }
+
         private const long INVALID_PROCESSTRACE_HANDLE = -1;
         private const uint PROCESS_TRACE_MODE_REAL_TIME = 0x00000100;
+        private const uint PROCESS_TRACE_MODE_EVENT_RECORD = 0x10000000;
         private const uint WNODE_FLAG_TRACED_GUID = 0x00020000;
         private const uint EVENT_TRACE_REAL_TIME_MODE = 0x00000100;
         private const int ERROR_ALREADY_EXISTS = 183;
 
         private delegate uint BufferCallback(ref EVENT_TRACE_LOGFILE buffer);
         private delegate void EventCallback(ref EVENT_TRACE eventRecord);
+        private delegate void EventRecordCallback(ref EVENT_RECORD eventRecord);
 
         [DllImport("kernel32.dll")]
         private static extern void RtlZeroMemory(IntPtr destination, IntPtr length);
@@ -380,6 +494,9 @@ namespace TraceSpy
 
         [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern long OpenTrace(ref EVENT_TRACE_LOGFILE logFile);
+
+        [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern long OpenTrace(ref EVENT_TRACE_LOGFILE_VISTA logFile);
 
         [DllImport("advapi32.dll")]
         private static extern int CloseTrace(long traceHandle);

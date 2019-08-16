@@ -336,6 +336,10 @@ namespace TraceSpy
             {
                 App.Current.Settings.CaptureOdsTraces = true;
             }
+            else
+            {
+                App.Current.Settings.CaptureOdsTraces = false;
+            }
             SaveSettings();
         }
 
@@ -623,9 +627,9 @@ namespace TraceSpy
                         continue;
 
                     var level = (EtwTraceLevel)provider.TraceLevel;
-
                     listener = new EventRealtimeListener(provider.Guid, provider.Guid.ToString(), level);
                     listener.Description = provider.Description;
+                    listener.StringMessageMode = provider.StringMessageMode;
 
                     var t = new Thread(ProcessEtwTrace);
                     t.Start(listener);
@@ -641,6 +645,11 @@ namespace TraceSpy
                         listener.Dispose();
                         _etwListeners.Remove(provider.Guid);
                         continue;
+                    }
+                    else
+                    {
+                        listener.Description = provider.Description;
+                        listener.StringMessageMode = provider.StringMessageMode;
                     }
                 }
             }

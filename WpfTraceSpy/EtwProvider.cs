@@ -8,10 +8,12 @@ namespace TraceSpy
         public EtwProvider()
         {
             IsActive = true;
+            StringMessageMode = false;
             TraceLevel = (byte)EtwTraceLevel.Verbose;
         }
 
         public bool IsActive { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
+        public bool StringMessageMode { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
         public string Description { get => DictionaryObjectGetPropertyValue<string>(); set => DictionaryObjectSetPropertyValue(value); }
         public Guid Guid { get => DictionaryObjectGetPropertyValue<Guid>(); set => DictionaryObjectSetPropertyValue(value); }
         public byte TraceLevel { get => DictionaryObjectGetPropertyValue<byte>(); set => DictionaryObjectSetPropertyValue(value); }

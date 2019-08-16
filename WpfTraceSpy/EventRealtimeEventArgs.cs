@@ -8,15 +8,17 @@ namespace TraceSpy
 {
     public sealed class EventRealtimeEventArgs : EventArgs
     {
-        public EventRealtimeEventArgs(int processId, int threadId, string message)
+        public EventRealtimeEventArgs(int processId, int threadId, string message, EtwTraceLevel level)
         {
             ProcessId = processId;
             ThreadId = threadId;
             Message = message;
+            Level = level;
         }
 
-        public string Message { get; private set; }
-        public int ProcessId { get; private set; }
-        public int ThreadId { get; private set; }
+        public string Message { get; }
+        public int ProcessId { get; }
+        public int ThreadId { get; }
+        public EtwTraceLevel Level { get; }
     }
 }

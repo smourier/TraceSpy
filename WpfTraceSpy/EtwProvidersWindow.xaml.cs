@@ -6,7 +6,7 @@ namespace TraceSpy
 {
     public partial class EtwProvidersWindow : Window
     {
-        private Context _context;
+        private readonly Context _context;
 
         public EtwProvidersWindow()
         {

@@ -3,6 +3,7 @@
 # TraceSpy
 TraceSpy is a pure .NET, 100% free and open source, alternative to the very popular SysInternals DebugView tool.
 
+**Update 2019/08/16** : WPFTraceSpy now can log UWP (Universal Windows Application) LoggingChannel messages.
 **Update 2018/03/10** : we have just released the first version of a WPF version "WPFTraceSpy" that's *much* faster than the original Winforms one when tracing millions of trace events. More info at the end of this page.
 
 Notables points of interest are:
@@ -71,6 +72,20 @@ Things that are in TraceSpy but not in WpfTraceSpy:
 * Quick Colorizers and Regex Colorizers are not part of WpfTraceSpy. I may add them in the future.
 
 ![wpftracespy.png](doc/wpftracespy.png?raw=true)
+
+WpfTraceSpy can also log traces from UWP (Universal Windows Applications) LoggingChannel classes. To emit a trace from your app, it's super simple:
+
+		// somewhere in your initialization code
+        private readonly static LoggingChannel _channel = new LoggingChannel("MyApp", new LoggingChannelOptions(), new Guid("01234567-01234-01234-01234-012345678901")); // change this guid, make it yours!
+
+		// everywhere in your code. add simple string traces
+        _channel.LogMessage("hello from UWP!");
+
+Note you must configure the ETW provider specifically for that, like this:
+
+![etw2.png](doc/uwplogging.png?raw=true)
+
+And you should receive all UWP traces in WpfTraceSpy.
 
 # Using TraceSpy for .NET Core (ASP or other) on Windows
 .NET Core logging is not super easy to configure (this is the least to say...), especially in ASP.NET Core code. So I have provided a support .cs file that enables you to use ETW simple text traces (on Windows platform only) very easily as a logging provider under .NET core. Of course, you will then be able to get those traces in TraceSpy and WpfTraceSpy!

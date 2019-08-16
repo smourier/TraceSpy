@@ -194,6 +194,7 @@ namespace TraceSpy
             if (existing != null)
             {
                 existing.IsActive = provider.IsActive;
+                existing.StringMessageMode = provider.StringMessageMode;
                 existing.Description = provider.Description;
                 existing.TraceLevel = provider.TraceLevel;
                 return false;

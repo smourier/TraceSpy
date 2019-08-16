@@ -51,7 +51,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(194, 39);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Trace Spy V2.4\r\n(C) Copyright Simon Mourier 2011-2018.\r\nAll rights reserved.";
+            this.label1.Text = "Trace Spy V2.4\r\n(C) Copyright Simon Mourier 2011-2019.\r\nAll rights reserved.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // linkLabel1
