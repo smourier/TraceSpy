@@ -10,7 +10,7 @@ namespace TraceSpy
         public event PropertyChangedEventHandler PropertyChanged;
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        private List<TraceEvent> _list = new List<TraceEvent>();
+        private readonly List<TraceEvent> _list = new List<TraceEvent>();
 
         public int Count => _list.Count;
 

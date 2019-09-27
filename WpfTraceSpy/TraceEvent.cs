@@ -66,5 +66,7 @@ namespace TraceSpy
                 return text;
             }
         }
+
+        public static void ResetIndex() => Interlocked.Exchange(ref _index, 0);
     }
 }

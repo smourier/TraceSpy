@@ -220,7 +220,7 @@ namespace TraceSpy
             var a = new IntPtr[64];
             for (int i = 0; i < a.Length; i++)
             {
-                a[i] = BuildProperties(true, out int size);
+                a[i] = BuildProperties(true, out _);
             }
 
             int hr = QueryAllTraces(a, a.Length, out int count);
@@ -244,7 +244,7 @@ namespace TraceSpy
 
         private void StopTrace()
         {
-            IntPtr props = BuildProperties(true, out int size);
+            IntPtr props = BuildProperties(true, out _);
             try
             {
                 if (StopTrace(0, SessionName, props) != 0)

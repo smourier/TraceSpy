@@ -13,7 +13,7 @@ namespace TraceSpy
     // all properties and methods start with DictionaryObject and are protected so they won't interfere with super type
     public abstract class DictionaryObject : INotifyPropertyChanged, INotifyPropertyChanging, IDataErrorInfo, INotifyDataErrorInfo
     {
-        private ConcurrentDictionary<string, DictionaryObjectProperty> _properties = new ConcurrentDictionary<string, DictionaryObjectProperty>();
+        private readonly ConcurrentDictionary<string, DictionaryObjectProperty> _properties = new ConcurrentDictionary<string, DictionaryObjectProperty>();
 
         protected DictionaryObject()
         {
@@ -133,7 +133,7 @@ namespace TraceSpy
 
         private class ObjectComparer : IEqualityComparer<object>
         {
-            private DictionaryObject _dob;
+            private readonly DictionaryObject _dob;
 
             public ObjectComparer(DictionaryObject dob)
             {
@@ -417,7 +417,7 @@ namespace TraceSpy
         {
             if (!TryChangeType(input, typeof(T), provider, out object tvalue))
             {
-                value = default(T);
+                value = default;
                 return false;
             }
 
@@ -437,10 +437,9 @@ namespace TraceSpy
                 return true;
             }
 
-            Type nullableType = null;
             if (conversionType.IsNullable())
             {
-                nullableType = conversionType.GenericTypeArguments[0];
+                Type nullableType = conversionType.GenericTypeArguments[0];
                 if (input == null)
                 {
                     value = null;
@@ -1095,7 +1094,7 @@ namespace TraceSpy
             return t.Length == 0 ? null : t;
         }
 
-        private static Lazy<MethodInfo> _enumTryParse = new Lazy<MethodInfo>(() => typeof(Enum).GetMethods(BindingFlags.Public | BindingFlags.Static).First(m => m.Name == nameof(Enum.TryParse) && m.GetParameters().Length == 3));
+        private static readonly Lazy<MethodInfo> _enumTryParse = new Lazy<MethodInfo>(() => typeof(Enum).GetMethods(BindingFlags.Public | BindingFlags.Static).First(m => m.Name == nameof(Enum.TryParse) && m.GetParameters().Length == 3));
 
         public static bool EnumTryParse(Type enumType, object value, out object enumValue) => EnumTryParse(enumType, value, true, out enumValue);
         public static bool EnumTryParse(Type enumType, object value, bool ignoreCase, out object enumValue)

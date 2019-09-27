@@ -36,7 +36,7 @@ namespace TraceSpy
             SHGSI_SELECTED = 0x10000,
             SHGSI_SHELLICONSIZE = 4,
             SHGSI_SMALLICON = 1,
-            SHGSI_SYSICONINDEX = 0x4000
+            SHGSI_SYSICONINDEX = 0x4000,
         }
 
         private const int SHIELD = 0x4d;

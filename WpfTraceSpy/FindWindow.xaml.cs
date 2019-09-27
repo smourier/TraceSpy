@@ -9,7 +9,7 @@ namespace TraceSpy
 {
     public partial class FindWindow : Window
     {
-        private Context _context;
+        private readonly Context _context;
 
         public event EventHandler FindingNext;
         public event EventHandler FindingPrev;
@@ -60,7 +60,7 @@ namespace TraceSpy
 
         private class Context : DictionaryObject
         {
-            private FindWindow _window;
+            private readonly FindWindow _window;
 
             public Context(FindWindow window)
             {

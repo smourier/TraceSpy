@@ -8,7 +8,7 @@ namespace TraceSpy
 {
     public class TraceEventElement : FrameworkElement
     {
-        private static readonly CultureInfo Culture = CultureInfo.GetCultureInfo(1033);
+        private static readonly CultureInfo _culture = CultureInfo.GetCultureInfo(1033);
 
         public static readonly DependencyProperty EventProperty =
             DependencyProperty.Register(nameof(Event), typeof(TraceEvent), typeof(TraceEventElement),
@@ -37,7 +37,7 @@ namespace TraceSpy
             {
                 var formattedText = new FormattedText(
                     Event.Text,
-                    Culture,
+                    _culture,
                     FlowDirection.LeftToRight,
                     App.Current.Settings.TypeFace,
                     FontSize,
@@ -79,7 +79,7 @@ namespace TraceSpy
             string index = evt.Index.ToString();
             var formattedText = new FormattedText(
                 index,
-                Culture,
+                _culture,
                 FlowDirection.LeftToRight,
                 App.Current.Settings.TypeFace,
                 FontSize,
@@ -91,7 +91,7 @@ namespace TraceSpy
 
             formattedText = new FormattedText(
                 evt.TicksText,
-                Culture,
+                _culture,
                 FlowDirection.LeftToRight,
                 App.Current.Settings.TypeFace,
                 FontSize,
@@ -107,7 +107,7 @@ namespace TraceSpy
             {
                 formattedText = new FormattedText(
                     evt.ProcessName,
-                    Culture,
+                    _culture,
                     FlowDirection.LeftToRight,
                     App.Current.Settings.TypeFace,
                     FontSize,
@@ -125,7 +125,7 @@ namespace TraceSpy
             {
                 formattedText = new FormattedText(
                     evt.Text,
-                    Culture,
+                    _culture,
                     FlowDirection.LeftToRight,
                     App.Current.Settings.TypeFace,
                     FontSize,
@@ -137,7 +137,7 @@ namespace TraceSpy
                 }
                 formattedText.Trimming = TextTrimming.CharacterEllipsis;
                 formattedText.MaxTextWidth = App.Current.ColumnLayout.TextColumnWidth;
-                formattedText.MaxTextHeight = (_listView.ActualHeight * 2) / 3;
+                formattedText.MaxTextHeight = Math.Max(1, (_listView.ActualHeight * 2) / 3);
                 drawingContext.DrawText(formattedText, new Point(offset, 0));
             }
         }

@@ -6,7 +6,7 @@ namespace TraceSpy
 {
     public partial class FiltersWindow : Window
     {
-        private Context _context;
+        private readonly Context _context;
 
         public FiltersWindow()
         {
@@ -64,7 +64,7 @@ namespace TraceSpy
 
         private class Context : DictionaryObject
         {
-            private FiltersWindow _window;
+            private readonly FiltersWindow _window;
 
             public Context(FiltersWindow window)
             {

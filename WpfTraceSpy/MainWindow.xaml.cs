@@ -22,20 +22,20 @@ namespace TraceSpy
     public partial class MainWindow : Window
     {
         private const int _odsBufferSize = 4096;
-        private EventWaitHandle _bufferReadyEvent;
-        private EventWaitHandle _dataReadyEvent;
-        private MemoryMappedFile _buffer;
-        private MemoryMappedViewStream _bufferStream;
+        private readonly EventWaitHandle _bufferReadyEvent;
+        private readonly EventWaitHandle _dataReadyEvent;
+        private readonly MemoryMappedFile _buffer;
+        private readonly MemoryMappedViewStream _bufferStream;
+        private readonly Thread _outputDebugStringThread;
+        private readonly ObservableCollection<TraceEvent> _dataSource = new ObservableCollection<TraceEvent>();
+        private readonly MainWindowState _state;
+        private readonly ConcurrentDictionary<int, string> _processes = new ConcurrentDictionary<int, string>();
+        private readonly Dictionary<Guid, EventRealtimeListener> _etwListeners = new Dictionary<Guid, EventRealtimeListener>();
+        private readonly ConcurrentLinkedList<TraceEvent> _events = new ConcurrentLinkedList<TraceEvent>();
         private bool _stopOutputDebugStringTraces;
-        private Thread _outputDebugStringThread;
-        private ObservableCollection<TraceEvent> _dataSource = new ObservableCollection<TraceEvent>();
-        private MainWindowState _state;
-        private ConcurrentDictionary<int, string> _processes = new ConcurrentDictionary<int, string>();
-        private Dictionary<Guid, EventRealtimeListener> _etwListeners = new Dictionary<Guid, EventRealtimeListener>();
         private FindWindow _findWindow;
         private int _scrollingTo;
         private TraceEvent _scrollTo;
-        private readonly ConcurrentLinkedList<TraceEvent> _events = new ConcurrentLinkedList<TraceEvent>();
 
         public MainWindow()
         {
@@ -381,7 +381,11 @@ namespace TraceSpy
             return name;
         }
 
-        private void ClearTraces_Click(object sender, RoutedEventArgs e) => _dataSource.Clear();
+        private void ClearTraces_Click(object sender, RoutedEventArgs e)
+        {
+            _dataSource.Clear();
+            TraceEvent.ResetIndex();
+        }
 
         private void ETWProviders_Click(object sender, RoutedEventArgs e)
         {
@@ -406,17 +410,20 @@ namespace TraceSpy
 
         private void Font_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new FontDialog();
-            dlg.AllowVerticalFonts = false;
-            dlg.FontMustExist = true;
-            dlg.Font = new System.Drawing.Font(LV.FontFamily.Source, (float)LV.FontSize);
-            if (dlg.ShowDialog(NativeWindow.FromHandle(new WindowInteropHelper(this).Handle)) != System.Windows.Forms.DialogResult.OK)
-                return;
+            using (var dlg = new FontDialog())
+            {
+                dlg.AllowVerticalFonts = false;
+                dlg.FontMustExist = true;
+                dlg.Font = new System.Drawing.Font(LV.FontFamily.Source, (float)LV.FontSize);
+                if (dlg.ShowDialog(NativeWindow.FromHandle(new WindowInteropHelper(this).Handle)) != System.Windows.Forms.DialogResult.OK)
+                    return;
 
-            App.Current.Settings.FontName = dlg.Font.Name;
-            App.Current.Settings.FontSize = dlg.Font.Size;
-            App.Current.Settings.SerializeToConfiguration();
-            SetFont();
+
+                App.Current.Settings.FontName = dlg.Font.Name;
+                App.Current.Settings.FontSize = dlg.Font.Size;
+                App.Current.Settings.SerializeToConfiguration();
+                SetFont();
+            }
         }
 
         private void SendTestTrace_Click(object sender, RoutedEventArgs e) => App.AddTrace("Test " + DateTime.Now);

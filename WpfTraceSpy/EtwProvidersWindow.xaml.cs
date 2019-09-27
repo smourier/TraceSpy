@@ -64,7 +64,7 @@ namespace TraceSpy
 
         private class Context : DictionaryObject
         {
-            private EtwProvidersWindow _window;
+            private readonly EtwProvidersWindow _window;
 
             public Context(EtwProvidersWindow window)
             {
