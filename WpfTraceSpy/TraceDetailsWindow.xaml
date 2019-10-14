@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TraceSpy"
         mc:Ignorable="d"
+        MinHeight="300" MinWidth="500"
         Title="Event" Height="450" Width="800" WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
@@ -18,6 +19,8 @@
             <TextBlock Padding="10" Text="{Binding ProcessName, StringFormat={}Process: {0}}" />
         </StackPanel>
         <TextBox Padding="10" Name="TB" Grid.Row="1" IsReadOnly="true" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Text="{Binding Text}" />
+        <Button Name="PreviousButton" Grid.Row="2" Content="Previous" Margin="10,0,0,10" HorizontalAlignment="Left" Width="75" Height="23" VerticalAlignment="Bottom" Click="Previous_Click"/>
+        <Button Name="NextButton" Grid.Row="2" Content="Next" Margin="95,0,0,10" HorizontalAlignment="Left" Width="75" Height="23" VerticalAlignment="Bottom" Click="Next_Click"/>
         <Button Name="CloseButton" Grid.Row="2" IsDefault="True" IsCancel="True" Content="Close" Margin="0,0,10,10" HorizontalAlignment="Right" Width="75" Height="23" VerticalAlignment="Bottom" Click="Close_Click"/>
     </Grid>
 </Window>

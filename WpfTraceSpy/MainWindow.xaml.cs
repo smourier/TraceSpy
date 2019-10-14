@@ -666,14 +666,13 @@ namespace TraceSpy
 
         private void LV_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (!(ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource) is ListBoxItem item))
+            if (LV.SelectedIndex < 0)
                 return;
 
-            var evt = (TraceEvent)item.DataContext;
-            if (evt == null)
-                return;
+            //if (!(ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource) is ListBoxItem item))
+            //    return;
 
-            var dlg = new TraceDetailsWindow(evt);
+            var dlg = new TraceDetailsWindow(LV);
             dlg.Owner = this;
             dlg.ShowDialog();
         }
