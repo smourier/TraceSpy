@@ -190,8 +190,8 @@ namespace TraceSpy
                 throw new ArgumentNullException(nameof(name));
 
             IEnumerable oldErrors = null;
-            bool rollbackOnError = (options & DictionaryObjectPropertySetOptions.RollbackChangeOnError) == DictionaryObjectPropertySetOptions.RollbackChangeOnError;
-            bool onErrorsChanged = (options & DictionaryObjectPropertySetOptions.DontRaiseOnErrorsChanged) != DictionaryObjectPropertySetOptions.DontRaiseOnErrorsChanged;
+            var rollbackOnError = (options & DictionaryObjectPropertySetOptions.RollbackChangeOnError) == DictionaryObjectPropertySetOptions.RollbackChangeOnError;
+            var onErrorsChanged = (options & DictionaryObjectPropertySetOptions.DontRaiseOnErrorsChanged) != DictionaryObjectPropertySetOptions.DontRaiseOnErrorsChanged;
             if (!DictionaryObjectRaiseOnErrorsChanged)
             {
                 onErrorsChanged = false;
@@ -202,8 +202,8 @@ namespace TraceSpy
                 oldErrors = DictionaryObjectGetErrors(name);
             }
 
-            bool forceChanged = (options & DictionaryObjectPropertySetOptions.ForceRaiseOnPropertyChanged) == DictionaryObjectPropertySetOptions.ForceRaiseOnPropertyChanged;
-            bool onChanged = (options & DictionaryObjectPropertySetOptions.DontRaiseOnPropertyChanged) != DictionaryObjectPropertySetOptions.DontRaiseOnPropertyChanged;
+            var forceChanged = (options & DictionaryObjectPropertySetOptions.ForceRaiseOnPropertyChanged) == DictionaryObjectPropertySetOptions.ForceRaiseOnPropertyChanged;
+            var onChanged = (options & DictionaryObjectPropertySetOptions.DontRaiseOnPropertyChanged) != DictionaryObjectPropertySetOptions.DontRaiseOnPropertyChanged;
             if (!DictionaryObjectRaiseOnPropertyChanged)
             {
                 onChanged = false;
@@ -220,11 +220,11 @@ namespace TraceSpy
                 if (updating != null)
                     return updating;
 
-                bool testEquality = (options & DictionaryObjectPropertySetOptions.DontTestValuesForEquality) != DictionaryObjectPropertySetOptions.DontTestValuesForEquality;
+                var testEquality = (options & DictionaryObjectPropertySetOptions.DontTestValuesForEquality) != DictionaryObjectPropertySetOptions.DontTestValuesForEquality;
                 if (testEquality && o != null && DictionaryObjectAreValuesEqual(value, o.Value))
                     return o;
 
-                bool onChanging = (options & DictionaryObjectPropertySetOptions.DontRaiseOnPropertyChanging) != DictionaryObjectPropertySetOptions.DontRaiseOnPropertyChanging;
+                var onChanging = (options & DictionaryObjectPropertySetOptions.DontRaiseOnPropertyChanging) != DictionaryObjectPropertySetOptions.DontRaiseOnPropertyChanging;
                 if (!DictionaryObjectRaiseOnPropertyChanging)
                 {
                     onChanging = false;
@@ -247,7 +247,7 @@ namespace TraceSpy
 
             if (forceChanged || (onChanged && ReferenceEquals(finalProp, newProp)))
             {
-                bool rollbacked = false;
+                var rollbacked = false;
                 if (rollbackOnError)
                 {
                     if ((DictionaryObjectGetErrors(name)?.Cast<object>().Any()).GetValueOrDefault())
@@ -475,7 +475,7 @@ namespace TraceSpy
                     return true;
                 }
 
-                string svalue = string.Format(provider, "{0}", input).Nullify();
+                var svalue = string.Format(provider, "{0}", input).Nullify();
                 if (svalue != null && Guid.TryParse(svalue, out Guid guid))
                 {
                     value = guid;
@@ -1090,7 +1090,7 @@ namespace TraceSpy
             if (string.IsNullOrWhiteSpace(text))
                 return null;
 
-            string t = text.Trim();
+            var t = text.Trim();
             return t.Length == 0 ? null : t;
         }
 
@@ -1113,7 +1113,7 @@ namespace TraceSpy
 
             var tryParse = _enumTryParse.Value.MakeGenericMethod(enumType);
             var args = new object[] { svalue, ignoreCase, Enum.ToObject(enumType, 0) };
-            bool result = (bool)tryParse.Invoke(null, args);
+            var result = (bool)tryParse.Invoke(null, args);
             enumValue = args[2];
             return result;
         }

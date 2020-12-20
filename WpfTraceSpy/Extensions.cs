@@ -71,7 +71,7 @@ namespace TraceSpy
             if (assembly == null)
                 throw new ArgumentNullException(nameof(assembly));
 
-            object[] atts = assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+            var atts = assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
             if (atts != null && atts.Length > 0)
                 return ((AssemblyProductAttribute)atts[0]).Product;
 
@@ -147,9 +147,9 @@ namespace TraceSpy
 
             if (sameLevelFirst)
             {
-                int count = VisualTreeHelper.GetChildrenCount(obj);
+                var count = VisualTreeHelper.GetChildrenCount(obj);
                 var list = new List<DependencyObject>(count);
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     DependencyObject child = VisualTreeHelper.GetChild(obj, i);
                     if (child == null)
@@ -172,10 +172,10 @@ namespace TraceSpy
             }
             else
             {
-                int count = VisualTreeHelper.GetChildrenCount(obj);
-                for (int i = 0; i < count; i++)
+                var count = VisualTreeHelper.GetChildrenCount(obj);
+                for (var i = 0; i < count; i++)
                 {
-                    DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                    var child = VisualTreeHelper.GetChild(obj, i);
                     if (child == null)
                         continue;
 
@@ -210,7 +210,7 @@ namespace TraceSpy
             if (obj == null)
                 return null;
 
-            DependencyObject parent = VisualTreeHelper.GetParent(obj);
+            var parent = VisualTreeHelper.GetParent(obj);
             if (parent == null)
                 return null;
 

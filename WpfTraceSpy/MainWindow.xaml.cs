@@ -99,7 +99,7 @@ namespace TraceSpy
 
 
 #if DEBUG
-//            new MonitorFocusScopes().Show();
+            //            new MonitorFocusScopes().Show();
 #endif
         }
 
@@ -281,7 +281,7 @@ namespace TraceSpy
             do
             {
                 _bufferReadyEvent.Set();
-                bool result = _dataReadyEvent.WaitOne(500);
+                var result = _dataReadyEvent.WaitOne(500);
                 if (_stopOutputDebugStringTraces)
                     return;
 
@@ -314,7 +314,7 @@ namespace TraceSpy
         private static string GetNullTerminatedString(byte[] bytes)
         {
             var chars = new char[bytes.Length];
-            for (int i = 0; i < bytes.Length; i++)
+            for (var i = 0; i < bytes.Length; i++)
             {
                 if (bytes[i] == 0)
                 {
@@ -418,7 +418,6 @@ namespace TraceSpy
                 if (dlg.ShowDialog(NativeWindow.FromHandle(new WindowInteropHelper(this).Handle)) != System.Windows.Forms.DialogResult.OK)
                     return;
 
-
                 App.Current.Settings.FontName = dlg.Font.Name;
                 App.Current.Settings.FontSize = dlg.Font.Size;
                 App.Current.Settings.SerializeToConfiguration();
@@ -490,9 +489,9 @@ namespace TraceSpy
 
             var focused = FocusManager.GetFocusedElement(_findWindow) is System.Windows.Controls.TextBox;
 
-            int start = Math.Max(0, LV.SelectedIndex);
+            var start = Math.Max(0, LV.SelectedIndex);
             var sc = _findWindow.CaseMatch ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
-            foreach (int i in EnumerateItems(start, next))
+            foreach (var i in EnumerateItems(start, next))
             {
                 var evt = (TraceEvent)LV.Items[i];
                 if (evt.Text == null)
@@ -526,14 +525,14 @@ namespace TraceSpy
         {
             if (next)
             {
-                for (int i = start + 1; i < LV.Items.Count; i++)
+                for (var i = start + 1; i < LV.Items.Count; i++)
                 {
                     yield return i;
                 }
                 yield break;
             }
 
-            for (int i = start - 1; i >= 0; i--)
+            for (var i = start - 1; i >= 0; i--)
             {
                 yield return i;
             }
@@ -621,7 +620,7 @@ namespace TraceSpy
             if (!_state.EtwStarted)
                 return;
 
-            foreach (EtwProvider provider in App.Current.Settings.EtwProviders)
+            foreach (var provider in App.Current.Settings.EtwProviders)
             {
                 _etwListeners.TryGetValue(provider.Guid, out EventRealtimeListener listener);
                 if (listener == null)

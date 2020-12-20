@@ -76,7 +76,7 @@ namespace TraceSpy
 
             double offset = 0;
 
-            string index = evt.Index.ToString();
+            var index = evt.Index.ToString();
             var formattedText = new FormattedText(
                 index,
                 _culture,

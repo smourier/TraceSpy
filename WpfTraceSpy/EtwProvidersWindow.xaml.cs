@@ -54,7 +54,7 @@ namespace TraceSpy
             if (!dlg.ShowDialog().GetValueOrDefault())
                 return;
 
-            bool added = App.Current.Settings.AddEtwProvider(dlg.Provider);
+            var added = App.Current.Settings.AddEtwProvider(dlg.Provider);
             App.Current.Settings.SerializeToConfiguration();
             if (added)
             {

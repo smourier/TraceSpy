@@ -54,7 +54,7 @@ namespace TraceSpy
             if (!dlg.ShowDialog().GetValueOrDefault())
                 return;
 
-            bool added = App.Current.Settings.AddFilter(null, dlg.Filter);
+            var added = App.Current.Settings.AddFilter(null, dlg.Filter);
             App.Current.Settings.SerializeToConfiguration();
             if (added)
             {

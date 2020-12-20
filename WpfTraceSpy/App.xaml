@@ -1,14 +1,19 @@
-﻿<Application x:Class="TraceSpy.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TraceSpy"
-             StartupUri="MainWindow.xaml">
+﻿<Application
+    x:Class="TraceSpy.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:TraceSpy"
+    StartupUri="MainWindow.xaml">
     <Application.Resources>
         <Style x:Key="ValidationTextBox" TargetType="{x:Type TextBox}">
             <Setter Property="Validation.ErrorTemplate">
                 <Setter.Value>
                     <ControlTemplate>
-                        <Border BorderThickness="1" BorderBrush="Red" Width="1" Height="23"></Border>
+                        <Border
+                            Width="1"
+                            Height="23"
+                            BorderBrush="Red"
+                            BorderThickness="1" />
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

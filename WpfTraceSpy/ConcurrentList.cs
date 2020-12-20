@@ -14,7 +14,7 @@ namespace TraceSpy
             {
                 if (_syncObject == null)
                 {
-                    object obj = new object();
+                    var obj = new object();
                     Interlocked.CompareExchange(ref _syncObject, obj, null);
                 }
                 return _syncObject;

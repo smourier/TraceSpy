@@ -33,7 +33,7 @@ namespace TraceSpy
 
         public void Add(TraceEvent item)
         {
-            int index = Count;
+            var index = Count;
             _list.Add(item);
             OnPropertyChanged(nameof(Count));
             OnPropertyChanged("Item[]");
@@ -58,7 +58,7 @@ namespace TraceSpy
 
         public bool Remove(TraceEvent item)
         {
-            int index = _list.IndexOf(item);
+            var index = _list.IndexOf(item);
             if (index < 0)
                 return false;
 

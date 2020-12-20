@@ -1,17 +1,72 @@
-﻿<Window x:Class="TraceSpy.FindWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TraceSpy"
-        mc:Ignorable="d"
-        Title="Find" Height="155" Width="500" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" FocusManager.FocusedElement="{Binding ElementName=Searches}">
+﻿<Window
+    x:Class="TraceSpy.FindWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TraceSpy"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Find"
+    Width="500"
+    Height="155"
+    FocusManager.FocusedElement="{Binding ElementName=Searches}"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
     <Grid>
-        <Label Content="Find what:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="98" />
-        <local:AutoCompleteComboBox x:Name="Searches" TextBoxBase.TextChanged="Searches_TextChanged" IsEditable="True" Margin="113,10,0,0" Width="275" Height="23" VerticalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" />
-        <CheckBox Name="MatchCase" Content="Match _case" IsChecked="{Binding MatchCase, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" HorizontalAlignment="Left" Height="15" VerticalAlignment="Top" Margin="16,52,0,0" />
-        <Button Name="FindNext" IsEnabled="{Binding IsValid}" Content="_Find Next" IsDefault="True" Margin="0,10,10,0" Height="23" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="FindNext_Click" />
-        <Button Name="FindPrev" IsEnabled="{Binding IsValid}" Content="_Find Prev" Margin="0,47,10,0" Height="23" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="FindPrev_Click" />
-        <Button Name="CloseButton" IsCancel="True" Content="_Close" Margin="0,83,10,0" Height="23" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="Close_Click" />
+        <Label
+            Width="98"
+            Margin="10,10,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="Find what:" />
+        <local:AutoCompleteComboBox
+            x:Name="Searches"
+            Width="275"
+            Height="23"
+            Margin="113,10,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            VerticalContentAlignment="Center"
+            IsEditable="True"
+            TextBoxBase.TextChanged="Searches_TextChanged" />
+        <CheckBox
+            Name="MatchCase"
+            Height="15"
+            Margin="16,52,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="Match _case"
+            IsChecked="{Binding MatchCase, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+        <Button
+            Name="FindNext"
+            Width="75"
+            Height="23"
+            Margin="0,10,10,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Click="FindNext_Click"
+            Content="_Find Next"
+            IsDefault="True"
+            IsEnabled="{Binding IsValid}" />
+        <Button
+            Name="FindPrev"
+            Width="75"
+            Height="23"
+            Margin="0,47,10,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Click="FindPrev_Click"
+            Content="_Find Prev"
+            IsEnabled="{Binding IsValid}" />
+        <Button
+            Name="CloseButton"
+            Width="75"
+            Height="23"
+            Margin="0,83,10,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Click="Close_Click"
+            Content="_Close"
+            IsCancel="True" />
     </Grid>
 </Window>

@@ -67,7 +67,7 @@ namespace TraceSpy
 
         private static IEnumerable<DependencyObject> EnumerateChildren(DependencyObject obj)
         {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            for (var i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
             {
                 var child = VisualTreeHelper.GetChild(obj, i);
                 if (child != null)

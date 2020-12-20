@@ -218,15 +218,15 @@ namespace TraceSpy
         private void StopTrace2()
         {
             var a = new IntPtr[64];
-            for (int i = 0; i < a.Length; i++)
+            for (var i = 0; i < a.Length; i++)
             {
                 a[i] = BuildProperties(true, out _);
             }
 
-            int hr = QueryAllTraces(a, a.Length, out int count);
+            var hr = QueryAllTraces(a, a.Length, out int count);
             if (hr == 0)
             {
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     var propi = (EVENT_TRACE_PROPERTIES)Marshal.PtrToStructure(a[i], typeof(EVENT_TRACE_PROPERTIES));
                     if (propi.Wnode.Guid == ProviderGuid)
@@ -236,7 +236,7 @@ namespace TraceSpy
                 }
             }
 
-            for (int i = 0; i < a.Length; i++)
+            for (var i = 0; i < a.Length; i++)
             {
                 Marshal.FreeCoTaskMem(a[i]);
             }
@@ -472,45 +472,47 @@ namespace TraceSpy
             public IntPtr Context;
         }
 
+#pragma warning disable IDE1006 // Naming Styles
         private const long INVALID_PROCESSTRACE_HANDLE = -1;
         private const uint PROCESS_TRACE_MODE_REAL_TIME = 0x00000100;
         private const uint PROCESS_TRACE_MODE_EVENT_RECORD = 0x10000000;
         private const uint WNODE_FLAG_TRACED_GUID = 0x00020000;
         private const uint EVENT_TRACE_REAL_TIME_MODE = 0x00000100;
         private const int ERROR_ALREADY_EXISTS = 183;
+#pragma warning restore IDE1006 // Naming Styles
 
         private delegate uint BufferCallback(ref EVENT_TRACE_LOGFILE buffer);
         private delegate void EventCallback(ref EVENT_TRACE eventRecord);
         private delegate void EventRecordCallback(ref EVENT_RECORD eventRecord);
 
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32")]
         private static extern void RtlZeroMemory(IntPtr destination, IntPtr length);
 
-        [DllImport("advapi32.dll", CharSet = CharSet.Unicode)]
+        [DllImport("advapi32", CharSet = CharSet.Unicode)]
         private static extern int StartTrace(out ulong sessionHandle, string sessionName, IntPtr properties);
 
-        [DllImport("advapi32.dll", CharSet = CharSet.Unicode)]
+        [DllImport("advapi32", CharSet = CharSet.Unicode)]
         private static extern int StopTrace(ulong sessionHandle, string sessionName, IntPtr properties);
 
-        [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        [DllImport("advapi32", SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern long OpenTrace(ref EVENT_TRACE_LOGFILE logFile);
 
-        [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        [DllImport("advapi32", SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern long OpenTrace(ref EVENT_TRACE_LOGFILE_VISTA logFile);
 
-        [DllImport("advapi32.dll")]
+        [DllImport("advapi32")]
         private static extern int CloseTrace(long traceHandle);
 
-        [DllImport("advapi32.dll")]
+        [DllImport("advapi32")]
         private static extern int ProcessTrace(ref long traceHandle, int handleCount, IntPtr startTime, IntPtr endTime);
 
-        [DllImport("advapi32.dll", CharSet = CharSet.Unicode)]
+        [DllImport("advapi32", CharSet = CharSet.Unicode)]
         private static extern int QueryAllTraces(IntPtr[] propertyArray, int propertyArrayCount, out int sessionCount);
 
-        [DllImport("Kernel32.dll")]
+        [DllImport("Kernel32")]
         private static extern int GetCurrentThreadId();
 
-        [DllImport("advapi32.dll")]
+        [DllImport("advapi32")]
         private static extern int EnableTraceEx(
             [MarshalAs(UnmanagedType.LPStruct)] Guid providerId,
             IntPtr sourceId,

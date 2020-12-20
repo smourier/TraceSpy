@@ -1,17 +1,22 @@
-﻿<Window x:Class="TraceSpy.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TraceSpy"
-        mc:Ignorable="d"
-        Title="Trace Spy" Height="500" Width="700" WindowStartupLocation="Manual" SizeChanged="Window_SizeChanged">
+﻿<Window
+    x:Class="TraceSpy.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TraceSpy"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Trace Spy"
+    Width="700"
+    Height="500"
+    SizeChanged="Window_SizeChanged"
+    WindowStartupLocation="Manual"
+    mc:Ignorable="d">
     <Window.Resources>
-        <Style TargetType="MenuItem" x:Key="NotStarted">
+        <Style x:Key="NotStarted" TargetType="MenuItem">
             <Setter Property="Foreground" Value="White" />
             <Setter Property="Background" Value="Red" />
         </Style>
-        <Style TargetType="MenuItem" x:Key="Started">
+        <Style x:Key="Started" TargetType="MenuItem">
             <Setter Property="Foreground" Value="White" />
             <Setter Property="Background" Value="Green" />
         </Style>
@@ -22,16 +27,40 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Menu Name="MainMenu" IsMainMenu="True" Grid.Row="0" >
-            <MenuItem Header="_File" Height="24">
-                <MenuItem Header="_Open..." Name="Open" Click="Open_Click" Visibility="Collapsed" />
+        <Menu
+            Name="MainMenu"
+            Grid.Row="0"
+            IsMainMenu="True">
+            <MenuItem Height="24" Header="_File">
+                <MenuItem
+                    Name="Open"
+                    Click="Open_Click"
+                    Header="_Open..."
+                    Visibility="Collapsed" />
                 <Separator Visibility="Collapsed" />
-                <MenuItem Header="_Save" Name="Save" InputGestureText="Ctrl+S" Click="Save_Click" Visibility="Collapsed" />
-                <MenuItem Header="Save _As..." Name="SaveAs" Click="SaveAs_Click" Visibility="Collapsed" />
+                <MenuItem
+                    Name="Save"
+                    Click="Save_Click"
+                    Header="_Save"
+                    InputGestureText="Ctrl+S"
+                    Visibility="Collapsed" />
+                <MenuItem
+                    Name="SaveAs"
+                    Click="SaveAs_Click"
+                    Header="Save _As..."
+                    Visibility="Collapsed" />
                 <Separator Visibility="Collapsed" />
-                <MenuItem Name="MenuExit" Header="E_xit" InputGestureText="Alt+F4" Click="MenuExit_Click" />
+                <MenuItem
+                    Name="MenuExit"
+                    Click="MenuExit_Click"
+                    Header="E_xit"
+                    InputGestureText="Alt+F4" />
             </MenuItem>
-            <MenuItem Name="OdsTrace" Click="OdsTrace_Click" Header="{Binding OdsText}" ToolTipService.ShowOnDisabled="True">
+            <MenuItem
+                Name="OdsTrace"
+                Click="OdsTrace_Click"
+                Header="{Binding OdsText}"
+                ToolTipService.ShowOnDisabled="True">
                 <MenuItem.Style>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
@@ -51,7 +80,10 @@
                     </Style>
                 </MenuItem.Style>
             </MenuItem>
-            <MenuItem Header="{Binding EtwText}" Name="EtwTrace" Click="EtwTrace_Click">
+            <MenuItem
+                Name="EtwTrace"
+                Click="EtwTrace_Click"
+                Header="{Binding EtwText}">
                 <MenuItem.Style>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
@@ -69,70 +101,175 @@
             </MenuItem>
 
             <MenuItem Header="_View">
-                <MenuItem Header="_Remove Empty Lines" IsChecked="{Binding RemoveEmptyLines, Mode=TwoWay}" IsCheckable="True" />
-                <MenuItem Header="_Auto Scroll" IsChecked="{Binding AutoScroll, Mode=TwoWay}" IsCheckable="True" />
-                <MenuItem Header="Resolve _Process Name" IsChecked="{Binding ResolveProcessName, Mode=TwoWay}" IsCheckable="True" />
-                <MenuItem Header="Show Process _Id" IsChecked="{Binding ShowProcessId, Mode=TwoWay}" IsCheckable="True" />
-                <MenuItem Header="Show ETW _Description" IsChecked="{Binding ShowEtwDescription, Mode=TwoWay}" IsCheckable="True" />
-                <MenuItem Header="_Wrap Text" IsChecked="{Binding WrapText, Mode=TwoWay}" IsCheckable="True" />
+                <MenuItem
+                    Header="_Remove Empty Lines"
+                    IsCheckable="True"
+                    IsChecked="{Binding RemoveEmptyLines, Mode=TwoWay}" />
+                <MenuItem
+                    Header="_Auto Scroll"
+                    IsCheckable="True"
+                    IsChecked="{Binding AutoScroll, Mode=TwoWay}" />
+                <MenuItem
+                    Header="Resolve _Process Name"
+                    IsCheckable="True"
+                    IsChecked="{Binding ResolveProcessName, Mode=TwoWay}" />
+                <MenuItem
+                    Header="Show Process _Id"
+                    IsCheckable="True"
+                    IsChecked="{Binding ShowProcessId, Mode=TwoWay}" />
+                <MenuItem
+                    Header="Show ETW _Description"
+                    IsCheckable="True"
+                    IsChecked="{Binding ShowEtwDescription, Mode=TwoWay}" />
+                <MenuItem
+                    Header="_Wrap Text"
+                    IsCheckable="True"
+                    IsChecked="{Binding WrapText, Mode=TwoWay}" />
                 <MenuItem Header="_Ticks">
-                    <MenuItem Header="As _Ticks" IsChecked="{Binding ShowTicksAsTicks, Mode=TwoWay}" IsCheckable="True" />
-                    <MenuItem Header="As T_ime" IsChecked="{Binding ShowTicksAsTime, Mode=TwoWay}" IsCheckable="True" />
-                    <MenuItem Header="As _Seconds" IsChecked="{Binding ShowTicksAsSeconds, Mode=TwoWay}" IsCheckable="True" />
-                    <MenuItem Header="As _Milliseconds" IsChecked="{Binding ShowTicksAsMilliseconds, Mode=TwoWay}" IsCheckable="True" />
-                    <MenuItem Header="As _Delta Ticks" IsChecked="{Binding ShowTicksAsDeltaTicks, Mode=TwoWay}" IsCheckable="True" />
-                    <MenuItem Header="As D_elta Seconds" IsChecked="{Binding ShowTicksAsDeltaSeconds, Mode=TwoWay}" IsCheckable="True" />
-                    <MenuItem Header="As Delta Mi_lliseconds" IsChecked="{Binding ShowTicksAsDeltaMilliseconds, Mode=TwoWay}" IsCheckable="True" />
+                    <MenuItem
+                        Header="As _Ticks"
+                        IsCheckable="True"
+                        IsChecked="{Binding ShowTicksAsTicks, Mode=TwoWay}" />
+                    <MenuItem
+                        Header="As T_ime"
+                        IsCheckable="True"
+                        IsChecked="{Binding ShowTicksAsTime, Mode=TwoWay}" />
+                    <MenuItem
+                        Header="As _Seconds"
+                        IsCheckable="True"
+                        IsChecked="{Binding ShowTicksAsSeconds, Mode=TwoWay}" />
+                    <MenuItem
+                        Header="As _Milliseconds"
+                        IsCheckable="True"
+                        IsChecked="{Binding ShowTicksAsMilliseconds, Mode=TwoWay}" />
+                    <MenuItem
+                        Header="As _Delta Ticks"
+                        IsCheckable="True"
+                        IsChecked="{Binding ShowTicksAsDeltaTicks, Mode=TwoWay}" />
+                    <MenuItem
+                        Header="As D_elta Seconds"
+                        IsCheckable="True"
+                        IsChecked="{Binding ShowTicksAsDeltaSeconds, Mode=TwoWay}" />
+                    <MenuItem
+                        Header="As Delta Mi_lliseconds"
+                        IsCheckable="True"
+                        IsChecked="{Binding ShowTicksAsDeltaMilliseconds, Mode=TwoWay}" />
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="_Edit" Name="Edit" SubmenuOpened="Edit_SubmenuOpened">
-                <MenuItem Header="_Copy Text" Name="CopyText" InputGestureText="Ctrl+C" Click="CopyText_Click" />
-                <MenuItem Header="Copy Full _Line" Name="CopyFullLine" Click="CopyFullLine_Click" />
+            <MenuItem
+                Name="Edit"
+                Header="_Edit"
+                SubmenuOpened="Edit_SubmenuOpened">
+                <MenuItem
+                    Name="CopyText"
+                    Click="CopyText_Click"
+                    Header="_Copy Text"
+                    InputGestureText="Ctrl+C" />
+                <MenuItem
+                    Name="CopyFullLine"
+                    Click="CopyFullLine_Click"
+                    Header="Copy Full _Line" />
                 <Separator />
-                <MenuItem Header="_Find..." Name="Find" InputGestureText="Ctrl+F" Click="Find_Click" />
-                <MenuItem Header="Find _Next" Name="FindNext" InputGestureText="F3" Click="FindNext_Click" />
-                <MenuItem Header="Find _Prev" Name="FindPrev" InputGestureText="Ctrl+F3" Click="FindPrev_Click" />
+                <MenuItem
+                    Name="Find"
+                    Click="Find_Click"
+                    Header="_Find..."
+                    InputGestureText="Ctrl+F" />
+                <MenuItem
+                    Name="FindNext"
+                    Click="FindNext_Click"
+                    Header="Find _Next"
+                    InputGestureText="F3" />
+                <MenuItem
+                    Name="FindPrev"
+                    Click="FindPrev_Click"
+                    Header="Find _Prev"
+                    InputGestureText="Ctrl+F3" />
                 <Separator />
-                <MenuItem Header="_Clear Traces" Name="ClearTraces" Click="ClearTraces_Click" InputGestureText="Ctrl+X" />
-                <MenuItem Header="_Send Test Trace" Name="SendTestTrace" Click="SendTestTrace_Click" Visibility="Collapsed" />
+                <MenuItem
+                    Name="ClearTraces"
+                    Click="ClearTraces_Click"
+                    Header="_Clear Traces"
+                    InputGestureText="Ctrl+X" />
+                <MenuItem
+                    Name="SendTestTrace"
+                    Click="SendTestTrace_Click"
+                    Header="_Send Test Trace"
+                    Visibility="Collapsed" />
             </MenuItem>
             <MenuItem Header="_Options">
-                <MenuItem Header="_Font..." Name="Font" Click="Font_Click" />
-                <MenuItem Header="E_xclusion Filters..." Name="Filters" Click="Filters_Click" />
+                <MenuItem
+                    Name="Font"
+                    Click="Font_Click"
+                    Header="_Font..." />
+                <MenuItem
+                    Name="Filters"
+                    Click="Filters_Click"
+                    Header="E_xclusion Filters..." />
                 <MenuItem Header="_Regex Colorizers..." Visibility="Collapsed" />
                 <MenuItem Header="_Quick Colorizers..." Visibility="Collapsed" />
-                <MenuItem Header="_ETW Providers..." Name="ETWProviders" Click="ETWProviders_Click" />
+                <MenuItem
+                    Name="ETWProviders"
+                    Click="ETWProviders_Click"
+                    Header="_ETW Providers..." />
                 <Separator />
-                <MenuItem Header="Open _Configuration Folder" Name="OpenConfig" Click="OpenConfig_Click" />
+                <MenuItem
+                    Name="OpenConfig"
+                    Click="OpenConfig_Click"
+                    Header="Open _Configuration Folder" />
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="_About Trace Spy..." Name="About" Click="About_Click" />
+                <MenuItem
+                    Name="About"
+                    Click="About_Click"
+                    Header="_About Trace Spy..." />
             </MenuItem>
         </Menu>
-        <ListView Grid.Row="1" Name="LVH">
+        <ListView Name="LVH" Grid.Row="1">
             <ListView.View>
                 <GridView x:Name="GV">
-                    <GridViewColumn Header="#" x:Name="IndexColumn" Width="50" />
-                    <GridViewColumn Header="Ticks" x:Name="TicksColumn" Width="50"></GridViewColumn>
-                    <GridViewColumn Header="Process" x:Name="ProcessColumn" Width="100"></GridViewColumn>
-                    <GridViewColumn Header="Text" x:Name="TextColumn" Width="1000"></GridViewColumn>
+                    <GridViewColumn
+                        x:Name="IndexColumn"
+                        Width="50"
+                        Header="#" />
+                    <GridViewColumn
+                        x:Name="TicksColumn"
+                        Width="50"
+                        Header="Ticks" />
+                    <GridViewColumn
+                        x:Name="ProcessColumn"
+                        Width="100"
+                        Header="Process" />
+                    <GridViewColumn
+                        x:Name="TextColumn"
+                        Width="1000"
+                        Header="Text" />
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView Grid.Row="2" Name="LV" FocusManager.IsFocusScope="True"  HorizontalContentAlignment="Stretch" ScrollViewer.ScrollChanged="LV_ScrollChanged" MouseDoubleClick="LV_MouseDoubleClick">
+        <ListView
+            Name="LV"
+            Grid.Row="2"
+            HorizontalContentAlignment="Stretch"
+            FocusManager.IsFocusScope="True"
+            MouseDoubleClick="LV_MouseDoubleClick"
+            ScrollViewer.ScrollChanged="LV_ScrollChanged">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="{TemplateBinding BorderThickness}"
-                                        Background="{TemplateBinding Background}"
-                                        Padding="{TemplateBinding Padding}"
-                                        SnapsToDevicePixels="true">
-                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                <Border
+                                    x:Name="Bd"
+                                    Padding="{TemplateBinding Padding}"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    SnapsToDevicePixels="true">
+                                    <ContentPresenter
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <MultiTrigger>
@@ -140,14 +277,14 @@
                                             <Condition Property="Selector.IsSelectionActive" Value="False" />
                                             <Condition Property="IsSelected" Value="True" />
                                         </MultiTrigger.Conditions>
-                                        <Setter Property="Background" TargetName="Bd" Value="LightSkyBlue" />
+                                        <Setter TargetName="Bd" Property="Background" Value="LightSkyBlue" />
                                     </MultiTrigger>
                                     <MultiTrigger>
                                         <MultiTrigger.Conditions>
                                             <Condition Property="Selector.IsSelectionActive" Value="True" />
                                             <Condition Property="IsSelected" Value="True" />
                                         </MultiTrigger.Conditions>
-                                        <Setter Property="Background" TargetName="Bd" Value="LightSteelBlue" />
+                                        <Setter TargetName="Bd" Property="Background" Value="LightSteelBlue" />
                                     </MultiTrigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

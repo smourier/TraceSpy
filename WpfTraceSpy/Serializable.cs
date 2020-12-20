@@ -116,7 +116,7 @@ namespace TraceSpy
             if (filePath == null)
                 throw new ArgumentNullException(nameof(filePath));
 
-            string dir = Path.GetDirectoryName(filePath);
+            var dir = Path.GetDirectoryName(filePath);
             if (dir != null && !Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);

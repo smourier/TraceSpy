@@ -88,6 +88,7 @@
     <Compile Include="FilterWindow.xaml.cs">
       <DependentUpon>FilterWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MainWindowState.cs" />
     <Compile Include="EventRealtimeEventArgs.cs" />
     <Compile Include="MonitorFocusScopes.xaml.cs">
