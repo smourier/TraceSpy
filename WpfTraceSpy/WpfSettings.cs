@@ -14,6 +14,8 @@ namespace TraceSpy
         private Lazy<Brush> _alternateBrush;
         private List<string> _searches = new List<string>();
         private List<Filter> _filters = new List<Filter>();
+        private List<Colorizer> _colorizers = new List<Colorizer>();
+        private List<ColorSet> _colorSets = new List<ColorSet>();
         private List<EtwProvider> _etwProviders = new List<EtwProvider>();
 
         public WpfSettings()
@@ -177,6 +179,105 @@ namespace TraceSpy
                 throw new ArgumentNullException(nameof(filter));
 
             return _filters.Remove(filter);
+        }
+
+        public ColorSet GetColorSet(string name)
+        {
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            foreach (var colorSet in _colorSets)
+            {
+                if (string.Compare(name, colorSet.Name, StringComparison.OrdinalIgnoreCase) == 0)
+                    return colorSet;
+            }
+            return null;
+        }
+
+        public IReadOnlyList<ColorRange> ComputeColorRanges(string line)
+        {
+            var list = new List<ColorRange>();
+            if (string.IsNullOrEmpty(line))
+            {
+                list.Add(new ColorRange(null, 0, 0));
+                return list;
+            }
+
+            ColorRange.ComputeColorizersColorRanges(list, this, line);
+            ColorRange.FinishRanges(list, line);
+
+            if (list.Count == 0)
+            {
+                list.Add(new ColorRange(null, 0, line.Length));
+            }
+            return list;
+        }
+
+        public ColorSet[] ColorSets
+        {
+            get => _colorSets.ToArray();
+            set => _colorSets = value == null ? new List<ColorSet>() : new List<ColorSet>(value);
+        }
+
+        public bool AddColorSet(ColorSet colorSet)
+        {
+            if (colorSet == null)
+                throw new ArgumentNullException(nameof(colorSet));
+
+            var existing = _colorSets.FirstOrDefault(p => p.Equals(colorSet));
+            if (existing != null)
+            {
+                existing.FrameWidth = colorSet.FrameWidth;
+                existing.BackBrushText = colorSet.BackBrushText;
+                existing.ForeBrushText = colorSet.ForeBrushText;
+                existing.Name = colorSet.Name;
+                existing.Mode = colorSet.Mode;
+                existing.TypefaceName = colorSet.TypefaceName;
+                return false;
+            }
+
+            _colorSets.Add(colorSet);
+            return true;
+        }
+
+        public bool RemoveColorSet(ColorSet colorSet)
+        {
+            if (colorSet == null)
+                throw new ArgumentNullException(nameof(colorSet));
+
+            return _colorSets.Remove(colorSet);
+        }
+
+        public Colorizer[] Colorizers
+        {
+            get => _colorizers.ToArray();
+            set => _colorizers = value == null ? new List<Colorizer>() : new List<Colorizer>(value);
+        }
+
+        public bool AddColorizer(Colorizer colorizer)
+        {
+            if (colorizer == null)
+                throw new ArgumentNullException(nameof(colorizer));
+
+            var existing = _colorizers.FirstOrDefault(p => p.Equals(colorizer));
+            if (existing != null)
+            {
+                existing.IsActive = colorizer.IsActive;
+                existing.IgnoreCase = colorizer.IgnoreCase;
+                existing.Definition = colorizer.Definition;
+                return false;
+            }
+
+            _colorizers.Add(colorizer);
+            return true;
+        }
+
+        public bool RemoveColorizer(Colorizer colorizer)
+        {
+            if (colorizer == null)
+                throw new ArgumentNullException(nameof(colorizer));
+
+            return _colorizers.Remove(colorizer);
         }
 
         public EtwProvider[] EtwProviders

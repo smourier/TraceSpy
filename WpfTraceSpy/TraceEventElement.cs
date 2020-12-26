@@ -48,7 +48,6 @@ namespace TraceSpy
             }
 
             height = Math.Min((_listView.ActualHeight * 2) / 3, height);
-
             return new Size(App.Current.ColumnLayout.RowWidth, Math.Max(FontSize + 2, height));
         }
 
@@ -135,6 +134,7 @@ namespace TraceSpy
                 {
                     formattedText.MaxLineCount = 1;
                 }
+
                 formattedText.Trimming = TextTrimming.CharacterEllipsis;
                 formattedText.MaxTextWidth = App.Current.ColumnLayout.TextColumnWidth;
                 formattedText.MaxTextHeight = Math.Max(1, (_listView.ActualHeight * 2) / 3);

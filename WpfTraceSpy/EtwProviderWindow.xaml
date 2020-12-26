@@ -8,6 +8,7 @@
     Title="ETW Provider"
     Width="500"
     Height="220"
+    FocusManager.FocusedElement="{Binding ElementName=PageName}"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">

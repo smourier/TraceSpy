@@ -2,7 +2,6 @@
     x:Class="TraceSpy.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:TraceSpy"
     StartupUri="MainWindow.xaml">
     <Application.Resources>
         <Style x:Key="ValidationTextBox" TargetType="{x:Type TextBox}">
@@ -23,5 +22,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Application.Resources>
 </Application>

@@ -64,11 +64,24 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AutoCompleteComboBox.cs" />
-    <Compile Include="ConcurrentList.cs" />
+    <Compile Include="Colorizer.cs" />
+    <Compile Include="ColorizerWindow.xaml.cs">
+      <DependentUpon>ColorizerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ColorRange.cs" />
+    <Compile Include="ColorSet.cs" />
+    <Compile Include="ColorSetDrawMode.cs" />
+    <Compile Include="ConcurrentLinkedList.cs" />
     <Compile Include="DictionaryObject.cs" />
     <Compile Include="EtwProvider.cs" />
+    <Compile Include="ColorizersWindow.xaml.cs">
+      <DependentUpon>ColorizersWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EtwProvidersWindow.xaml.cs">
       <DependentUpon>EtwProvidersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ColorSetWindow.xaml.cs">
+      <DependentUpon>ColorSetWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="EtwProviderWindow.xaml.cs">
       <DependentUpon>EtwProviderWindow.xaml</DependentUpon>
@@ -94,6 +107,9 @@
     <Compile Include="MonitorFocusScopes.xaml.cs">
       <DependentUpon>MonitorFocusScopes.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NumericUpDownControl.xaml.cs">
+      <DependentUpon>NumericUpDownControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Serializable.cs" />
     <Compile Include="ShowTicksMode.cs" />
     <Compile Include="TraceDetailsWindow.xaml.cs">
@@ -108,9 +124,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ColorizersWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ColorizerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="EtwProvidersWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ColorSetWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="EtwProviderWindow.xaml">
       <SubType>Designer</SubType>
@@ -144,6 +172,10 @@
     <Page Include="MonitorFocusScopes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="NumericUpDownControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TraceDetailsWindow.xaml">
       <SubType>Designer</SubType>

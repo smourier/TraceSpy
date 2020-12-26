@@ -21,8 +21,7 @@ namespace TraceSpy
             Process.Start(psi);
         }
 
-        public static void RaiseMenuItemClickOnKeyGesture(this ItemsControl control, KeyEventArgs args) => RaiseMenuItemClickOnKeyGesture(control, args, true);
-        public static void RaiseMenuItemClickOnKeyGesture(this ItemsControl control, KeyEventArgs args, bool throwOnError)
+        public static void RaiseMenuItemClickOnKeyGesture(this ItemsControl control, KeyEventArgs args, bool throwOnError = true)
         {
             if (args == null)
                 throw new ArgumentNullException(nameof(args));
@@ -138,9 +137,7 @@ namespace TraceSpy
             }
         }
 
-        public static IEnumerable<DependencyObject> EnumerateVisualChildren(this DependencyObject obj) => obj.EnumerateVisualChildren(true);
-        public static IEnumerable<DependencyObject> EnumerateVisualChildren(this DependencyObject obj, bool recursive) => obj.EnumerateVisualChildren(recursive, true);
-        public static IEnumerable<DependencyObject> EnumerateVisualChildren(this DependencyObject obj, bool recursive, bool sameLevelFirst)
+        public static IEnumerable<DependencyObject> EnumerateVisualChildren(this DependencyObject obj, bool recursive = true, bool sameLevelFirst = true)
         {
             if (obj == null)
                 yield break;
@@ -151,7 +148,7 @@ namespace TraceSpy
                 var list = new List<DependencyObject>(count);
                 for (var i = 0; i < count; i++)
                 {
-                    DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                    var child = VisualTreeHelper.GetChild(obj, i);
                     if (child == null)
                         continue;
 
@@ -164,7 +161,7 @@ namespace TraceSpy
 
                 foreach (var child in list)
                 {
-                    foreach (DependencyObject grandChild in child.EnumerateVisualChildren(recursive, sameLevelFirst))
+                    foreach (var grandChild in child.EnumerateVisualChildren(recursive, sameLevelFirst))
                     {
                         yield return grandChild;
                     }
@@ -191,14 +188,13 @@ namespace TraceSpy
             }
         }
 
-        public static T FindVisualChild<T>(this DependencyObject obj) where T : FrameworkElement => FindVisualChild<T>(obj, t => true);
-        public static T FindVisualChild<T>(this DependencyObject obj, Func<T, bool> where) where T : FrameworkElement
+        public static T FindVisualChild<T>(this DependencyObject obj, Func<T, bool> where = null) where T : FrameworkElement
         {
-            if (where == null)
-                throw new ArgumentNullException(nameof(where));
-
             foreach (T item in obj.EnumerateVisualChildren(true, true).OfType<T>())
             {
+                if (where == null)
+                    return item;
+
                 if (where(item))
                     return item;
             }

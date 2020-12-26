@@ -33,24 +33,6 @@
             IsMainMenu="True">
             <MenuItem Height="24" Header="_File">
                 <MenuItem
-                    Name="Open"
-                    Click="Open_Click"
-                    Header="_Open..."
-                    Visibility="Collapsed" />
-                <Separator Visibility="Collapsed" />
-                <MenuItem
-                    Name="Save"
-                    Click="Save_Click"
-                    Header="_Save"
-                    InputGestureText="Ctrl+S"
-                    Visibility="Collapsed" />
-                <MenuItem
-                    Name="SaveAs"
-                    Click="SaveAs_Click"
-                    Header="Save _As..."
-                    Visibility="Collapsed" />
-                <Separator Visibility="Collapsed" />
-                <MenuItem
                     Name="MenuExit"
                     Click="MenuExit_Click"
                     Header="E_xit"
@@ -206,8 +188,10 @@
                     Name="Filters"
                     Click="Filters_Click"
                     Header="E_xclusion Filters..." />
-                <MenuItem Header="_Regex Colorizers..." Visibility="Collapsed" />
-                <MenuItem Header="_Quick Colorizers..." Visibility="Collapsed" />
+                <MenuItem
+                    Name="Colorizers"
+                    Click="Colorizers_Click"
+                    Header="_Regex Colorizers..." />
                 <MenuItem
                     Name="ETWProviders"
                     Click="ETWProviders_Click"

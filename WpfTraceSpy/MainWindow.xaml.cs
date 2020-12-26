@@ -292,9 +292,9 @@ namespace TraceSpy
                 {
                     _bufferStream.Position = 0;
                     _bufferStream.Read(pidBytes, 0, pidBytes.Length);
-                    int pid = BitConverter.ToInt32(pidBytes, 0);
+                    var pid = BitConverter.ToInt32(pidBytes, 0);
                     _bufferStream.Read(strBytes, 0, strBytes.Length);
-                    string text = GetNullTerminatedString(strBytes).Trim();
+                    var text = GetNullTerminatedString(strBytes).Trim();
                     if (_state.RemoveEmptyLines && string.IsNullOrWhiteSpace(text))
                         continue;
 
@@ -398,6 +398,13 @@ namespace TraceSpy
         private void Filters_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new FiltersWindow();
+            dlg.Owner = this;
+            dlg.ShowDialog();
+        }
+
+        private void Colorizers_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new ColorizersWindow();
             dlg.Owner = this;
             dlg.ShowDialog();
         }
@@ -547,21 +554,6 @@ namespace TraceSpy
             FindPrev.IsEnabled = FindNext.IsEnabled;
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SaveAs_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Open_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void About_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new AboutWindow();
@@ -667,9 +659,6 @@ namespace TraceSpy
         {
             if (LV.SelectedIndex < 0)
                 return;
-
-            //if (!(ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource) is ListBoxItem item))
-            //    return;
 
             var dlg = new TraceDetailsWindow(LV);
             dlg.Owner = this;
