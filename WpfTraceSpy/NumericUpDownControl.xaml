@@ -12,10 +12,19 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="TB">1</TextBox>
+        <TextBox
+            x:Name="TB"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Center"
+            x:FieldModifier="private">
+            1
+        </TextBox>
         <ScrollBar
             x:Name="SB"
             Grid.Column="1"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Center"
+            x:FieldModifier="private"
             Value="0" />
     </Grid>
 </UserControl>

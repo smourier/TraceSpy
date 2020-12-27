@@ -77,6 +77,9 @@ namespace TraceSpy
 
         internal static void FinishRanges(List<ColorRange> ranges, string line)
         {
+            if (ranges.Count == 0)
+                return;
+
             // create intermediate null range
             // note: overlapped match will create undetermined results...
             var lastCovered = 0;

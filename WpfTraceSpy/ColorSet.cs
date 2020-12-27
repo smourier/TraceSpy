@@ -8,45 +8,23 @@ namespace TraceSpy
 {
     public class ColorSet : DictionaryObject, IEquatable<ColorSet>, IComparable, IComparable<ColorSet>
     {
-        private Lazy<Brush> _backBrush;
         private Lazy<Brush> _foreBrush;
+        private Lazy<Brush> _backBrush;
+        private Lazy<Brush> _frameBrush;
         private Lazy<Pen> _backPen;
-        private Lazy<Typeface> _typeFace;
+        private Lazy<Tuple<Typeface, double>> _typeFace;
 
         public ColorSet()
         {
-            _backBrush = new Lazy<Brush>(GetBackBrush, true);
             _foreBrush = new Lazy<Brush>(GetForeBrush, true);
+            _backBrush = new Lazy<Brush>(GetBackBrush, true);
+            _frameBrush = new Lazy<Brush>(GetFrameBrush, true);
             _backPen = new Lazy<Pen>(GetBackPen, true);
-            _typeFace = new Lazy<Typeface>(GetTypeface, true);
-        }
-
-        public ColorSet(string name, string foreBrush, string backBrush)
-            : this()
-        {
-            Name = name;
-            ForeBrushText = foreBrush;
-            BackBrushText = backBrush;
+            _typeFace = new Lazy<Tuple<Typeface, double>>(GetTypeface, true);
         }
 
         public string Name { get => DictionaryObjectGetPropertyValue<string>(); set => DictionaryObjectSetPropertyValue(value); }
-        public ColorSetDrawMode Mode { get => DictionaryObjectGetPropertyValue(ColorSetDrawMode.Fill); set => DictionaryObjectSetPropertyValue(value); }
-        public float FrameWidth { get => DictionaryObjectGetPropertyValue(1.0f); set => DictionaryObjectSetPropertyValue(value); }
-        public bool IsModeFrame { get => !IsModeFill; set => IsModeFill = !value; }
-
-        public bool IsModeFill
-        {
-            get => Mode == ColorSetDrawMode.Fill;
-            set
-            {
-                if (value == IsModeFill)
-                    return;
-
-                Mode = value ? ColorSetDrawMode.Fill : ColorSetDrawMode.Frame;
-                OnPropertyChanged(nameof(IsModeFrame));
-                OnPropertyChanged(nameof(IsModeFill));
-            }
-        }
+        public double FrameWidth { get => DictionaryObjectGetPropertyValue(0d); set => DictionaryObjectSetPropertyValue(value); }
 
         [XmlElement("ForeBrush")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -56,25 +34,33 @@ namespace TraceSpy
         [EditorBrowsable(EditorBrowsableState.Never)]
         public string BackBrushText { get => DictionaryObjectGetPropertyValue<string>(); set => DictionaryObjectSetPropertyValue(value); }
 
-        [XmlElement("Typeface")]
+        [XmlElement("FrameBrush")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public string TypefaceName { get => DictionaryObjectGetPropertyValue<string>(); set => DictionaryObjectSetPropertyValue(value); }
+        public string FrameBrushText { get => DictionaryObjectGetPropertyValue<string>(); set => DictionaryObjectSetPropertyValue(value); }
+
+        [XmlElement("Font")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public string FontText { get => DictionaryObjectGetPropertyValue<string>(); set => DictionaryObjectSetPropertyValue(value); }
 
         [XmlIgnore]
         public Brush ForeBrush => _foreBrush.Value;
-        private Brush GetForeBrush() => ConvertToBrush(BackBrushText, Brushes.Black);
+        private Brush GetForeBrush() => ConvertToBrush(ForeBrushText, Brushes.Black);
 
         [XmlIgnore]
         public Brush BackBrush => _backBrush.Value;
         private Brush GetBackBrush() => ConvertToBrush(BackBrushText, Brushes.White);
 
         [XmlIgnore]
-        public Pen BackPen => _backPen.Value;
-        private Pen GetBackPen() => ConvertToPen(ForeBrushText, new Pen(BackBrush, 1));
+        public Brush FrameBrush => _frameBrush.Value;
+        private Brush GetFrameBrush() => ConvertToBrush(FrameBrushText, ForeBrush);
 
         [XmlIgnore]
-        public Typeface Typeface => _typeFace.Value;
-        private Typeface GetTypeface() => ConvertToTypeface(TypefaceName, App.Current.Settings.TypeFace);
+        public Pen BackPen => _backPen.Value;
+        private Pen GetBackPen() => ConvertToPen(FrameBrushText, new Pen(FrameBrush, FrameWidth));
+
+        [XmlIgnore]
+        public Tuple<Typeface, double> Typeface => _typeFace.Value;
+        private Tuple<Typeface, double> GetTypeface() => ConvertToTypeface(FontText, new Tuple<Typeface, double>(App.Current.Settings.TypeFace, App.Current.Settings.FontSize));
 
         protected override IEnumerable DictionaryObjectGetErrors(string propertyName)
         {
@@ -82,6 +68,36 @@ namespace TraceSpy
             {
                 if (string.IsNullOrWhiteSpace(Name))
                     yield return "Name cannot be empty.";
+            }
+
+            if (propertyName == null || propertyName == nameof(ForeBrushText))
+            {
+                if (!string.IsNullOrWhiteSpace(ForeBrushText))
+                {
+                    var brush = ConvertToBrush(ForeBrushText, null);
+                    if (brush == null)
+                        yield return "Fore brush cannot be resolved.";
+                }
+            }
+
+            if (propertyName == null || propertyName == nameof(BackBrushText))
+            {
+                if (!string.IsNullOrWhiteSpace(BackBrushText))
+                {
+                    var brush = ConvertToBrush(BackBrushText, null);
+                    if (brush == null)
+                        yield return "Back brush cannot be resolved.";
+                }
+            }
+
+            if (propertyName == null || propertyName == nameof(FontText))
+            {
+                if (!string.IsNullOrWhiteSpace(FontText))
+                {
+                    var face = ConvertToTypeface(FontText, null);
+                    if (face == null)
+                        yield return "Type face cannot be resolved.";
+                }
             }
         }
 
@@ -99,10 +115,16 @@ namespace TraceSpy
             {
                 _backBrush = new Lazy<Brush>(GetBackBrush, true);
                 _backPen = new Lazy<Pen>(GetBackPen, true);
+                _frameBrush = new Lazy<Brush>(GetFrameBrush, true);
             }
-            else if (e.PropertyName == nameof(TypefaceName))
+            else if (e.PropertyName == nameof(FrameBrushText))
             {
-                _typeFace = new Lazy<Typeface>(GetTypeface, true);
+                _frameBrush = new Lazy<Brush>(GetFrameBrush, true);
+                _backPen = new Lazy<Pen>(GetBackPen, true);
+            }
+            else if (e.PropertyName == nameof(FontText))
+            {
+                _typeFace = new Lazy<Tuple<Typeface, double>>(GetTypeface, true);
             }
             base.OnPropertyChanged(sender, e);
         }
@@ -133,13 +155,13 @@ namespace TraceSpy
                     text += "Back:" + BackBrushText;
                 }
 
-                if (!string.IsNullOrEmpty(TypefaceName))
+                if (!string.IsNullOrEmpty(FontText))
                 {
                     if (text != null)
                     {
                         text += " ";
                     }
-                    text += "Face:" + TypefaceName;
+                    text += "Face:" + FontText;
                 }
                 return text;
             }
@@ -175,14 +197,16 @@ namespace TraceSpy
             return Name.CompareTo(other.Name);
         }
 
-        private static Typeface ConvertToTypeface(string text, Typeface defaultValue)
+        private static Tuple<Typeface, double> ConvertToTypeface(string text, Tuple<Typeface, double> defaultValue)
         {
             if (string.IsNullOrWhiteSpace(text))
                 return defaultValue;
 
             try
             {
-                return new Typeface(text);
+                var font = (System.Drawing.Font)(new System.Drawing.FontConverter().ConvertFromString(text));
+                var tf = new Typeface(font.FontFamily.ToFontFamily(), font.GetStyle(), font.GetWeight(), font.GetStretch());
+                return new Tuple<Typeface, double>(tf, font.Size);
             }
             catch
             {
@@ -205,14 +229,14 @@ namespace TraceSpy
             }
         }
 
-        private static Pen ConvertToPen(string text, Pen defaultValue)
+        private Pen ConvertToPen(string text, Pen defaultValue)
         {
             if (string.IsNullOrWhiteSpace(text))
                 return defaultValue;
 
             try
             {
-                return new Pen((Brush)new BrushConverter().ConvertFromString(text), 1);
+                return new Pen((Brush)new BrushConverter().ConvertFromString(text), FrameWidth);
             }
             catch
             {

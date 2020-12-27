@@ -70,7 +70,7 @@
     </Compile>
     <Compile Include="ColorRange.cs" />
     <Compile Include="ColorSet.cs" />
-    <Compile Include="ColorSetDrawMode.cs" />
+    <Compile Include="ComparisonConverter.cs" />
     <Compile Include="ConcurrentLinkedList.cs" />
     <Compile Include="DictionaryObject.cs" />
     <Compile Include="EtwProvider.cs" />

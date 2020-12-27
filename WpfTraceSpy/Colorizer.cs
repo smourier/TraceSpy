@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 namespace TraceSpy
 {
-    public class Colorizer : DictionaryObject, IEquatable<Colorizer>, IComparable, IComparable<Colorizer>
+    public class Colorizer : DictionaryObject, IComparable, IComparable<Colorizer>
     {
         private Lazy<Regex> _regex;
 
@@ -55,16 +55,6 @@ namespace TraceSpy
         }
 
         public override string ToString() => Definition + ":" + (IgnoreCase ? "I" : "C");
-        public override int GetHashCode() => Definition == null ? base.GetHashCode() : Definition.GetHashCode();
-        public override bool Equals(object obj) => Equals(obj as Colorizer);
-        public bool Equals(Colorizer other)
-        {
-            if (other == null)
-                return false;
-
-            return Definition == other.Definition & IgnoreCase == other.IgnoreCase;
-        }
-
         int IComparable.CompareTo(object obj) => CompareTo(obj as Colorizer);
         public int CompareTo(Colorizer other)
         {

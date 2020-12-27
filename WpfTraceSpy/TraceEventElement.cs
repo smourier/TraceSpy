@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,7 +48,7 @@ namespace TraceSpy
                 height = formattedText.Height;
             }
 
-            height = Math.Min((_listView.ActualHeight * 2) / 3, height);
+            height = Math.Min(_listView.ActualHeight * 2 / 3, height);
             return new Size(App.Current.ColumnLayout.RowWidth, Math.Max(FontSize + 2, height));
         }
 
@@ -122,23 +123,71 @@ namespace TraceSpy
 
             if (evt.Text != null)
             {
-                formattedText = new FormattedText(
-                    evt.Text,
-                    _culture,
-                    FlowDirection.LeftToRight,
-                    App.Current.Settings.TypeFace,
-                    FontSize,
-                    Brushes.Black);
-
-                if (!App.Current.Settings.WrapText)
+                var ranges = App.Current.Settings.ComputeColorRanges(evt.Text);
+                if (ranges.Count == 0)
                 {
-                    formattedText.MaxLineCount = 1;
-                }
+                    formattedText = new FormattedText(
+                        evt.Text,
+                        _culture,
+                        FlowDirection.LeftToRight,
+                        App.Current.Settings.TypeFace,
+                        FontSize,
+                        Brushes.Black);
 
-                formattedText.Trimming = TextTrimming.CharacterEllipsis;
-                formattedText.MaxTextWidth = App.Current.ColumnLayout.TextColumnWidth;
-                formattedText.MaxTextHeight = Math.Max(1, (_listView.ActualHeight * 2) / 3);
-                drawingContext.DrawText(formattedText, new Point(offset, 0));
+                    if (!App.Current.Settings.WrapText)
+                    {
+                        formattedText.MaxLineCount = 1;
+                    }
+
+                    formattedText.Trimming = TextTrimming.CharacterEllipsis;
+                    formattedText.MaxTextWidth = App.Current.ColumnLayout.TextColumnWidth;
+                    formattedText.MaxTextHeight = Math.Max(1, _listView.ActualHeight * 2 / 3);
+                    drawingContext.DrawText(formattedText, new Point(offset, 0));
+                }
+                else
+                {
+                    var charIndex = 0;
+                    var x = 0d;
+                    var y = 0d;
+                    var maxWidth = App.Current.ColumnLayout.TextColumnWidth;
+                    for (var i = 0; i < ranges.Count; i++)
+                    {
+                        if (maxWidth < 0)
+                            return;
+
+                        var range = ranges[i];
+                        var chunk = evt.Text.Substring(charIndex, range.Length);
+
+                        formattedText = new FormattedText(
+                            chunk,
+                            _culture,
+                            FlowDirection.LeftToRight,
+                            range.ColorSet != null ? range.ColorSet.Typeface.Item1 : App.Current.Settings.TypeFace,
+                            range.ColorSet != null ? range.ColorSet.Typeface.Item2 : FontSize,
+                            range.ColorSet != null ? range.ColorSet.ForeBrush : Brushes.Black);
+
+                        if (!App.Current.Settings.WrapText)
+                        {
+                            formattedText.MaxLineCount = 1;
+                        }
+
+                        formattedText.Trimming = TextTrimming.CharacterEllipsis;
+                        formattedText.MaxTextWidth = maxWidth;
+                        formattedText.MaxTextHeight = Math.Max(1, _listView.ActualHeight * 2 / 3);
+
+                        if (range.ColorSet != null)
+                        {
+                            var rc = new Rect(offset + x, y, formattedText.Width, formattedText.Height);
+                            drawingContext.DrawRectangle(range.ColorSet.BackBrush, range.ColorSet.BackPen, rc);
+                        }
+
+                        drawingContext.DrawText(formattedText, new Point(offset + x, y));
+                        x += formattedText.Width;
+                        charIndex += range.Length;
+
+                        maxWidth -= formattedText.Width;
+                    }
+                }
             }
         }
     }

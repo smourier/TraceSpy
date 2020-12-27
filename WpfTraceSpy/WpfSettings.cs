@@ -161,11 +161,7 @@ namespace TraceSpy
             var existing = _filters.FirstOrDefault(p => p.Equals(old));
             if (existing != null)
             {
-                existing.IsActive = filter.IsActive;
-                existing.Column = filter.Column;
-                existing.Type = filter.Type;
-                existing.Definition = filter.Definition;
-                existing.IgnoreCase = filter.IgnoreCase;
+                filter.CopyTo(existing);
                 return false;
             }
 
@@ -197,19 +193,8 @@ namespace TraceSpy
         public IReadOnlyList<ColorRange> ComputeColorRanges(string line)
         {
             var list = new List<ColorRange>();
-            if (string.IsNullOrEmpty(line))
-            {
-                list.Add(new ColorRange(null, 0, 0));
-                return list;
-            }
-
             ColorRange.ComputeColorizersColorRanges(list, this, line);
             ColorRange.FinishRanges(list, line);
-
-            if (list.Count == 0)
-            {
-                list.Add(new ColorRange(null, 0, line.Length));
-            }
             return list;
         }
 
@@ -227,12 +212,7 @@ namespace TraceSpy
             var existing = _colorSets.FirstOrDefault(p => p.Equals(colorSet));
             if (existing != null)
             {
-                existing.FrameWidth = colorSet.FrameWidth;
-                existing.BackBrushText = colorSet.BackBrushText;
-                existing.ForeBrushText = colorSet.ForeBrushText;
-                existing.Name = colorSet.Name;
-                existing.Mode = colorSet.Mode;
-                existing.TypefaceName = colorSet.TypefaceName;
+                colorSet.CopyTo(existing);
                 return false;
             }
 
@@ -262,9 +242,7 @@ namespace TraceSpy
             var existing = _colorizers.FirstOrDefault(p => p.Equals(colorizer));
             if (existing != null)
             {
-                existing.IsActive = colorizer.IsActive;
-                existing.IgnoreCase = colorizer.IgnoreCase;
-                existing.Definition = colorizer.Definition;
+                colorizer.CopyTo(existing);
                 return false;
             }
 
@@ -294,10 +272,7 @@ namespace TraceSpy
             var existing = _etwProviders.FirstOrDefault(p => p.Equals(provider));
             if (existing != null)
             {
-                existing.IsActive = provider.IsActive;
-                existing.StringMessageMode = provider.StringMessageMode;
-                existing.Description = provider.Description;
-                existing.TraceLevel = provider.TraceLevel;
+                provider.CopyTo(existing);
                 return false;
             }
 

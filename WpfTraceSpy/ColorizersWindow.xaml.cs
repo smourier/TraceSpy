@@ -18,16 +18,19 @@ namespace TraceSpy
         private void Close_Click(object sender, RoutedEventArgs e) => Close();
         private void LVColorizer_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Modify((e.OriginalSource as FrameworkElement)?.DataContext as Colorizer);
         private void ModifyColorizer_Click(object sender, RoutedEventArgs e) => Modify(LVColorizers.SelectedValue as Colorizer);
-        private void Modify(Colorizer provider)
+        private void Modify(Colorizer colorizer)
         {
-            if (provider == null)
+            if (colorizer == null)
                 return;
 
-            var dlg = new ColorizerWindow(provider.Clone());
+            var dlg = new ColorizerWindow(colorizer.Clone());
             dlg.Owner = this;
             if (!dlg.ShowDialog().GetValueOrDefault())
                 return;
 
+            _context.Colorizers.Remove(colorizer);
+            _context.Colorizers.Add(dlg.Colorizer);
+            App.Current.Settings.RemoveColorizer(colorizer);
             App.Current.Settings.AddColorizer(dlg.Colorizer);
             App.Current.Settings.SerializeToConfiguration();
         }
@@ -52,33 +55,35 @@ namespace TraceSpy
             if (!dlg.ShowDialog().GetValueOrDefault())
                 return;
 
-            var added = App.Current.Settings.AddColorizer(dlg.Colorizer);
-            App.Current.Settings.SerializeToConfiguration();
-            if (added)
+            if (App.Current.Settings.AddColorizer(dlg.Colorizer))
             {
                 _context.Colorizers.Add(dlg.Colorizer);
             }
+            App.Current.Settings.SerializeToConfiguration();
         }
 
         private void LVColorSets_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Modify((e.OriginalSource as FrameworkElement)?.DataContext as ColorSet);
         private void ModifyColorSet_Click(object sender, RoutedEventArgs e) => Modify(LVColorSets.SelectedValue as ColorSet);
-        private void Modify(ColorSet set)
+        private void Modify(ColorSet colorSet)
         {
-            if (set == null)
+            if (colorSet == null)
                 return;
 
-            var dlg = new ColorSetWindow(set.Clone());
+            var dlg = new ColorSetWindow(colorSet.Clone());
             dlg.Owner = this;
             if (!dlg.ShowDialog().GetValueOrDefault())
                 return;
 
-            App.Current.Settings.AddColorSet(dlg.ColorSet);
+            if (App.Current.Settings.AddColorSet(dlg.ColorSet))
+            {
+                _context.ColorSets.Add(dlg.ColorSet);
+            }
             App.Current.Settings.SerializeToConfiguration();
         }
 
         private void RemoveColorSet_Click(object sender, RoutedEventArgs e)
         {
-            if (!(LVColorizers.SelectedValue is ColorSet colorSet))
+            if (!(LVColorSets.SelectedValue is ColorSet colorSet))
                 return;
 
             if (this.ShowConfirm("Are you sure you want to remove the '" + colorSet + "' color set?") != MessageBoxResult.Yes)

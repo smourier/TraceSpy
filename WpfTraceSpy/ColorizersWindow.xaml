@@ -25,7 +25,7 @@
         <ListView
             Name="LVColorizers"
             Grid.Row="1"
-            ItemsSource="{Binding Providers}"
+            ItemsSource="{Binding Colorizers}"
             MouseDoubleClick="LVColorizer_MouseDoubleClick"
             SelectionMode="Single">
             <ListView.View>
@@ -81,7 +81,7 @@
         <ListView
             Name="LVColorSets"
             Grid.Row="4"
-            ItemsSource="{Binding Providers}"
+            ItemsSource="{Binding ColorSets}"
             MouseDoubleClick="LVColorSets_MouseDoubleClick"
             SelectionMode="Single">
             <ListView.View>
@@ -91,19 +91,19 @@
                         DisplayMemberBinding="{Binding Name}"
                         Header="Name" />
                     <GridViewColumn
-                        Width="80"
-                        DisplayMemberBinding="{Binding BackBrushText}"
-                        Header="Back Brush" />
+                        Width="180"
+                        DisplayMemberBinding="{Binding FontText}"
+                        Header="Font" />
                     <GridViewColumn
                         Width="80"
                         DisplayMemberBinding="{Binding ForeBrushText}"
                         Header="Fore Brush" />
                     <GridViewColumn
-                        Width="200"
-                        DisplayMemberBinding="{Binding TypefaceName}"
-                        Header="Type face" />
+                        Width="80"
+                        DisplayMemberBinding="{Binding BackBrushText}"
+                        Header="Back Brush" />
                     <GridViewColumn
-                        Width="40"
+                        Width="50"
                         DisplayMemberBinding="{Binding Mode}"
                         Header="Mode" />
                     <GridViewColumn

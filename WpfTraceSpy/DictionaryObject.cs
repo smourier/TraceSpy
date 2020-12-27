@@ -39,7 +39,7 @@ namespace TraceSpy
         protected string DictionaryObjectError => DictionaryObjectGetError(null);
         protected bool DictionaryObjectHasErrors => (DictionaryObjectGetErrors(null)?.Cast<object>().Any()).GetValueOrDefault();
 
-        protected virtual void CopyTo(DictionaryObject other)
+        public virtual void CopyTo(DictionaryObject other, DictionaryObjectPropertySetOptions options = DictionaryObjectPropertySetOptions.None)
         {
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
@@ -49,7 +49,10 @@ namespace TraceSpy
 
             foreach (var kv in DictionaryObjectProperties)
             {
-                other.DictionaryObjectProperties[kv.Key] = kv.Value;
+                if (kv.Value == null)
+                    continue;
+
+                other.DictionaryObjectSetPropertyValue(kv.Value.Value, options, kv.Key);
             }
         }
 

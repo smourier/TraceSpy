@@ -137,6 +137,45 @@ namespace TraceSpy
             }
         }
 
+        public static string ToName(this System.Drawing.Color color)
+        {
+            var name = color.Name;
+            if (!name.StartsWith("ff", StringComparison.OrdinalIgnoreCase))
+                return name;
+
+            return "#" + name.Substring(2);
+        }
+
+        public static FontFamily ToFontFamily(this System.Drawing.FontFamily family)
+        {
+            if (family == null)
+                return null;
+
+            return new FontFamily(family.Name);
+        }
+
+        public static FontStyle GetStyle(this System.Drawing.Font font)
+        {
+            if (font != null)
+            {
+                if (font.Italic)
+                    return FontStyles.Italic;
+            }
+            return FontStyles.Normal;
+        }
+
+        public static FontWeight GetWeight(this System.Drawing.Font font)
+        {
+            if (font != null)
+            {
+                if (font.Bold)
+                    return FontWeights.Bold;
+            }
+            return FontWeights.Normal;
+        }
+
+        public static FontStretch GetStretch(this System.Drawing.Font font) => new FontStretch();
+
         public static IEnumerable<DependencyObject> EnumerateVisualChildren(this DependencyObject obj, bool recursive = true, bool sameLevelFirst = true)
         {
             if (obj == null)

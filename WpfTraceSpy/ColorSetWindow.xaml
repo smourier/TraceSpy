@@ -23,7 +23,7 @@
             VerticalAlignment="Top"
             Content="Name:" />
         <TextBox
-            Name="Name"
+            Name="ColorSetName"
             Width="349"
             Height="23"
             Margin="0,10,10,0"
@@ -38,22 +38,24 @@
             VerticalAlignment="Top"
             Content="Type face:" />
         <TextBox
-            Name="Typeface"
+            Name="Font"
             Width="319"
             Height="23"
             Margin="0,40,40,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             VerticalContentAlignment="Center"
+            IsReadOnly="True"
             Style="{StaticResource ResourceKey=ValidationTextBox}"
-            Text="{Binding TypefaceName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+            Text="{Binding FontText, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
         <Button
-            Name="TypefaceButton"
+            Name="FontButton"
             Width="25"
             Height="23"
             Margin="0,40,10,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
+            Click="FontButton_Click"
             Content="..." />
         <Label
             Margin="10,70,0,0"
@@ -69,7 +71,7 @@
             VerticalAlignment="Top"
             VerticalContentAlignment="Center"
             Style="{StaticResource ResourceKey=ValidationTextBox}"
-            Text="{Binding ForeBrushName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+            Text="{Binding ForeBrushText, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
         <Button
             Name="ForeBrushButton"
             Width="25"
@@ -77,6 +79,7 @@
             Margin="0,70,10,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
+            Click="ForeBrushButton_Click"
             Content="..." />
         <Label
             Margin="10,100,0,0"
@@ -92,7 +95,7 @@
             VerticalAlignment="Top"
             VerticalContentAlignment="Center"
             Style="{StaticResource ResourceKey=ValidationTextBox}"
-            Text="{Binding BackBrushName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+            Text="{Binding BackBrushText, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
         <Button
             Name="BackBrushButton"
             Width="25"
@@ -100,40 +103,38 @@
             Margin="0,100,10,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
+            Click="BackBrushButton_Click"
             Content="..." />
         <Label
             Margin="10,130,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            Content="Background mode:" />
-        <RadioButton
-            Name="BackgroundModeFill"
-            Width="63"
+            Content="Frame brush:" />
+        <TextBox
+            Name="FrameBrush"
+            Width="319"
             Height="23"
-            Margin="135,130,0,0"
-            HorizontalAlignment="Left"
+            Margin="0,130,40,0"
+            HorizontalAlignment="Right"
             VerticalAlignment="Top"
             VerticalContentAlignment="Center"
-            Content="Fill"
-            GroupName="BackgroundMode"
-            IsChecked="{Binding IsModeFill, UpdateSourceTrigger=PropertyChanged}" />
-        <RadioButton
-            Name="BackgroundModeFrame"
-            Width="113"
+            Style="{StaticResource ResourceKey=ValidationTextBox}"
+            Text="{Binding FrameBrushText, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+        <Button
+            Name="FrameBrushButton"
+            Width="25"
             Height="23"
-            Margin="200,130,0,0"
-            HorizontalAlignment="Left"
+            Margin="0,130,10,0"
+            HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            VerticalContentAlignment="Center"
-            Content="Frame"
-            GroupName="BackgroundMode"
-            IsChecked="{Binding IsModeFrame, UpdateSourceTrigger=PropertyChanged}" />
+            Click="FrameBrushButton_Click"
+            Content="..." />
         <Label
             Margin="10,160,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Content="Frame width:" />
-        <local:Int32UpDownControl
+        <local:DoubleUpDownControl
             x:Name="FrameWidth"
             Width="40"
             Height="23"
@@ -141,10 +142,10 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             VerticalContentAlignment="Center"
-            IsEnabled="{Binding IsModeFrame}"
+            IncrementValue="0.1"
             MaxValue="10"
-            MinValue="1"
-            Text="{Binding FrameWidth, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+            MinValue="0"
+            Value="{Binding FrameWidth, Mode=TwoWay}" />
         <Button
             Name="OK"
             Grid.Row="1"

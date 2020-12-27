@@ -74,6 +74,7 @@ namespace TraceSpy
                     OnPropertyChanged(nameof(ModifyEnabled));
                     OnPropertyChanged(nameof(RemoveEnabled));
                 };
+
                 Providers = new ObservableCollection<EtwProvider>();
                 Providers.AddRange(App.Current.Settings.EtwProviders);
             }
