@@ -39,6 +39,9 @@ namespace TraceSpy
                 if (!colorizer.IsActive)
                     continue;
 
+                if (colorizer.Regex == null)
+                    continue;
+
                 foreach (Match m in colorizer.Regex.Matches(line))
                 {
                     for (var i = 0; i < m.Groups.Count; i++)

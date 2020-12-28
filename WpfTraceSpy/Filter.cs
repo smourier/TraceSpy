@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace TraceSpy
 {
     public class Filter : DictionaryObject, IEquatable<Filter>
     {
-        private Regex _regex;
-        private bool _regexParsed;
+        private Lazy<Regex> _regex;
 
         public Filter()
         {
+            _regex = new Lazy<Regex>(GetRegex, true);
             IgnoreCase = true;
             IsActive = true;
         }
@@ -103,8 +104,7 @@ namespace TraceSpy
             {
                 if (DictionaryObjectSetPropertyValue(value))
                 {
-                    _regex = null;
-                    _regexParsed = false;
+                    _regex = new Lazy<Regex>(GetRegex, true);
                 }
             }
         }
@@ -116,36 +116,33 @@ namespace TraceSpy
             {
                 if (DictionaryObjectSetPropertyValue(value))
                 {
-                    _regex = null;
-                    _regexParsed = false;
+                    _regex = new Lazy<Regex>(GetRegex, true);
                 }
             }
         }
 
-        public Regex Regex
-        {
-            get
-            {
-                if (_regex == null && !_regexParsed && Type == FilterType.Regex)
-                {
-                    _regexParsed = true;
-                    var options = RegexOptions.Compiled;
-                    if (IgnoreCase)
-                    {
-                        options |= RegexOptions.IgnoreCase;
-                    }
+        public Regex Regex => _regex.Value;
 
-                    try
-                    {
-                        _regex = new Regex(Definition, options);
-                    }
-                    catch (Exception e)
-                    {
-                        App.AddTrace("*** Error parsing filter regular expression: " + e.Message + Environment.NewLine + "*** This message will only be shown once.");
-                    }
+        private Regex GetRegex()
+        {
+            if (Type == FilterType.Regex)
+            {
+                var options = RegexOptions.Compiled;
+                if (IgnoreCase)
+                {
+                    options |= RegexOptions.IgnoreCase;
                 }
-                return _regex;
+
+                try
+                {
+                    return new Regex(Definition, options);
+                }
+                catch (Exception e)
+                {
+                    App.AddTrace(TraceLevel.Error, "*** Error parsing filter '" + Definition + "' regular expression: " + e.Message + Environment.NewLine + "*** This message will only be shown once.");
+                }
             }
+            return null;
         }
 
         public override string ToString() => Definition + ":C" + (IgnoreCase ? "I" : "C");

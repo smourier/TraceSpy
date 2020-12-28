@@ -35,8 +35,7 @@ namespace TraceSpy
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
-            var provider = LV.SelectedValue as EtwProvider;
-            if (provider == null)
+            if (!(LV.SelectedValue is EtwProvider provider))
                 return;
 
             if (this.ShowConfirm("Are you sure you want to remove the '" + provider + "' ETW provider?") != MessageBoxResult.Yes)

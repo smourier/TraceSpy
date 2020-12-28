@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Media;
@@ -8,22 +9,36 @@ namespace TraceSpy
     public class TraceEvent
     {
         private static long _index;
+        private Lazy<IReadOnlyList<ColorRange>> _ranges;
+        private string _text;
 
         public TraceEvent()
         {
             Index = Interlocked.Increment(ref _index);
             Ticks = Stopwatch.GetTimestamp();
+            _ranges = new Lazy<IReadOnlyList<ColorRange>>(GetRanges, true);
         }
 
         public long Index { get; }
-        public long Ticks { get; set; }
+        public long Ticks { get; }
         public long PreviousTicks { get; set; }
         public string ProcessName { get; set; }
-        public string Text { get; set; }
-
-        public int Height { get; set; }
-        public Brush Background { get; set; }
+        public Brush BackgroundBrush { get; set; }
         public string FullText => Index + "\t" + Ticks + "\t" + ProcessName + "\t" + Text;
+        public IReadOnlyList<ColorRange> Ranges => _ranges.Value;
+
+        public string Text
+        {
+            get => _text;
+            set
+            {
+                if (_text == value)
+                    return;
+
+                _text = value;
+                _ranges = new Lazy<IReadOnlyList<ColorRange>>(GetRanges, true);
+            }
+        }
 
         public string TicksText
         {
@@ -68,5 +83,7 @@ namespace TraceSpy
         }
 
         public static void ResetIndex() => Interlocked.Exchange(ref _index, 0);
+
+        private IReadOnlyList<ColorRange> GetRanges() => App.Current.Settings.ComputeColorRanges(Text);
     }
 }

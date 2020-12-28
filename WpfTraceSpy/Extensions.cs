@@ -174,7 +174,9 @@ namespace TraceSpy
             return FontWeights.Normal;
         }
 
+#pragma warning disable IDE0060 // Remove unused parameter
         public static FontStretch GetStretch(this System.Drawing.Font font) => new FontStretch();
+#pragma warning restore IDE0060 // Remove unused parameter
 
         public static IEnumerable<DependencyObject> EnumerateVisualChildren(this DependencyObject obj, bool recursive = true, bool sameLevelFirst = true)
         {

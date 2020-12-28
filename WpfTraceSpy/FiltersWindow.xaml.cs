@@ -35,8 +35,7 @@ namespace TraceSpy
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
-            var filter = LV.SelectedValue as Filter;
-            if (filter == null)
+            if (!(LV.SelectedValue is Filter filter))
                 return;
 
             if (this.ShowConfirm("Are you sure you want to remove the '" + filter + "' Filter?") != MessageBoxResult.Yes)

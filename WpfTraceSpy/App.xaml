@@ -24,6 +24,5 @@
             </Style.Triggers>
         </Style>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <local:ComparisonConverter x:Key="ComparisonConverter" />
     </Application.Resources>
 </Application>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
@@ -44,7 +45,16 @@ namespace TraceSpy
             {
                 options |= RegexOptions.IgnoreCase;
             }
-            return new Regex(Definition, options);
+
+            try
+            {
+                return new Regex(Definition, options);
+            }
+            catch(Exception e)
+            {
+                App.AddTrace(TraceLevel.Error, "*** Error parsing colorizer '" + Definition + "' regular expression: " + e.Message + Environment.NewLine + "*** This message will only be shown once.");
+                return null;
+            }
         }
 
         public Colorizer Clone()

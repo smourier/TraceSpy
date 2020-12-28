@@ -192,6 +192,9 @@ namespace TraceSpy
 
         public IReadOnlyList<ColorRange> ComputeColorRanges(string line)
         {
+            if (string.IsNullOrWhiteSpace(line))
+                return Array.Empty<ColorRange>();
+
             var list = new List<ColorRange>();
             ColorRange.ComputeColorizersColorRanges(list, this, line);
             ColorRange.FinishRanges(list, line);

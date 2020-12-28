@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,10 +17,6 @@ namespace TraceSpy
 
         private ListView _listView;
 
-        public TraceEventElement()
-        {
-        }
-
         protected override void OnVisualParentChanged(DependencyObject oldParent)
         {
             base.OnVisualParentChanged(oldParent);
@@ -36,13 +32,15 @@ namespace TraceSpy
             double height = 0;
             if (Event != null && Event.Text != null && App.Current.Settings.WrapText)
             {
+                // note: we don't really support multiline with colorizer as we don't know where the previous chunk landed in multiline
                 var formattedText = new FormattedText(
                     Event.Text,
                     _culture,
                     FlowDirection.LeftToRight,
                     App.Current.Settings.TypeFace,
                     FontSize,
-                    Brushes.Black);
+                    Brushes.Black,
+                    App.PixelsPerDip);
 
                 formattedText.MaxTextWidth = App.Current.ColumnLayout.TextColumnWidth;
                 height = formattedText.Height;
@@ -58,24 +56,22 @@ namespace TraceSpy
             if (evt == null)
                 return;
 
-            if (evt.Background != null)
+            if (evt.BackgroundBrush != null)
             {
-                drawingContext.DrawRectangle(evt.Background, null, new Rect(RenderSize));
+                drawingContext.DrawRectangle(evt.BackgroundBrush, null, new Rect(RenderSize));
             }
-            else
+
+            if ((evt.Index % 2) == 1)
             {
-                if ((evt.Index % 2) == 1)
+                var altBrush = App.Current.Settings.AlternateBrush;
+                if (altBrush != null)
                 {
-                    var altBrush = App.Current.Settings.AlternateBrush;
-                    if (altBrush != null)
-                    {
-                        drawingContext.DrawRectangle(altBrush, null, new Rect(RenderSize));
-                    }
+                    drawingContext.DrawRectangle(altBrush, null, new Rect(RenderSize));
                 }
             }
 
+            var ppd = App.PixelsPerDip;
             double offset = 0;
-
             var index = evt.Index.ToString();
             var formattedText = new FormattedText(
                 index,
@@ -83,7 +79,8 @@ namespace TraceSpy
                 FlowDirection.LeftToRight,
                 App.Current.Settings.TypeFace,
                 FontSize,
-                Brushes.Black);
+                Brushes.Black,
+                ppd);
 
             formattedText.MaxTextWidth = App.Current.ColumnLayout.IndexColumnWidth;
             drawingContext.DrawText(formattedText, new Point(0, 0));
@@ -95,7 +92,8 @@ namespace TraceSpy
                 FlowDirection.LeftToRight,
                 App.Current.Settings.TypeFace,
                 FontSize,
-                Brushes.Black);
+                Brushes.Black,
+                ppd);
 
             formattedText.MaxLineCount = 1;
             formattedText.Trimming = TextTrimming.CharacterEllipsis;
@@ -111,7 +109,8 @@ namespace TraceSpy
                     FlowDirection.LeftToRight,
                     App.Current.Settings.TypeFace,
                     FontSize,
-                    Brushes.Black);
+                    Brushes.Black,
+                    ppd);
 
                 formattedText.MaxLineCount = 1;
                 formattedText.Trimming = TextTrimming.CharacterEllipsis;
@@ -123,7 +122,7 @@ namespace TraceSpy
 
             if (evt.Text != null)
             {
-                var ranges = App.Current.Settings.ComputeColorRanges(evt.Text);
+                var ranges = evt.Ranges;
                 if (ranges.Count == 0)
                 {
                     formattedText = new FormattedText(
@@ -132,7 +131,8 @@ namespace TraceSpy
                         FlowDirection.LeftToRight,
                         App.Current.Settings.TypeFace,
                         FontSize,
-                        Brushes.Black);
+                        Brushes.Black,
+                        ppd);
 
                     if (!App.Current.Settings.WrapText)
                     {
@@ -146,6 +146,7 @@ namespace TraceSpy
                 }
                 else
                 {
+                    // note: we don't really support multiline with colorizer as we don't know where the previous chunk landed in multiline
                     var charIndex = 0;
                     var x = 0d;
                     var y = 0d;
@@ -164,7 +165,8 @@ namespace TraceSpy
                             FlowDirection.LeftToRight,
                             range.ColorSet != null ? range.ColorSet.Typeface.Item1 : App.Current.Settings.TypeFace,
                             range.ColorSet != null ? range.ColorSet.Typeface.Item2 : FontSize,
-                            range.ColorSet != null ? range.ColorSet.ForeBrush : Brushes.Black);
+                            range.ColorSet != null ? range.ColorSet.ForeBrush : Brushes.Black,
+                            ppd);
 
                         if (!App.Current.Settings.WrapText)
                         {
@@ -177,15 +179,15 @@ namespace TraceSpy
 
                         if (range.ColorSet != null)
                         {
-                            var rc = new Rect(offset + x, y, formattedText.Width, formattedText.Height);
+                            var rc = new Rect(offset + x, y, formattedText.WidthIncludingTrailingWhitespace, formattedText.Height);
                             drawingContext.DrawRectangle(range.ColorSet.BackBrush, range.ColorSet.BackPen, rc);
                         }
 
                         drawingContext.DrawText(formattedText, new Point(offset + x, y));
-                        x += formattedText.Width;
+                        x += formattedText.WidthIncludingTrailingWhitespace;
                         charIndex += range.Length;
 
-                        maxWidth -= formattedText.Width;
+                        maxWidth -= formattedText.WidthIncludingTrailingWhitespace;
                     }
                 }
             }

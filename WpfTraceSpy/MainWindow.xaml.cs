@@ -36,9 +36,11 @@ namespace TraceSpy
         private FindWindow _findWindow;
         private int _scrollingTo;
         private TraceEvent _scrollTo;
+        private Lazy<double> _pixelsPerDip;
 
         public MainWindow()
         {
+            _pixelsPerDip = new Lazy<double>(() => VisualTreeHelper.GetDpi(this).PixelsPerDip);
             _state = new MainWindowState();
             _state.AutoScroll = App.Current.Settings.AutoScroll;
             _state.RemoveEmptyLines = App.Current.Settings.RemoveEmptyLines;
@@ -100,13 +102,22 @@ namespace TraceSpy
 
 #if DEBUG
             //            new MonitorFocusScopes().Show();
+            SendTestTrace.Visibility = Visibility.Visible;
 #endif
         }
+
+        public double PixelsPerDip => _pixelsPerDip.Value;
 
         protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e)
         {
             base.OnKeyDown(e);
             MainMenu.RaiseMenuItemClickOnKeyGesture(e);
+        }
+
+        protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
+        {
+            base.OnDpiChanged(oldDpi, newDpi);
+            _pixelsPerDip = new Lazy<double>(() => VisualTreeHelper.GetDpi(this).PixelsPerDip);
         }
 
         private void OnStatePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -243,12 +254,12 @@ namespace TraceSpy
             }
         }
 
-        public void AddTrace(TraceEvent evt)
+        public void AddTrace(TraceEvent evt, bool allowExclusion = true)
         {
             if (evt == null || evt.ProcessName == null)
                 return;
 
-            if (App.Current.Settings.ExcludeLine(evt.Text, evt.ProcessName))
+            if (allowExclusion && App.Current.Settings.ExcludeLine(evt.Text, evt.ProcessName))
                 return;
 
             var last = _dataSource.LastOrDefault();
@@ -432,7 +443,7 @@ namespace TraceSpy
             }
         }
 
-        private void SendTestTrace_Click(object sender, RoutedEventArgs e) => App.AddTrace("Test " + DateTime.Now);
+        private void SendTestTrace_Click(object sender, RoutedEventArgs e) => App.AddTrace(TraceLevel.Info, "Test " + DateTime.Now);
         private void LV_ScrollChanged(object sender, ScrollChangedEventArgs e) => LVH.Margin = new Thickness(-e.HorizontalOffset, 0, 0, 0);
 
         private void CopyText_Click(object sender, RoutedEventArgs e)

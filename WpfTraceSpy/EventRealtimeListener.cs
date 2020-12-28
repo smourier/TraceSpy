@@ -59,7 +59,7 @@ namespace TraceSpy
             }
             catch (Exception e)
             {
-                App.AddTrace("EventRealtimeListener e:" + e);
+                App.AddTrace(TraceLevel.Error, "*** Internal error in EventRealtimeListener: " + e.Message);
                 return;
             }
             finally
