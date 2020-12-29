@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -62,6 +63,15 @@ namespace TraceSpy
             var clone = new Colorizer();
             CopyTo(clone);
             return clone;
+        }
+
+        protected override IEnumerable DictionaryObjectGetErrors(string propertyName)
+        {
+            if (propertyName == null || propertyName == nameof(Definition))
+            {
+                if (string.IsNullOrWhiteSpace(Definition))
+                    yield return "Definition cannot be empty.";
+            }
         }
 
         public override string ToString() => Definition + ":" + (IgnoreCase ? "I" : "C");

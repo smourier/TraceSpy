@@ -1,14 +1,14 @@
 ﻿<Window
-    x:Class="TraceSpy.ColorizerWindow"
+    x:Class="TraceSpy.SendTraceWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TraceSpy"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Regex Colorizer"
+    Title="Send Test Trace"
     Width="500"
-    Height="300"
-    FocusManager.FocusedElement="{Binding ElementName=Definition}"
+    Height="260"
+    FocusManager.FocusedElement="{Binding ElementName=Text}"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
@@ -21,11 +21,10 @@
             Margin="10,10,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            xml:space="preserve">Regex:
-(.NET syntax)</Label>
+            Content="Text:" />
         <TextBox
-            Name="Definition"
-            Width="381"
+            Name="Text"
+            Width="396"
             Height="162"
             Margin="0,10,10,0"
             HorizontalAlignment="Right"
@@ -33,33 +32,9 @@
             AcceptsReturn="True"
             HorizontalScrollBarVisibility="Disabled"
             Style="{StaticResource ResourceKey=ValidationTextBox}"
-            Text="{Binding Definition, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
             TextWrapping="Wrap"
             VerticalScrollBarVisibility="Auto" />
-        <CheckBox
-            Height="15"
-            Margin="15,0,0,20"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
-            Content="Active"
-            IsChecked="{Binding IsActive, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
-        <CheckBox
-            Height="15"
-            Margin="79,0,0,20"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
-            Content="Ignore Case"
-            IsChecked="{Binding IgnoreCase, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
-        <Button
-            Name="Help"
-            Grid.Row="1"
-            Width="85"
-            Height="23"
-            Margin="10,0,95,10"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
-            Click="Help_Click"
-            Content="_Regex Help" />
         <Button
             Name="OK"
             Grid.Row="1"
@@ -69,7 +44,7 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Click="OK_Click"
-            Content="_Save"
+            Content="_Send"
             IsDefault="True"
             IsEnabled="{Binding IsValid}" />
         <Button

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 
 namespace TraceSpy
@@ -27,6 +28,12 @@ namespace TraceSpy
         {
             DialogResult = false;
             Close();
+        }
+
+        private void Help_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://docs.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference") { UseShellExecute = true });
+            Definition.Focus();
         }
     }
 }

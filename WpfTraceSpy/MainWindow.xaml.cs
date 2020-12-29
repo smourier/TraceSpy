@@ -102,7 +102,6 @@ namespace TraceSpy
 
 #if DEBUG
             //            new MonitorFocusScopes().Show();
-            SendTestTrace.Visibility = Visibility.Visible;
 #endif
         }
 
@@ -443,7 +442,20 @@ namespace TraceSpy
             }
         }
 
-        private void SendTestTrace_Click(object sender, RoutedEventArgs e) => App.AddTrace(TraceLevel.Info, "Test " + DateTime.Now);
+        private void SendTestTrace_Click(object sender, RoutedEventArgs e)
+        {
+            var st = new SendTrace();
+            st.Text = App.Current.Settings.TestTraceText.Nullify();
+            var dlg = new SendTraceWindow(st);
+            dlg.Owner = this;
+            if (dlg.ShowDialog() == true && !string.IsNullOrWhiteSpace(st.Text))
+            {
+                App.AddTrace(TraceLevel.Info, st.Text, true);
+                App.Current.Settings.TestTraceText = st.Text.Nullify();
+                App.Current.Settings.SerializeToConfiguration();
+            }
+        }
+
         private void LV_ScrollChanged(object sender, ScrollChangedEventArgs e) => LVH.Margin = new Thickness(-e.HorizontalOffset, 0, 0, 0);
 
         private void CopyText_Click(object sender, RoutedEventArgs e)

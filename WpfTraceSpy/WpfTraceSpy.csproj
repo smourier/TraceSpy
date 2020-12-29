@@ -64,7 +64,11 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AutoCompleteComboBox.cs" />
+    <Compile Include="SendTrace.cs" />
     <Compile Include="Colorizer.cs" />
+    <Compile Include="SendTraceWindow.xaml.cs">
+      <DependentUpon>SendTraceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ColorizerWindow.xaml.cs">
       <DependentUpon>ColorizerWindow.xaml</DependentUpon>
     </Compile>
@@ -124,6 +128,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ColorizersWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SendTraceWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

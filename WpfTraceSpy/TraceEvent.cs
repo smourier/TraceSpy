@@ -24,6 +24,7 @@ namespace TraceSpy
         public long PreviousTicks { get; set; }
         public string ProcessName { get; set; }
         public Brush BackgroundBrush { get; set; }
+        public bool DontColorize { get; set; }
         public string FullText => Index + "\t" + Ticks + "\t" + ProcessName + "\t" + Text;
         public IReadOnlyList<ColorRange> Ranges => _ranges.Value;
 

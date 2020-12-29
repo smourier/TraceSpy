@@ -123,7 +123,7 @@ namespace TraceSpy
             if (evt.Text != null)
             {
                 var ranges = evt.Ranges;
-                if (ranges.Count == 0)
+                if (evt.DontColorize || ranges.Count == 0)
                 {
                     formattedText = new FormattedText(
                         evt.Text,
@@ -147,7 +147,6 @@ namespace TraceSpy
                 else
                 {
                     // note: we don't really support multiline with colorizer as we don't know where the previous chunk landed in multiline
-                    var charIndex = 0;
                     var x = 0d;
                     var y = 0d;
                     var maxWidth = App.Current.ColumnLayout.TextColumnWidth;
@@ -157,7 +156,7 @@ namespace TraceSpy
                             return;
 
                         var range = ranges[i];
-                        var chunk = evt.Text.Substring(charIndex, range.Length);
+                        var chunk = evt.Text.Substring(range.StartIndex, range.Length);
 
                         formattedText = new FormattedText(
                             chunk,
@@ -185,7 +184,6 @@ namespace TraceSpy
 
                         drawingContext.DrawText(formattedText, new Point(offset + x, y));
                         x += formattedText.WidthIncludingTrailingWhitespace;
-                        charIndex += range.Length;
 
                         maxWidth -= formattedText.WidthIncludingTrailingWhitespace;
                     }

@@ -173,11 +173,11 @@
                     Click="ClearTraces_Click"
                     Header="_Clear Traces"
                     InputGestureText="Ctrl+X" />
+                <Separator />
                 <MenuItem
                     Name="SendTestTrace"
                     Click="SendTestTrace_Click"
-                    Header="_Send Test Trace"
-                    Visibility="Collapsed" />
+                    Header="_Send Test Trace..." />
             </MenuItem>
             <MenuItem Header="_Options">
                 <MenuItem

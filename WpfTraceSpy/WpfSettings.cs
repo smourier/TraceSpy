@@ -62,6 +62,7 @@ namespace TraceSpy
         public double ProcessColumnWidth { get; set; }
         public double TextColumnWidth { get; set; }
         public bool DontAnimateCaptureMenuItem { get; set; }
+        public string TestTraceText { get; set; }
 
         [XmlIgnore] // we don't persist this one
         public bool DisableAllFilters { get; set; }

@@ -8,6 +8,7 @@
     Title="Filter"
     Width="500"
     Height="220"
+    FocusManager.FocusedElement="{Binding ElementName=Definition}"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">

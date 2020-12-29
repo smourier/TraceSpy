@@ -21,11 +21,12 @@ namespace TraceSpy
 
         public static double PixelsPerDip => ((Current?.MainWindow as MainWindow)?.PixelsPerDip).GetValueOrDefault(1);
 
-        public static TraceEvent AddTrace(TraceLevel level, string text)
+        public static TraceEvent AddTrace(TraceLevel level, string text, bool colorize = false)
         {
             var evt = new TraceEvent();
             evt.ProcessName = _processName.Value;
             evt.Text = text;
+            evt.DontColorize = !colorize;
             switch (level)
             {
                 case TraceLevel.Error:

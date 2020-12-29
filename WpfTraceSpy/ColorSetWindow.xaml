@@ -8,7 +8,7 @@
     Title="Color Set"
     Width="500"
     Height="270"
-    FocusManager.FocusedElement="{Binding ElementName=Name}"
+    FocusManager.FocusedElement="{Binding ElementName=ColorSetName}"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
