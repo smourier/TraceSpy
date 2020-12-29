@@ -38,8 +38,11 @@ namespace TraceSpy
 
                 _text = value;
                 _ranges = new Lazy<IReadOnlyList<ColorRange>>(GetRanges, true);
+                Texts = value != null ? _text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries) : null;
             }
         }
+
+        public string[] Texts { get; private set; }
 
         public string TicksText
         {
@@ -85,6 +88,6 @@ namespace TraceSpy
 
         public static void ResetIndex() => Interlocked.Exchange(ref _index, 0);
 
-        private IReadOnlyList<ColorRange> GetRanges() => App.Current.Settings.ComputeColorRanges(Text);
+        private IReadOnlyList<ColorRange> GetRanges() => App.Current.Settings.ComputeColorRanges(this);
     }
 }

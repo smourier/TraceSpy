@@ -30,9 +30,8 @@ namespace TraceSpy
         protected override Size MeasureOverride(Size availableSize)
         {
             double height = 0;
-            if (Event != null && Event.Text != null && App.Current.Settings.WrapText)
+            if (Event != null && Event.Text != null)
             {
-                // note: we don't really support multiline with colorizer as we don't know where the previous chunk landed in multiline
                 var formattedText = new FormattedText(
                     Event.Text,
                     _culture,
@@ -42,6 +41,26 @@ namespace TraceSpy
                     Brushes.Black,
                     App.PixelsPerDip);
 
+                // if colorizers, we don't know how to wrap
+                var wrap = App.Current.Settings.WrapText;
+                if (Event.Ranges.Count > 1)
+                {
+                    wrap = false;
+                }
+
+                // no wrap => 1 line only
+                if (!wrap && Event.Texts.Length <= 1)
+                {
+                    formattedText.MaxLineCount = 1;
+                }
+
+                // if more than one colorized line, we don't know how to wrap
+                if (Event.Ranges.Count > 1 && Event.Texts.Length > 1)
+                {
+                    formattedText.MaxLineCount = Event.Texts.Length;
+                }
+
+                formattedText.Trimming = TextTrimming.CharacterEllipsis;
                 formattedText.MaxTextWidth = App.Current.ColumnLayout.TextColumnWidth;
                 height = formattedText.Height;
             }
@@ -146,17 +165,25 @@ namespace TraceSpy
                 }
                 else
                 {
-                    // note: we don't really support multiline with colorizer as we don't know where the previous chunk landed in multiline
                     var x = 0d;
                     var y = 0d;
+                    var lastLineIndex = 0;
                     var maxWidth = App.Current.ColumnLayout.TextColumnWidth;
                     for (var i = 0; i < ranges.Count; i++)
                     {
-                        if (maxWidth < 0)
-                            return;
-
                         var range = ranges[i];
-                        var chunk = evt.Text.Substring(range.StartIndex, range.Length);
+                        if (range.TextsIndex != lastLineIndex)
+                        {
+                            maxWidth = App.Current.ColumnLayout.TextColumnWidth;
+                            x = 0;
+                            y += formattedText.Height;
+                            lastLineIndex = range.TextsIndex;
+                        }
+
+                        if (maxWidth < 0)
+                            continue;
+
+                        var chunk = evt.Texts[range.TextsIndex].Substring(range.StartIndex, range.Length);
 
                         formattedText = new FormattedText(
                             chunk,
@@ -167,11 +194,7 @@ namespace TraceSpy
                             range.ColorSet != null ? range.ColorSet.ForeBrush : Brushes.Black,
                             ppd);
 
-                        if (!App.Current.Settings.WrapText)
-                        {
-                            formattedText.MaxLineCount = 1;
-                        }
-
+                        formattedText.MaxLineCount = 1;
                         formattedText.Trimming = TextTrimming.CharacterEllipsis;
                         formattedText.MaxTextWidth = maxWidth;
                         formattedText.MaxTextHeight = Math.Max(1, _listView.ActualHeight * 2 / 3);

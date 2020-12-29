@@ -145,12 +145,13 @@
                 <MenuItem
                     Name="CopyText"
                     Click="CopyText_Click"
-                    Header="_Copy Text"
+                    Header="_Copy Text(s)"
                     InputGestureText="Ctrl+C" />
                 <MenuItem
                     Name="CopyFullLine"
                     Click="CopyFullLine_Click"
-                    Header="Copy Full _Line" />
+                    Header="Copy Full _Line(s)"
+                    InputGestureText="Ctrl+L" />
                 <Separator />
                 <MenuItem
                     Name="Find"
@@ -177,7 +178,8 @@
                 <MenuItem
                     Name="SendTestTrace"
                     Click="SendTestTrace_Click"
-                    Header="_Send Test Trace..." />
+                    Header="_Send Test Trace..."
+                    InputGestureText="Ctrl+T" />
             </MenuItem>
             <MenuItem Header="_Options">
                 <MenuItem

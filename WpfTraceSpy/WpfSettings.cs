@@ -191,14 +191,14 @@ namespace TraceSpy
             return null;
         }
 
-        public IReadOnlyList<ColorRange> ComputeColorRanges(string line)
+        public IReadOnlyList<ColorRange> ComputeColorRanges(TraceEvent evt)
         {
-            if (string.IsNullOrWhiteSpace(line))
+            if (string.IsNullOrWhiteSpace(evt.Text))
                 return Array.Empty<ColorRange>();
 
             var list = new List<ColorRange>();
-            ColorRange.ComputeColorizersColorRanges(list, this, line);
-            ColorRange.FinishRanges(list, line);
+            ColorRange.ComputeColorizersColorRanges(list, this, evt);
+            ColorRange.FinishRanges(list, evt);
             return list;
         }
 

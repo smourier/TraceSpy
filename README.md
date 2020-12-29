@@ -1,9 +1,7 @@
-*** This is the new home of https://tracespy.codeplex.com/ ***
-
 # TraceSpy
 TraceSpy is a pure .NET, 100% free and open source, alternative to the very popular SysInternals' DebugView tool.
 
-Note TraceSpy will *not* evolve, instead, use **WpfTraceSpy**.
+Note TraceSpy will *not* evolve, instead, use **WpfTraceSpy** (see below).
 
 **Update 2020/12/28** : WPFTraceSpy now has Regex colorizers.
 
@@ -16,8 +14,8 @@ Notables points of interest are:
 * It's 100% .NET
 * It does not need UAC to be disabled nor special rights (unless you want to use ETW traces, see below)
 * It can remove empty lines (which is very handy to get rid of these pesky trace lines sent by Visual Studio or addins, for example...)
-* The traced application is less blocked by this tracing tool than by DebugView, because it's more async
-* The Copy (CTRL-C) operation just copies the traced text, and not the full line (a full line copy feature is there though)
+* The traced application is far less blocked by this tracing tool than by DebugView, because it's more async
+* The Copy (CTRL-C) operation just copies the traced text, and not the full line (a full line copy using CTRL-L feature is there though)
 * The process name of the traced application is optionally displayed instead of the process id (if available and not dead at display  time)
 * The find dialog has an autocomplete feature
 * Lines that contain newline characters (\r, \n) are not displayed as normal lines (DbgView does this) but as one big line
@@ -36,7 +34,7 @@ using (EventProvider prov = new EventProvider(providerGuid1))
 }
 ```
 
-These traces are very fast to create, and cost almost nothing to the system. In fact you you should get rid of *OutputDebugString* (this is also the default trace listener on .NET under Windows) usage, as this is a thing of the past, and use ETW, which is *much* better and faster.
+These traces are very fast to create, and cost almost *nothing* to the system. In fact you you should get rid of *OutputDebugString* (this is also the default trace listener on .NET under Windows) usage, as this is a thing of the past, and use ETW, which is *much* better and faster.
 
 The `EventProvider` class - supported with .NET Framework 4 and higher - is located in the `System.Diagnostics.Eventing` namespace. The good news is these traces are super fast, and they can even be left in production code. This is in fact what Microsoft uses for all Windows code.
 
@@ -74,7 +72,7 @@ This is a WPF version of TraceSpy. Wpf TraceSpy is *much* faster than the Winfor
 
 Things that are in TraceSpy but not in WpfTraceSpy:
 * File Open, File Save, File Save As are not there. I'm not sure it' so useful since we can copy all lines to the clipboard.
-* Quick Colorizers are not part of WpfTraceSpy.
+* Quick Colorizers are not part of WpfTraceSpy, but you have Regex Colorizers.
 
 ![wpftracespy.png](doc/wpftracespy.png?raw=true)
 
@@ -117,9 +115,9 @@ Here is how you can integrate in your startup code:
 
 # Using Regex Colorizers
 
-First you need to define a Regex with capture group name. For example, this: *(?<test>test)* will match the text "test" anywhere in a trace text and will assign this to the "test" capture group name. Check .NET regular expression for more on this.
+First you need to define a Regex with capture group name. For example, this: (?<<test>>test) will match the text "test" anywhere in a trace text and will assign this to the "test" capture group name. Check .NET regular expression for more on this.
 
-Once you have defined a Regex, you must define a WpfTraceSpy's "Color Set" for each group name. The Color Set name is the same as the group name. So the following setting:
+Once you have defined a Regex, you must define a WpfTraceSpy's "Color Set" for each group name. The Color Set's name is the same as the group name. So the following setting:
 
 ![etw2.png](doc/colorizer.png?raw=true)
 
@@ -132,3 +130,5 @@ Here is another sample setting to colorize key value pairs:
 And here is an output example in WpfTraceSpy:
 
 ![etw2.png](doc/colorizerkvresults.png?raw=true)
+
+Note: for colorized traces, the Wrap Text feature doesn't work, the trace is just truncated.

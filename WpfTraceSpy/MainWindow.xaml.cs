@@ -461,7 +461,7 @@ namespace TraceSpy
         private void CopyText_Click(object sender, RoutedEventArgs e)
         {
             var sb = new StringBuilder();
-            foreach (var evt in LV.SelectedItems.OfType<TraceEvent>())
+            foreach (var evt in LV.SelectedItems.OfType<TraceEvent>().OrderBy(evt => evt.Index))
             {
                 sb.AppendLine(evt.Text);
             }
@@ -471,7 +471,7 @@ namespace TraceSpy
         private void CopyFullLine_Click(object sender, RoutedEventArgs e)
         {
             var sb = new StringBuilder();
-            foreach (var evt in LV.SelectedItems.OfType<TraceEvent>())
+            foreach (var evt in LV.SelectedItems.OfType<TraceEvent>().OrderBy(evt => evt.Index))
             {
                 sb.AppendLine(evt.FullText);
             }
@@ -571,7 +571,25 @@ namespace TraceSpy
         private void Edit_SubmenuOpened(object sender, RoutedEventArgs e)
         {
             CopyFullLine.IsEnabled = LV.SelectedItems.Count > 0;
+            if (LV.SelectedItems.Count > 1)
+            {
+                CopyFullLine.Header = "Copy Full " + LV.SelectedItems.Count + " _Lines";
+            }
+            else
+            {
+                CopyFullLine.Header = "Copy Full _Line";
+            }
+
             CopyText.IsEnabled = LV.SelectedItems.Count > 0;
+            if (LV.SelectedItems.Count > 1)
+            {
+                CopyText.Header = "_Copy " + LV.SelectedItems.Count + " Texts";
+            }
+            else
+            {
+                CopyText.Header = "_Copy Text";
+            }
+
             Find.IsEnabled = LV.Items.Count > 0;
             FindNext.IsEnabled = _findWindow != null && !string.IsNullOrWhiteSpace(_findWindow.Searches.Text);
             FindPrev.IsEnabled = FindNext.IsEnabled;
