@@ -115,7 +115,7 @@ Here is how you can integrate in your startup code:
 
 # Using Regex Colorizers
 
-First you need to define a Regex with capture group name. For example, this: (?<<test>>test) will match the text "test" anywhere in a trace text and will assign this to the "test" capture group name. Check .NET regular expression for more on this.
+First you need to define a Regex with capture group name. For example, this: `(?<test>test)` will match the text "test" anywhere in a trace text and will assign this to the "test" capture group name. Check .NET regular expression for more on this.
 
 Once you have defined a Regex, you must define a WpfTraceSpy's "Color Set" for each group name. The Color Set's name is the same as the group name. So the following setting:
 
