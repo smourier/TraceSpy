@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace TraceSpy
 {
@@ -7,8 +9,12 @@ namespace TraceSpy
         public AboutWindow()
         {
             InitializeComponent();
+#if FX4
+            Title += "FX4";
+#endif
+            WB.Source = new BitmapImage(new Uri("https://stackoverflow.com/users/flair/403671.png?theme=clean"));
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e) => "http://stackoverflow.com/users/403671/simon-mourier?tab=profile".OpenInDefaultBrowser();
+        private void Button_Click(object sender, RoutedEventArgs e) => "https://stackoverflow.com/users/403671/simon-mourier?tab=profile".OpenInDefaultBrowser();
     }
 }

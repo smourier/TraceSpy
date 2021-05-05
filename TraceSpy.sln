@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraceSpy", "TraceSpy\TraceSpy.csproj", "{A64849FE-5B6C-44B6-8AE9-5583E67D3516}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraceSpyTest", "TraceSpyTest\TraceSpyTest.csproj", "{04341C9B-44BB-49DE-A148-40F5AD5D18A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTraceSpy", "WpfTraceSpy\WpfTraceSpy.csproj", "{9F5C8933-04E6-47B4-B446-0B1A4972AB2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTraceSpyFx4", "WpfTraceSpyFx4\WpfTraceSpyFx4.csproj", "{793FC3E8-E9F6-4E34-BCBC-37FAC58CA379}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{9F5C8933-04E6-47B4-B446-0B1A4972AB2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F5C8933-04E6-47B4-B446-0B1A4972AB2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F5C8933-04E6-47B4-B446-0B1A4972AB2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{793FC3E8-E9F6-4E34-BCBC-37FAC58CA379}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{793FC3E8-E9F6-4E34-BCBC-37FAC58CA379}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{793FC3E8-E9F6-4E34-BCBC-37FAC58CA379}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{793FC3E8-E9F6-4E34-BCBC-37FAC58CA379}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -193,8 +193,13 @@ namespace TraceSpy
 
         public IReadOnlyList<ColorRange> ComputeColorRanges(TraceEvent evt)
         {
+#if FX4
+            if (string.IsNullOrWhiteSpace(evt.Text))
+                return new ColorRange[0];
+#else
             if (string.IsNullOrWhiteSpace(evt.Text))
                 return Array.Empty<ColorRange>();
+#endif
 
             var list = new List<ColorRange>();
             ColorRange.ComputeColorizersColorRanges(list, this, evt);

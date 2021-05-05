@@ -32,8 +32,7 @@
             <Image
                 Name="WB"
                 Width="208"
-                Height="58"
-                Source="http://stackoverflow.com/users/flair/403671.png?theme=clean" />
+                Height="58" />
         </Button>
     </Grid>
 </Window>

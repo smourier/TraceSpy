@@ -36,11 +36,12 @@ namespace TraceSpy
         private FindWindow _findWindow;
         private int _scrollingTo;
         private TraceEvent _scrollTo;
-        private Lazy<double> _pixelsPerDip;
 
         public MainWindow()
         {
+#if !FX4
             _pixelsPerDip = new Lazy<double>(() => VisualTreeHelper.GetDpi(this).PixelsPerDip);
+#endif
             _state = new MainWindowState();
             _state.AutoScroll = App.Current.Settings.AutoScroll;
             _state.RemoveEmptyLines = App.Current.Settings.RemoveEmptyLines;
@@ -105,19 +106,22 @@ namespace TraceSpy
 #endif
         }
 
-        public double PixelsPerDip => _pixelsPerDip.Value;
-
         protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e)
         {
             base.OnKeyDown(e);
             MainMenu.RaiseMenuItemClickOnKeyGesture(e);
         }
 
+#if !FX4
+        private Lazy<double> _pixelsPerDip;
+        public double PixelsPerDip => _pixelsPerDip.Value;
+
         protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
         {
             base.OnDpiChanged(oldDpi, newDpi);
             _pixelsPerDip = new Lazy<double>(() => VisualTreeHelper.GetDpi(this).PixelsPerDip);
         }
+#endif
 
         private void OnStatePropertyChanged(object sender, PropertyChangedEventArgs e)
         {

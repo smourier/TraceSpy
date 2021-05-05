@@ -19,7 +19,9 @@ namespace TraceSpy
         public WpfSettings Settings { get; }
         public TraceEventColumnLayout ColumnLayout { get; }
 
+#if !FX4
         public static double PixelsPerDip => ((Current?.MainWindow as MainWindow)?.PixelsPerDip).GetValueOrDefault(1);
+#endif
 
         public static TraceEvent AddTrace(TraceLevel level, string text, bool colorize = false)
         {

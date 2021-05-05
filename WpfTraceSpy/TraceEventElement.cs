@@ -32,6 +32,15 @@ namespace TraceSpy
             double height = 0;
             if (Event != null && Event.Text != null)
             {
+#if FX4
+                var formattedText = new FormattedText(
+                    Event.Text,
+                    _culture,
+                    FlowDirection.LeftToRight,
+                    App.Current.Settings.TypeFace,
+                    FontSize,
+                    Brushes.Black);
+#else
                 var formattedText = new FormattedText(
                     Event.Text,
                     _culture,
@@ -40,6 +49,7 @@ namespace TraceSpy
                     FontSize,
                     Brushes.Black,
                     App.PixelsPerDip);
+#endif
 
                 // if colorizers, we don't know how to wrap
                 var wrap = App.Current.Settings.WrapText;
@@ -89,9 +99,19 @@ namespace TraceSpy
                 }
             }
 
-            var ppd = App.PixelsPerDip;
             double offset = 0;
             var index = evt.Index.ToString();
+
+#if FX4
+            var formattedText = new FormattedText(
+                index,
+                _culture,
+                FlowDirection.LeftToRight,
+                App.Current.Settings.TypeFace,
+                FontSize,
+                Brushes.Black);
+#else
+            var ppd = App.PixelsPerDip;
             var formattedText = new FormattedText(
                 index,
                 _culture,
@@ -100,11 +120,22 @@ namespace TraceSpy
                 FontSize,
                 Brushes.Black,
                 ppd);
+#endif
+
 
             formattedText.MaxTextWidth = App.Current.ColumnLayout.IndexColumnWidth;
             drawingContext.DrawText(formattedText, new Point(0, 0));
             offset += App.Current.ColumnLayout.IndexColumnWidth;
 
+#if FX4
+            formattedText = new FormattedText(
+                evt.TicksText,
+                _culture,
+                FlowDirection.LeftToRight,
+                App.Current.Settings.TypeFace,
+                FontSize,
+                Brushes.Black);
+#else
             formattedText = new FormattedText(
                 evt.TicksText,
                 _culture,
@@ -113,6 +144,7 @@ namespace TraceSpy
                 FontSize,
                 Brushes.Black,
                 ppd);
+#endif
 
             formattedText.MaxLineCount = 1;
             formattedText.Trimming = TextTrimming.CharacterEllipsis;
@@ -122,6 +154,15 @@ namespace TraceSpy
 
             if (evt.ProcessName != null)
             {
+#if FX4
+                formattedText = new FormattedText(
+                    evt.ProcessName,
+                    _culture,
+                    FlowDirection.LeftToRight,
+                    App.Current.Settings.TypeFace,
+                    FontSize,
+                    Brushes.Black);
+#else
                 formattedText = new FormattedText(
                     evt.ProcessName,
                     _culture,
@@ -130,6 +171,7 @@ namespace TraceSpy
                     FontSize,
                     Brushes.Black,
                     ppd);
+#endif
 
                 formattedText.MaxLineCount = 1;
                 formattedText.Trimming = TextTrimming.CharacterEllipsis;
@@ -144,6 +186,15 @@ namespace TraceSpy
                 var ranges = evt.Ranges;
                 if (evt.DontColorize || ranges.Count == 0)
                 {
+#if FX4
+                    formattedText = new FormattedText(
+                        evt.Text,
+                        _culture,
+                        FlowDirection.LeftToRight,
+                        App.Current.Settings.TypeFace,
+                        FontSize,
+                        Brushes.Black);
+#else
                     formattedText = new FormattedText(
                         evt.Text,
                         _culture,
@@ -152,6 +203,7 @@ namespace TraceSpy
                         FontSize,
                         Brushes.Black,
                         ppd);
+#endif
 
                     if (!App.Current.Settings.WrapText)
                     {
@@ -185,6 +237,15 @@ namespace TraceSpy
 
                         var chunk = evt.Texts[range.TextsIndex].Substring(range.StartIndex, range.Length);
 
+#if FX4
+                        formattedText = new FormattedText(
+                            chunk,
+                            _culture,
+                            FlowDirection.LeftToRight,
+                            range.ColorSet != null ? range.ColorSet.Typeface.Item1 : App.Current.Settings.TypeFace,
+                            range.ColorSet != null ? range.ColorSet.Typeface.Item2 : FontSize,
+                            range.ColorSet != null ? range.ColorSet.ForeBrush : Brushes.Black);
+#else
                         formattedText = new FormattedText(
                             chunk,
                             _culture,
@@ -193,6 +254,7 @@ namespace TraceSpy
                             range.ColorSet != null ? range.ColorSet.Typeface.Item2 : FontSize,
                             range.ColorSet != null ? range.ColorSet.ForeBrush : Brushes.Black,
                             ppd);
+#endif
 
                         formattedText.MaxLineCount = 1;
                         formattedText.Trimming = TextTrimming.CharacterEllipsis;

@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{793FC3E8-E9F6-4E34-BCBC-37FAC58CA379}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>TraceSpy</RootNamespace>
+    <AssemblyName>WpfTraceSpyFx4</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;FX4</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;FX4</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>..\WpfTraceSpy\WpfTraceSpy.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Presentation" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="..\WpfTraceSpy\App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="..\WpfTraceSpy\Colorizer.cs">
+      <Link>Colorizer.cs</Link>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\AutoCompleteComboBox.cs" />
+    <Compile Include="..\WpfTraceSpy\SendTrace.cs" />
+    <Compile Include="..\WpfTraceSpy\SendTraceWindow.xaml.cs">
+      <DependentUpon>SendTraceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\ColorizerWindow.xaml.cs">
+      <DependentUpon>ColorizerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\ColorRange.cs" />
+    <Compile Include="..\WpfTraceSpy\ColorSet.cs" />
+    <Compile Include="..\WpfTraceSpy\ConcurrentLinkedList.cs" />
+    <Compile Include="..\WpfTraceSpy\DictionaryObject.cs" />
+    <Compile Include="..\WpfTraceSpy\EtwProvider.cs" />
+    <Compile Include="..\WpfTraceSpy\ColorizersWindow.xaml.cs">
+      <DependentUpon>ColorizersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\EtwProvidersWindow.xaml.cs">
+      <DependentUpon>EtwProvidersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\ColorSetWindow.xaml.cs">
+      <DependentUpon>ColorSetWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\EtwProviderWindow.xaml.cs">
+      <DependentUpon>EtwProviderWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\EtwTraceLevel.cs" />
+    <Compile Include="..\WpfTraceSpy\EventRealtimeListener.cs" />
+    <Compile Include="..\WpfTraceSpy\Extensions.cs" />
+    <Compile Include="..\WpfTraceSpy\Filter.cs" />
+    <Compile Include="..\WpfTraceSpy\FilterColumn.cs" />
+    <Compile Include="..\WpfTraceSpy\FiltersWindow.xaml.cs">
+      <DependentUpon>FiltersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\FilterType.cs" />
+    <Compile Include="..\WpfTraceSpy\FindWindow.xaml.cs">
+      <DependentUpon>FindWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\FilterWindow.xaml.cs">
+      <DependentUpon>FilterWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\GlobalSuppressions.cs" />
+    <Compile Include="..\WpfTraceSpy\MainWindowState.cs" />
+    <Compile Include="..\WpfTraceSpy\EventRealtimeEventArgs.cs" />
+    <Compile Include="..\WpfTraceSpy\MonitorFocusScopes.xaml.cs">
+      <DependentUpon>MonitorFocusScopes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\NumericUpDownControl.xaml.cs">
+      <DependentUpon>NumericUpDownControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\Serializable.cs" />
+    <Compile Include="..\WpfTraceSpy\ShowTicksMode.cs" />
+    <Compile Include="..\WpfTraceSpy\TraceDetailsWindow.xaml.cs">
+      <DependentUpon>TraceDetailsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\WpfSettings.cs" />
+    <Compile Include="..\WpfTraceSpy\TraceEvent.cs" />
+    <Compile Include="..\WpfTraceSpy\TraceEventColumnLayout.cs" />
+    <Compile Include="..\WpfTraceSpy\TraceEventElement.cs" />
+    <Compile Include="..\WpfTraceSpy\UacUtilities.cs" />
+    <Page Include="..\WpfTraceSpy\AboutWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Link>AboutWindow.xaml</Link>
+    </Page>
+    <Page Include="..\WpfTraceSpy\ColorizersWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WpfTraceSpy\SendTraceWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WpfTraceSpy\ColorizerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WpfTraceSpy\EtwProvidersWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\ColorSetWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WpfTraceSpy\EtwProviderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\FiltersWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\FindWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WpfTraceSpy\FilterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="..\WpfTraceSpy\App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\TraceEventDataSource.cs" />
+    <Compile Include="..\WpfTraceSpy\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="..\WpfTraceSpy\MonitorFocusScopes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WpfTraceSpy\NumericUpDownControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\TraceDetailsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\WpfTraceSpy\Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\WpfTraceSpy\WpfTraceSpy.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
