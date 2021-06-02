@@ -221,6 +221,7 @@ namespace TraceSpy
                     var y = 0d;
                     var lastLineIndex = 0;
                     var maxWidth = App.Current.ColumnLayout.TextColumnWidth;
+                    var rangesOffset = 0;
                     for (var i = 0; i < ranges.Count; i++)
                     {
                         var range = ranges[i];
@@ -232,8 +233,11 @@ namespace TraceSpy
                             lastLineIndex = range.TextsIndex;
                         }
 
-                        if (maxWidth < 0)
+                        if (maxWidth < 0 || range.StartIndex < rangesOffset)
+                        {
+                            rangesOffset = range.StartIndex + range.Length;
                             continue;
+                        }
 
                         var chunk = evt.Texts[range.TextsIndex].Substring(range.StartIndex, range.Length);
 
@@ -271,6 +275,7 @@ namespace TraceSpy
                         x += formattedText.WidthIncludingTrailingWhitespace;
 
                         maxWidth -= formattedText.WidthIncludingTrailingWhitespace;
+                        rangesOffset = range.StartIndex + range.Length;
                     }
                 }
             }
