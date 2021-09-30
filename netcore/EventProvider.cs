@@ -50,11 +50,11 @@ namespace TraceSpy
                 throw new ArgumentNullException(nameof(provider));
 
             Provider = provider;
-            Categogy = category;
+            Category = category;
         }
 
         public EventProvider Provider { get; }
-        public string Categogy { get; }
+        public string Category { get; }
 
         public IDisposable BeginScope<TState>(TState state) => NoopDisposable.Instance;
 
