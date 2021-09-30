@@ -469,7 +469,15 @@ namespace TraceSpy
             {
                 sb.AppendLine(evt.Text);
             }
-            System.Windows.Clipboard.SetText(sb.ToString());
+
+            try
+            {
+                System.Windows.Clipboard.SetText(sb.ToString());
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+            }
         }
 
         private void CopyFullLine_Click(object sender, RoutedEventArgs e)
@@ -479,7 +487,15 @@ namespace TraceSpy
             {
                 sb.AppendLine(evt.FullText);
             }
-            System.Windows.Clipboard.SetText(sb.ToString());
+
+            try
+            {
+                System.Windows.Clipboard.SetText(sb.ToString());
+            }
+            catch(Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+            }
         }
 
         private void Find_Click(object sender, RoutedEventArgs e)
