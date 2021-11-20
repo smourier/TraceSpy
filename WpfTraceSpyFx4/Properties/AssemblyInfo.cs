@@ -14,4 +14,4 @@ using System.Windows;
 [assembly: AssemblyCopyright("Copyright © 2011-2021 Simon Mourier. All rights reserved.")]
 [assembly: ComVisible(false)]
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
-[assembly: Guid("24920c8f-38ad-4cae-bddc-aec52e12da35)]
+[assembly: Guid("24920c8f-38ad-4cae-bddc-aec52e12da35")]
