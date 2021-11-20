@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTraceSpy", "WpfTraceSpy\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTraceSpyFx4", "WpfTraceSpyFx4\WpfTraceSpyFx4.csproj", "{793FC3E8-E9F6-4E34-BCBC-37FAC58CA379}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTraceSpyCore", "WpfTraceSpyCore\WpfTraceSpyCore.csproj", "{C8D62E84-E6CA-4BE0-BD0F-378C53E0CCEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{793FC3E8-E9F6-4E34-BCBC-37FAC58CA379}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{793FC3E8-E9F6-4E34-BCBC-37FAC58CA379}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{793FC3E8-E9F6-4E34-BCBC-37FAC58CA379}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8D62E84-E6CA-4BE0-BD0F-378C53E0CCEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8D62E84-E6CA-4BE0-BD0F-378C53E0CCEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8D62E84-E6CA-4BE0-BD0F-378C53E0CCEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8D62E84-E6CA-4BE0-BD0F-378C53E0CCEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

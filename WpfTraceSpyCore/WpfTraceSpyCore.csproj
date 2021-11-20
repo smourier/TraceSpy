@@ -1,0 +1,119 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <ApplicationIcon>D:\SimonMourier\GitHub\TraceSpy\WpfTraceSpy\WpfTraceSpy.ico</ApplicationIcon>
+    <RootNamespace>TraceSpy</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\WpfTraceSpy\AboutWindow.xaml.cs" Link="AboutWindow.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\App.xaml.cs" Link="App.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\AutoCompleteComboBox.cs" Link="AutoCompleteComboBox.cs" />
+    <Compile Include="..\WpfTraceSpy\Colorizer.cs" Link="Colorizer.cs" />
+    <Compile Include="..\WpfTraceSpy\ColorizersWindow.xaml.cs" Link="ColorizersWindow.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\ColorizerWindow.xaml.cs" Link="ColorizerWindow.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\ColorRange.cs" Link="ColorRange.cs" />
+    <Compile Include="..\WpfTraceSpy\ColorSet.cs" Link="ColorSet.cs" />
+    <Compile Include="..\WpfTraceSpy\ColorSetWindow.xaml.cs" Link="ColorSetWindow.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\ConcurrentLinkedList.cs" Link="ConcurrentLinkedList.cs" />
+    <Compile Include="..\WpfTraceSpy\DictionaryObject.cs" Link="DictionaryObject.cs" />
+    <Compile Include="..\WpfTraceSpy\EtwProvider.cs" Link="EtwProvider.cs" />
+    <Compile Include="..\WpfTraceSpy\EtwProvidersWindow.xaml.cs" Link="EtwProvidersWindow.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\EtwProviderWindow.xaml.cs" Link="EtwProviderWindow.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\EtwTraceLevel.cs" Link="EtwTraceLevel.cs" />
+    <Compile Include="..\WpfTraceSpy\EventRealtimeEventArgs.cs" Link="EventRealtimeEventArgs.cs" />
+    <Compile Include="..\WpfTraceSpy\EventRealtimeListener.cs" Link="EventRealtimeListener.cs" />
+    <Compile Include="..\WpfTraceSpy\Extensions.cs" Link="Extensions.cs" />
+    <Compile Include="..\WpfTraceSpy\Filter.cs" Link="Filter.cs" />
+    <Compile Include="..\WpfTraceSpy\FilterColumn.cs" Link="FilterColumn.cs" />
+    <Compile Include="..\WpfTraceSpy\FiltersWindow.xaml.cs" Link="FiltersWindow.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\FilterType.cs" Link="FilterType.cs" />
+    <Compile Include="..\WpfTraceSpy\FilterWindow.xaml.cs" Link="FilterWindow.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\FindWindow.xaml.cs" Link="FindWindow.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+    <Compile Include="..\WpfTraceSpy\MainWindow.xaml.cs" Link="MainWindow.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\MainWindowState.cs" Link="MainWindowState.cs" />
+    <Compile Include="..\WpfTraceSpy\MonitorFocusScopes.xaml.cs" Link="MonitorFocusScopes.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\NumericUpDownControl.xaml.cs" Link="NumericUpDownControl.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\Properties\AssemblyVersionInfo.cs" Link="Properties\AssemblyVersionInfo.cs" />
+    <Compile Include="..\WpfTraceSpy\SendTrace.cs" Link="SendTrace.cs" />
+    <Compile Include="..\WpfTraceSpy\SendTraceWindow.xaml.cs" Link="SendTraceWindow.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\Serializable.cs" Link="Serializable.cs" />
+    <Compile Include="..\WpfTraceSpy\ShowTicksMode.cs" Link="ShowTicksMode.cs" />
+    <Compile Include="..\WpfTraceSpy\TraceDetailsWindow.xaml.cs" Link="TraceDetailsWindow.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\TraceEvent.cs" Link="TraceEvent.cs" />
+    <Compile Include="..\WpfTraceSpy\TraceEventColumnLayout.cs" Link="TraceEventColumnLayout.cs" />
+    <Compile Include="..\WpfTraceSpy\TraceEventDataSource.cs" Link="TraceEventDataSource.cs" />
+    <Compile Include="..\WpfTraceSpy\TraceEventElement.cs" Link="TraceEventElement.cs" />
+    <Compile Include="..\WpfTraceSpy\UacUtilities.cs" Link="UacUtilities.cs" />
+    <Compile Include="..\WpfTraceSpy\WpfSettings.cs" Link="WpfSettings.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\WpfTraceSpy\WpfTraceSpy.ico" Link="WpfTraceSpy.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="..\WpfTraceSpy\AboutWindow.xaml" Link="AboutWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <ApplicationDefinition Include="..\WpfTraceSpy\App.xaml" Link="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page Include="..\WpfTraceSpy\ColorizersWindow.xaml" Link="ColorizersWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\ColorizerWindow.xaml" Link="ColorizerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\ColorSetWindow.xaml" Link="ColorSetWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\EtwProvidersWindow.xaml" Link="EtwProvidersWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\EtwProviderWindow.xaml" Link="EtwProviderWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\FiltersWindow.xaml" Link="FiltersWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\FilterWindow.xaml" Link="FilterWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\FindWindow.xaml" Link="FindWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\MainWindow.xaml" Link="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\MonitorFocusScopes.xaml" Link="MonitorFocusScopes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\NumericUpDownControl.xaml" Link="NumericUpDownControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\SendTraceWindow.xaml" Link="SendTraceWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\TraceDetailsWindow.xaml" Link="TraceDetailsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>

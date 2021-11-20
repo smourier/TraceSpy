@@ -64,6 +64,7 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AutoCompleteComboBox.cs" />
+    <Compile Include="Properties\AssemblyVersionInfo.cs" />
     <Compile Include="SendTrace.cs" />
     <Compile Include="Colorizer.cs" />
     <Compile Include="SendTraceWindow.xaml.cs">

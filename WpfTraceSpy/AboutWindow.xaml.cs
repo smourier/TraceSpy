@@ -12,6 +12,9 @@ namespace TraceSpy
 #if FX4
             Title += "FX4";
 #endif
+#if NET
+            Title += "Core";
+#endif
             WB.Source = new BitmapImage(new Uri("https://stackoverflow.com/users/flair/403671.png?theme=clean"));
         }
 

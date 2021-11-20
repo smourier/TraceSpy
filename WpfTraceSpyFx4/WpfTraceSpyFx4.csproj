@@ -67,6 +67,9 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="..\WpfTraceSpy\AutoCompleteComboBox.cs" />
+    <Compile Include="..\WpfTraceSpy\Properties\AssemblyVersionInfo.cs">
+      <Link>Properties\AssemblyVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="..\WpfTraceSpy\SendTrace.cs" />
     <Compile Include="..\WpfTraceSpy\SendTraceWindow.xaml.cs">
       <DependentUpon>SendTraceWindow.xaml</DependentUpon>
@@ -125,6 +128,7 @@
     <Compile Include="..\WpfTraceSpy\TraceEventColumnLayout.cs" />
     <Compile Include="..\WpfTraceSpy\TraceEventElement.cs" />
     <Compile Include="..\WpfTraceSpy\UacUtilities.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Page Include="..\WpfTraceSpy\AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -191,11 +195,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\WpfTraceSpy\Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\WpfTraceSpy\WpfTraceSpy.ico" />
