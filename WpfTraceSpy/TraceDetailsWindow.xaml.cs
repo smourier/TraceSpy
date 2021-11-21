@@ -8,7 +8,7 @@ namespace TraceSpy
     public partial class TraceDetailsWindow : Window
     {
         private int _index;
-        private ListView _listView;
+        private readonly ListView _listView;
 
         public TraceDetailsWindow(ListView listView)
         {

@@ -122,7 +122,7 @@ namespace TraceSpy
 
             try
             {
-                var color = (Color)(new ColorConverter().ConvertFromInvariantString(AlternateColor));
+                var color = (Color)new ColorConverter().ConvertFromInvariantString(AlternateColor);
                 return new SolidColorBrush(color);
             }
             catch
@@ -144,7 +144,7 @@ namespace TraceSpy
             if (string.IsNullOrWhiteSpace(search))
                 return;
 
-            _searches.RemoveAll(s => s == search);
+            _ = _searches.RemoveAll(s => s == search);
             _searches.Insert(0, search);
         }
 
@@ -289,9 +289,9 @@ namespace TraceSpy
             return true;
         }
 
-        public bool RemoveEtwProvider(Guid guid)
+        public bool RemoveEtwProvider(Guid providerId)
         {
-            var existing = _etwProviders.FirstOrDefault(p => p.Guid == guid);
+            var existing = _etwProviders.FirstOrDefault(p => p.Guid == providerId);
             if (existing == null)
                 return false;
 

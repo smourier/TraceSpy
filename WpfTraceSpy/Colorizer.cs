@@ -51,7 +51,7 @@ namespace TraceSpy
             {
                 return new Regex(Definition, options);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 App.AddTrace(TraceLevel.Error, "*** Error parsing colorizer '" + Definition + "' regular expression: " + e.Message + Environment.NewLine + "*** This message will only be shown once.");
                 return null;

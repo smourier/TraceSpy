@@ -26,11 +26,10 @@ namespace TraceSpy
             return Process.Start(info) != null;
         }
 
-#pragma warning disable CA1712 // Do not prefix enum values with type name
-
         [Flags]
         public enum SHGSI : int
         {
+#pragma warning disable CA1712 // Do not prefix enum values with type name
             SHGSI_ICON = 0x100,
             SHGSI_ICONLOCATION = 0,
             SHGSI_LARGEICON = 0,
@@ -39,10 +38,8 @@ namespace TraceSpy
             SHGSI_SHELLICONSIZE = 4,
             SHGSI_SMALLICON = 1,
             SHGSI_SYSICONINDEX = 0x4000,
-        }
-
-        private const int SHIELD = 0x4d;
 #pragma warning restore CA1712 // Do not prefix enum values with type name
+        }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         private struct SHSTOCKICONINFO

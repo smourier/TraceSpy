@@ -1,0 +1,33 @@
+﻿[*.cs]
+
+# IDE0011: Add braces
+csharp_prefer_braces = false
+
+# IDE0008: Use explicit type
+csharp_style_var_elsewhere =true:silent
+
+# IDE0008: Use explicit type
+csharp_style_var_for_built_in_types =true:silent
+csharp_style_var_when_type_is_apparent=true:silent
+
+# IDE0022: Use block body for methods
+csharp_style_expression_bodied_methods = true
+csharp_prefer_simple_using_statement=false:suggestion
+
+# IDE0046: Convert to conditional expression
+dotnet_style_prefer_conditional_expression_over_return = false
+
+# IDE0090: Simplify new expression
+csharp_style_implicit_object_creation_when_type_is_apparent = false
+
+# IDE0058: Expression value is never used
+csharp_style_unused_value_expression_statement_preference = discard_variable
+
+# IDE0058: Expression value is never used
+dotnet_diagnostic.IDE0058.severity = none
+
+# CA1031: Do not catch general exception types
+dotnet_diagnostic.CA1031.severity = none
+
+# IDE0010: Add missing cases
+dotnet_diagnostic.IDE0010.severity = none

@@ -346,14 +346,7 @@ namespace TraceSpy
         private void OdsTrace_Click(object sender, RoutedEventArgs e)
         {
             _state.OdsStarted = !_state.OdsStarted;
-            if (_state.OdsStarted.GetValueOrDefault())
-            {
-                App.Current.Settings.CaptureOdsTraces = true;
-            }
-            else
-            {
-                App.Current.Settings.CaptureOdsTraces = false;
-            }
+            App.Current.Settings.CaptureOdsTraces = _state.OdsStarted.GetValueOrDefault();
             SaveSettings();
         }
 
@@ -492,7 +485,7 @@ namespace TraceSpy
             {
                 System.Windows.Clipboard.SetText(sb.ToString());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(ex.Message);
             }

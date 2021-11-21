@@ -6,23 +6,23 @@ using TraceSpyService;
 
 namespace TraceSpyTest
 {
-    class Program
+    public class Program
     {
-        static EventProvider _etw;
-        static Timer _timer;
-        static Random _rnd = new Random(Environment.TickCount);
+        private static EventProvider _etw;
+        private static Timer _timer;
+        private static readonly Random _rnd = new Random(Environment.TickCount);
 
-        static void Main(string[] args)
+        private static void Main()
         {
             if (Debugger.IsAttached)
             {
-                SafeMain(args);
+                SafeMain();
             }
             else
             {
                 try
                 {
-                    SafeMain(args);
+                    SafeMain();
                 }
                 catch (Exception e)
                 {
@@ -31,9 +31,9 @@ namespace TraceSpyTest
             }
         }
 
-        static void SafeMain(string[] args)
+        private static void SafeMain()
         {
-            int count = 1;
+            var count = 1;
             string t;
             var etwProvider = CommandLineUtilities.GetArgument("etw", Guid.Empty);
             Console.WriteLine("TraceSpy Test.");
@@ -60,8 +60,8 @@ namespace TraceSpyTest
             do
             {
                 var info = Console.ReadKey(true);
-                int key = (int)info.Key;
-                int num = GetFinalNumber(info);
+                var key = (int)info.Key;
+                var num = GetFinalNumber(info);
                 switch (info.Key)
                 {
                     case ConsoleKey.Escape:
@@ -71,6 +71,7 @@ namespace TraceSpyTest
                         if (_etw != null)
                         {
                             _etw.Dispose();
+                            _etw = null;
                         }
                         return;
 
@@ -102,23 +103,34 @@ namespace TraceSpyTest
                         break;
 
                     case ConsoleKey.E:
-                        t = "ETWTrace #" + count + " from TraceSpyTest. Date:" + DateTime.Now;
-                        Console.WriteLine("Sending: '" + t + "'");
-                        _etw.WriteMessageEvent(t);
-                        count++;
+                        if (_etw != null)
+                        {
+                            t = "ETWTrace #" + count + " from TraceSpyTest. Date:" + DateTime.Now;
+                            Console.WriteLine("Sending: '" + t + "'");
+                            _etw.WriteMessageEvent(t);
+                            count++;
+                        }
                         break;
 
                     default:
                         if (num > 0)
                         {
-                            for (int i = 1; i <= num; i++)
+                            for (var i = 1; i <= num; i++)
                             {
                                 t = "Trace #" + count + ", " + i + "/" + num + " from TraceSpyTest. Date:" + DateTime.Now;
                                 if (num < 1000 || (i % 1000) == 0)
                                 {
                                     Console.WriteLine("Sending: '" + t + "'");
                                 }
-                                _etw.WriteMessageEvent(t);
+
+                                if (_etw != null)
+                                {
+                                    _etw.WriteMessageEvent(t);
+                                }
+                                else
+                                {
+                                    Trace.WriteLine(t);
+                                }
                                 count++;
                             }
                         }
@@ -132,14 +144,14 @@ namespace TraceSpyTest
         {
             const string line = "The quick brown fox jumps over the lazy dog";
             string s = null;
-            int numLines = _rnd.Next(5);
-            for (int i = 0; i < numLines; i++)
+            var numLines = _rnd.Next(5);
+            for (var i = 0; i < numLines; i++)
             {
-                string l = line.Substring(0, line.Length - _rnd.Next(0, line.Length / 2));
+                var l = line.Substring(0, line.Length - _rnd.Next(0, line.Length / 2));
                 if (s != null)
                 {
                     s += Environment.NewLine;
-                    for (int j = 0; j < _rnd.Next(3); j++)
+                    for (var j = 0; j < _rnd.Next(3); j++)
                     {
                         s += "\t";
                     }
@@ -151,7 +163,7 @@ namespace TraceSpyTest
 
         private static int GetNumber(ConsoleKey key)
         {
-            int k = (int)key;
+            var k = (int)key;
             if (k > (int)ConsoleKey.D0 && k <= (int)ConsoleKey.D9)
                 return k - (int)ConsoleKey.D0;
 
@@ -163,20 +175,20 @@ namespace TraceSpyTest
 
         private static int GetFinalNumber(ConsoleKeyInfo info)
         {
-            int k = GetNumber(info.Key);
+            var k = GetNumber(info.Key);
             if ((info.Modifiers & ConsoleModifiers.Shift) == ConsoleModifiers.Shift)
             {
-                k = k * 10;
+                k *= 10;
             }
 
             if ((info.Modifiers & ConsoleModifiers.Control) == ConsoleModifiers.Control)
             {
-                k = k * 100;
+                k *= 100;
             }
 
             if ((info.Modifiers & ConsoleModifiers.Alt) == ConsoleModifiers.Alt)
             {
-                k = k * 1000;
+                k *= 1000;
             }
             return k;
         }

@@ -16,21 +16,18 @@ namespace TraceSpyService
 
         public static DateTime AssemblyDate { get; private set; }
 
-        public static DateTime TruncateMilliseconds(this DateTime dateTime)
-        {
-            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second);
-        }
+        public static DateTime TruncateMilliseconds(this DateTime dateTime) => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second);
 
-        [DllImport("advapi32.dll", SetLastError = true)]
+        [DllImport("advapi32", SetLastError = true)]
         private static extern bool OpenProcessToken(IntPtr processHandle, int desiredAccess, out IntPtr tokenHandle);
 
-        [DllImport("advapi32.dll", SetLastError = true)]
+        [DllImport("advapi32", SetLastError = true)]
         private static extern bool GetTokenInformation(IntPtr tokenHandle, int tokenInformationClass, out TokenElevationType tokenInformation, int tokenInformationLength, out int returnLength);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport("kernel32", SetLastError = true)]
         private static extern bool CloseHandle(IntPtr handle);
 
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32")]
         private static extern IntPtr GetCurrentProcess();
 
         private const int TOKEN_QUERY = 8;
@@ -39,13 +36,13 @@ namespace TraceSpyService
         public static TokenElevationType GetTokenElevationType()
         {
             var type = TokenElevationType.Unknown;
-            int len = IntPtr.Size;
-            if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, out IntPtr h))
+            var len = IntPtr.Size;
+            if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, out var h))
                 return type;
 
             try
             {
-                GetTokenInformation(h, TokenElevationTypeInformation, out type, len, out int olen);
+                GetTokenInformation(h, TokenElevationTypeInformation, out type, len, out var olen);
                 return type;
             }
             finally
@@ -54,21 +51,12 @@ namespace TraceSpyService
             }
         }
 
-        public static T ChangeType<T>(object value, T defaultValue)
-        {
-            return ChangeType(value, defaultValue, null);
-        }
-
-        public static T ChangeType<T>(object value, T defaultValue, IFormatProvider provider)
-        {
-            return (T)ChangeType(value, typeof(T), defaultValue, provider);
-        }
-
-        public static object ChangeType(object value, Type conversionType, object defaultValue, IFormatProvider provider)
+        public static T ChangeType<T>(object value, T defaultValue, IFormatProvider provider = null) => (T)ChangeType(value, typeof(T), defaultValue, provider);
+        public static object ChangeType(object value, Type conversionType, object defaultValue, IFormatProvider provider = null)
         {
             if (conversionType == typeof(Guid))
             {
-                if (!Guid.TryParse(string.Format("{0}", value), out Guid g))
+                if (!Guid.TryParse(string.Format("{0}", value), out var g))
                     return defaultValue;
 
                 return g;
@@ -84,17 +72,12 @@ namespace TraceSpyService
             }
         }
 
-        public static string Nullify(this string text)
-        {
-            return Nullify(text, true);
-        }
-
-        public static string Nullify(this string text, bool trim)
+        public static string Nullify(this string text, bool trim = true)
         {
             if (text == null)
                 return text;
 
-            string strim = text.Trim();
+            var strim = text.Trim();
             if (strim.Length == 0)
                 return null;
 
@@ -104,12 +87,7 @@ namespace TraceSpyService
             return text;
         }
 
-        public static string FormatFileSize(long size)
-        {
-            return FormatFileSize(size, null, null, null);
-        }
-
-        public static string FormatFileSize(long size, string byteName, string numberFormat, IFormatProvider formatProvider)
+        public static string FormatFileSize(long size, string byteName = null, string numberFormat = null, IFormatProvider formatProvider = null)
         {
             if (size < 0)
                 throw new ArgumentException(null, nameof(size));
@@ -176,7 +154,7 @@ namespace TraceSpyService
             if (assembly == null)
                 throw new ArgumentNullException(nameof(assembly));
 
-            object[] atts = assembly.GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false);
+            var atts = assembly.GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false);
             if (atts != null && atts.Length > 0)
                 return ((AssemblyConfigurationAttribute)atts[0]).Configuration;
 
@@ -188,19 +166,14 @@ namespace TraceSpyService
             if (assembly == null)
                 throw new ArgumentNullException(nameof(assembly));
 
-            object[] atts = assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
+            var atts = assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
             if (atts != null && atts.Length > 0)
                 return ((AssemblyInformationalVersionAttribute)atts[0]).InformationalVersion;
 
             return null;
         }
 
-        public static void SetCurrentThreadCulture(string name)
-        {
-            SetCurrentThreadCulture(name, false);
-        }
-
-        public static void SetCurrentThreadCulture(string name, bool throwOnError)
+        public static void SetCurrentThreadCulture(string name, bool throwOnError = false)
         {
             if (name == null)
             {
@@ -209,16 +182,7 @@ namespace TraceSpyService
 
             try
             {
-                CultureInfo culture;
-                if (int.TryParse(name, out int lcid))
-                {
-                    culture = new CultureInfo(lcid);
-                }
-                else
-                {
-                    culture = new CultureInfo(name);
-                }
-
+                var culture = int.TryParse(name, out var lcid) ? new CultureInfo(lcid) : new CultureInfo(name);
                 Thread.CurrentThread.CurrentUICulture = culture;
 
                 if (!culture.IsNeutralCulture)

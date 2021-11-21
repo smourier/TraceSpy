@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -205,9 +204,16 @@ namespace TraceSpy
                         ppd);
 #endif
 
-                    if (!App.Current.Settings.WrapText)
+                    // no wrap => 1 line only
+                    if (!App.Current.Settings.WrapText && Event.Texts.Length <= 1)
                     {
                         formattedText.MaxLineCount = 1;
+                    }
+
+                    // if more than one colorized line, we don't know how to wrap
+                    if (Event.Ranges.Count > 1 && Event.Texts.Length > 1)
+                    {
+                        formattedText.MaxLineCount = Event.Texts.Length;
                     }
 
                     formattedText.Trimming = TextTrimming.CharacterEllipsis;
@@ -225,12 +231,16 @@ namespace TraceSpy
                     for (var i = 0; i < ranges.Count; i++)
                     {
                         var range = ranges[i];
+                        if (range.Length == 0)
+                            continue;
+
                         if (range.TextsIndex != lastLineIndex)
                         {
                             maxWidth = App.Current.ColumnLayout.TextColumnWidth;
                             x = 0;
                             y += formattedText.Height;
                             lastLineIndex = range.TextsIndex;
+                            rangesOffset = 0;
                         }
 
                         if (maxWidth < 0 || range.StartIndex < rangesOffset)

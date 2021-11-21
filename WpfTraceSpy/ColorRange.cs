@@ -84,7 +84,7 @@ namespace TraceSpy
             var range = new ColorRange(colorset, startIndex, length, lineIndex);
 #if DEBUG
             System.Diagnostics.Debug.Assert(startIndex >= 0);
-            System.Diagnostics.Debug.Assert(length > 0);
+            System.Diagnostics.Debug.Assert(length >= 0);
             System.Diagnostics.Debug.Assert((startIndex + length) <= line.Length);
             range.Text = line.Substring(startIndex, length);
 #endif

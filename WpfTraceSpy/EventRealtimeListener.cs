@@ -39,7 +39,7 @@ namespace TraceSpy
             SessionName = sessionName;
 
             int status;
-            IntPtr properties = BuildProperties(false, out int size);
+            var properties = BuildProperties(false, out int size);
             try
             {
                 status = StartTrace(out _handle, SessionName, properties);
@@ -73,6 +73,12 @@ namespace TraceSpy
 
             _traceOn = true;
         }
+
+        public Guid ProviderGuid { get; }
+        public string SessionName { get; }
+        public string Description { get; set; }
+        public bool StringMessageMode { get; set; }
+        public bool ConsoleOutput { get; set; }
 
         public static void ProcessTraces(Guid providerGuid, string sessionName) => ProcessTraces(providerGuid, sessionName, EtwTraceLevel.Verbose, 0);
         public static void ProcessTraces(Guid providerGuid, string sessionName, EtwTraceLevel level, long keyword)
@@ -128,7 +134,7 @@ namespace TraceSpy
 
             try
             {
-                int status = ProcessTrace(ref oh, 1, IntPtr.Zero, IntPtr.Zero);
+                var status = ProcessTrace(ref oh, 1, IntPtr.Zero, IntPtr.Zero);
                 if (status != 0)
                     throw new Win32Exception(status);
             }
@@ -165,12 +171,6 @@ namespace TraceSpy
             Marshal.StructureToPtr(prop, properties, false);
             return properties;
         }
-
-        public Guid ProviderGuid { get; }
-        public string SessionName { get; }
-        public string Description { get; set; }
-        public bool StringMessageMode { get; set; }
-        public bool ConsoleOutput { get; set; }
 
         private void OnRealtimeEvent(int processId, int threadId, string s, EtwTraceLevel level) => RealtimeEvent?.Invoke(this, new EventRealtimeEventArgs(processId, threadId, s, level));
         private void OnEvent(ref EVENT_TRACE eventRecord)
@@ -244,7 +244,7 @@ namespace TraceSpy
 
         private void StopTrace()
         {
-            IntPtr props = BuildProperties(true, out _);
+            var props = BuildProperties(true, out _);
             try
             {
                 if (StopTrace(0, SessionName, props) != 0)
@@ -472,14 +472,12 @@ namespace TraceSpy
             public IntPtr Context;
         }
 
-#pragma warning disable IDE1006 // Naming Styles
         private const long INVALID_PROCESSTRACE_HANDLE = -1;
         private const uint PROCESS_TRACE_MODE_REAL_TIME = 0x00000100;
         private const uint PROCESS_TRACE_MODE_EVENT_RECORD = 0x10000000;
         private const uint WNODE_FLAG_TRACED_GUID = 0x00020000;
         private const uint EVENT_TRACE_REAL_TIME_MODE = 0x00000100;
         private const int ERROR_ALREADY_EXISTS = 183;
-#pragma warning restore IDE1006 // Naming Styles
 
         private delegate uint BufferCallback(ref EVENT_TRACE_LOGFILE buffer);
         private delegate void EventCallback(ref EVENT_TRACE eventRecord);

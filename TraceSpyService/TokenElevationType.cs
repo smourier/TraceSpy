@@ -1,5 +1,4 @@
-﻿
-namespace TraceSpyService
+﻿namespace TraceSpyService
 {
     public enum TokenElevationType
     {
