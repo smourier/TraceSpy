@@ -707,7 +707,7 @@ namespace TraceSpy
             }
         }
 
-        private void OpenConfig_Click(object sender, RoutedEventArgs e) => Process.Start("\"" + Path.GetDirectoryName(WpfSettings.ConfigurationFilePath) + "\"");
+        private void OpenConfig_Click(object sender, RoutedEventArgs e) => Process.Start(new ProcessStartInfo { FileName = Path.GetDirectoryName(WpfSettings.ConfigurationFilePath), UseShellExecute = true });
 
         private void LV_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
