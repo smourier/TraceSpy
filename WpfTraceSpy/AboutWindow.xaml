@@ -20,8 +20,8 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock TextAlignment="Center">
-            WPF TraceSpy V4.0.0.5<LineBreak />
-            Copyright (C) 2011-2021 Simon Mourier<LineBreak />
+            WPF TraceSpy V4.0.0.6<LineBreak />
+            Copyright (C) 2011-2023 Simon Mourier<LineBreak />
             All rights reserved.<LineBreak /></TextBlock>
         <Button
             Grid.Row="1"
