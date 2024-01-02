@@ -11,7 +11,7 @@ using System.Windows;
 #endif
 [assembly: AssemblyCompany("Simon Mourier")]
 [assembly: AssemblyProduct("Trace Spy")]
-[assembly: AssemblyCopyright("Copyright © 2011-2023 Simon Mourier. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2011-2024 Simon Mourier. All rights reserved.")]
 [assembly: ComVisible(false)]
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 [assembly: Guid("24920c8f-38ad-4cae-bddc-aec52e12da35")]

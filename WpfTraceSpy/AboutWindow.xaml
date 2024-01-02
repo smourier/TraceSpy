@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
         <TextBlock TextAlignment="Center">
             WPF TraceSpy V4.0.0.6<LineBreak />
-            Copyright (C) 2011-2023 Simon Mourier<LineBreak />
+            Copyright (C) 2011-2024 Simon Mourier<LineBreak />
             All rights reserved.<LineBreak /></TextBlock>
         <Button
             Grid.Row="1"

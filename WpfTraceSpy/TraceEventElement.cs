@@ -6,6 +6,7 @@ using System.Windows.Media;
 
 namespace TraceSpy
 {
+#pragma warning disable CS0618 // Type or member is obsolete
     public class TraceEventElement : FrameworkElement
     {
         private static readonly CultureInfo _culture = CultureInfo.GetCultureInfo(1033);
@@ -291,4 +292,5 @@ namespace TraceSpy
             }
         }
     }
+#pragma warning restore CS0618 // Type or member is obsolete
 }

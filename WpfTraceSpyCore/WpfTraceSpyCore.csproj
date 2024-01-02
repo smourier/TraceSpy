@@ -6,7 +6,7 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <ApplicationIcon>D:\SimonMourier\GitHub\TraceSpy\WpfTraceSpy\WpfTraceSpy.ico</ApplicationIcon>
+    <ApplicationIcon>..\WpfTraceSpy\WpfTraceSpy.ico</ApplicationIcon>
     <RootNamespace>TraceSpy</RootNamespace>
   </PropertyGroup>
 
