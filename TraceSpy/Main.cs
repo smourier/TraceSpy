@@ -97,17 +97,17 @@ namespace TraceSpy
             columnHeaderTime = new ColumnHeader();
             columnHeaderTime.Text = "Ticks";
             columnHeaderTime.Width = 96;
-            
+
             columnHeaderPid = new ColumnHeader();
             columnHeaderPid.Text = "Process";
             columnHeaderPid.Width = 100;
-            
+
             columnHeaderText = new ColumnHeader();
             columnHeaderText.Text = "Text";
             columnHeaderText.Width = 680;
 
             listView = new ListViewEx();
-            listView.Columns.AddRange(new [] { columnHeaderIndex, columnHeaderTime, columnHeaderPid, columnHeaderText});
+            listView.Columns.AddRange(new[] { columnHeaderIndex, columnHeaderTime, columnHeaderPid, columnHeaderText });
             listView.DoubleClick += ListView_DoubleClick;
             Controls.Add(this.listView);
             listView.AutoArrange = false;
@@ -146,19 +146,34 @@ namespace TraceSpy
 
             _bufferReadyEvent = CreateEvent(IntPtr.Zero, false, false, "DBWIN_BUFFER_READY");
             if (_bufferReadyEvent == IntPtr.Zero)
-                Marshal.ThrowExceptionForHR(Marshal.GetLastWin32Error());
+            {
+                captureOnToolStripMenuItem.Enabled = false;
+                captureOnToolStripMenuItem.Text = "ODS unavailable";
+                captureOnToolStripMenuItem.ToolTipText = "There's already an ODS trace listener running in the machine.";
+            }
+            else
+            {
+                _dataReadyEvent = CreateEvent(IntPtr.Zero, false, false, "DBWIN_DATA_READY");
+                if (_dataReadyEvent == IntPtr.Zero)
+                {
+                    var gle = Marshal.GetLastWin32Error();
+                    throw new Win32Exception(gle);
+                }
 
-            _dataReadyEvent = CreateEvent(IntPtr.Zero, false, false, "DBWIN_DATA_READY");
-            if (_dataReadyEvent == IntPtr.Zero)
-                Marshal.ThrowExceptionForHR(Marshal.GetLastWin32Error());
+                _mapping = CreateFileMapping(new IntPtr(-1), IntPtr.Zero, FileMapProtection.PageReadWrite, 0, 4096, "DBWIN_BUFFER");
+                if (_mapping == IntPtr.Zero)
+                {
+                    var gle = Marshal.GetLastWin32Error();
+                    throw new Win32Exception(gle);
+                }
 
-            _mapping = CreateFileMapping(new IntPtr(-1), IntPtr.Zero, FileMapProtection.PageReadWrite, 0, 4096, "DBWIN_BUFFER");
-            if (_mapping == IntPtr.Zero)
-                Marshal.ThrowExceptionForHR(Marshal.GetLastWin32Error());
-
-            _file = MapViewOfFile(_mapping, FileMapAccess.FileMapRead, 0, 0, 1024);
-            if (_file == IntPtr.Zero)
-                Marshal.ThrowExceptionForHR(Marshal.GetLastWin32Error());
+                _file = MapViewOfFile(_mapping, FileMapAccess.FileMapRead, 0, 0, 1024);
+                if (_file == IntPtr.Zero)
+                {
+                    var gle = Marshal.GetLastWin32Error();
+                    throw new Win32Exception(gle);
+                }
+            }
 
             removeEmptyLinesToolStripMenuItem.Checked = _settings.RemoveEmptyLines;
             autoScrollToolStripMenuItem.Checked = _settings.AutoScroll;
@@ -186,8 +201,11 @@ namespace TraceSpy
             _timer.Start();
 
             _watch = new Stopwatch();
-            _reader = new Thread(Read);
-            _reader.Start();
+            if (_bufferReadyEvent != IntPtr.Zero)
+            {
+                _reader = new Thread(ReadDbWin);
+                _reader.Start();
+            }
 
             if (_settings.CaptureEtwTraces)
             {
@@ -415,7 +433,7 @@ namespace TraceSpy
                                         {
                                             if (_settings.ShowProcessId)
                                             {
-                                                name = line.ProcessName + " ("+ line.Pid + ")";
+                                                name = line.ProcessName + " (" + line.Pid + ")";
                                             }
                                             else
                                             {
@@ -524,14 +542,14 @@ namespace TraceSpy
             public string Description;
         }
 
-        private void Read()
+        private void ReadDbWin()
         {
             try
             {
                 do
                 {
                     SetEvent(_bufferReadyEvent);
-                    uint wait = WaitForSingleObject(_dataReadyEvent, WaitTimeout);
+                    var wait = WaitForSingleObject(_dataReadyEvent, WaitTimeout);
                     if (_stop)
                         return;
 
@@ -540,8 +558,8 @@ namespace TraceSpy
 
                     if (wait == WAIT_OBJECT_0) // we don't care about other return values
                     {
-                        int pid = Marshal.ReadInt32(_file);
-                        string text = Marshal.PtrToStringAnsi(new IntPtr(_file.ToInt32() + Marshal.SizeOf(typeof(int)))).TrimEnd(null);
+                        var pid = Marshal.ReadInt32(_file);
+                        var text = Marshal.PtrToStringAnsi(_file + Marshal.SizeOf(typeof(int))).TrimEnd(null);
                         if (string.IsNullOrEmpty(text) && removeEmptyLinesToolStripMenuItem.Checked)
                             continue;
 
@@ -965,15 +983,22 @@ namespace TraceSpy
 
         private void UpdateControls()
         {
-            if (_settings.CaptureOutputDebugString)
+            if (_bufferReadyEvent != IntPtr.Zero)
             {
-                captureOnToolStripMenuItem.Image = ((Image)(_resources.GetObject("captureOnToolStripMenuItem.Image")));
-                captureOnToolStripMenuItem.Text = "Stop Capture";
+                if (_settings.CaptureOutputDebugString)
+                {
+                    captureOnToolStripMenuItem.Image = ((Image)(_resources.GetObject("captureOnToolStripMenuItem.Image")));
+                    captureOnToolStripMenuItem.Text = "Stop Capture";
+                }
+                else
+                {
+                    captureOnToolStripMenuItem.Image = null;
+                    captureOnToolStripMenuItem.Text = "Start Capture";
+                }
             }
             else
             {
                 captureOnToolStripMenuItem.Image = null;
-                captureOnToolStripMenuItem.Text = "Start Capture";
             }
 
             if (_settings.CaptureEtwTraces)

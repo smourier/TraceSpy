@@ -59,20 +59,15 @@ namespace TraceSpy
             _state.OdsStarted = App.Current.Settings.CaptureOdsTraces;
             UpdateEtwEvents();
 
-            _bufferReadyEvent = new EventWaitHandle(false, EventResetMode.AutoReset, "DBWIN_BUFFER_READY");
-            _dataReadyEvent = new EventWaitHandle(false, EventResetMode.AutoReset, "DBWIN_DATA_READY");
-
             try
             {
+                _bufferReadyEvent = new EventWaitHandle(false, EventResetMode.AutoReset, "DBWIN_BUFFER_READY");
+                _dataReadyEvent = new EventWaitHandle(false, EventResetMode.AutoReset, "DBWIN_DATA_READY");
                 _buffer = MemoryMappedFile.CreateNew("DBWIN_BUFFER", _odsBufferSize);
                 _bufferStream = _buffer.CreateViewStream(0, _odsBufferSize);
             }
-            catch (Exception e)
+            catch
             {
-                const int ERROR_ALREADY_EXISTS = unchecked((int)0x800700b7);
-                if (e.HResult != ERROR_ALREADY_EXISTS)
-                    throw;
-
                 OdsTrace.IsEnabled = false;
                 OdsTrace.Header = "ODS unavailable";
                 OdsTrace.ToolTip = "There's already an ODS trace listener running in the machine.";

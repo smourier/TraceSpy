@@ -10,9 +10,9 @@ using System.Runtime.InteropServices;
 #endif
 [assembly: AssemblyCompany("Simon Mourier")]
 [assembly: AssemblyProduct("Trace Spy")]
-[assembly: AssemblyCopyright("Copyright © 2011-2019 Simon Mourier. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2011-2024 Simon Mourier. All rights reserved.")]
 [assembly: ComVisible(false)]
 [assembly: Guid("dfc20d26-c4bd-440f-b248-81c68fc8c961")]
-[assembly: AssemblyVersion("2.4.0.0")]
-[assembly: AssemblyFileVersion("2.4.1.0")]
-[assembly: AssemblyInformationalVersion("2.4.1.0")]
+[assembly: AssemblyVersion("2.4.2.0")]
+[assembly: AssemblyFileVersion("2.4.2.0")]
+[assembly: AssemblyInformationalVersion("2.4.2.0")]
