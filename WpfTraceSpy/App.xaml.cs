@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
@@ -17,6 +18,9 @@ namespace TraceSpy
             AppDomain.CurrentDomain.UnhandledException += (s, e) => OnException(e.ExceptionObject as Exception);
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
+#if NET
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif
         }
 
         public WpfSettings Settings { get; }

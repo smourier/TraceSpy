@@ -36,7 +36,9 @@ using (EventProvider prov = new EventProvider(providerGuid1))
 
 These traces are very fast to create, and cost almost *nothing* to the system. In fact you you should get rid of *OutputDebugString* (this is also the default trace listener on .NET under Windows) usage, as this is a thing of the past, and use ETW, which is *much* better and faster.
 
-The `EventProvider` class - supported with .NET Framework 4 and higher - is located in the `System.Diagnostics.Eventing` namespace. The good news is these traces are super fast, and they can even be left in production code. This is in fact what Microsoft uses for all Windows code.
+The `EventProvider` class - created initially with .NET Framework 4 and higher - is located in the `System.Diagnostics.Eventing` namespace. The good news is these traces are super fast, and they can even be left in production code. ETW is in fact what Microsoft uses for all Windows code.
+
+For .NET Core (any version), I've put an `EventProvider` implementation here https://github.com/smourier/TraceSpy/tree/master/netcore
 
 If you want to use ETW from other platforms than .NET, it's possible (as long as you run on the Windows OS), I've provided some VBA interop code with an Excel sample here: [VBA ETW real time traces sample](vba) 
 
@@ -132,3 +134,40 @@ And here is an output example in WpfTraceSpy:
 ![etw2.png](doc/colorizerkvresults.png?raw=true)
 
 Note: for colorized traces, the Wrap Text feature doesn't work, the trace is just truncated.
+
+# Unicode support for OutputDebugString (ODS) traces
+
+As explained in official documentation the [OutputDebugStringW function](https://learn.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-outputdebugstringw) internally converts the specified string based on the current system locale information and passes it to `OutputDebugStringA` to be displayed. As a result, some Unicode characters may not be displayed correctly.
+
+In WpfTraceSpy version 4.1.0.6, support has been added to internally use a specified encoding to display these ODS traces.
+Because of what's been said above, it will generally only work for code-page/single-byte/ansi encodings (like old ISO-8859-1 encoding, etc).
+
+But it can also work for Unicode support if:
+
+* you use UTF-8 encoding when you call `OutputDebugStringA`
+* you don't use `OutputDebugStringW` at all
+* you configure WpfTraceSpy to use UTF-8 as the "ODS encoding", like shown here (menu "Options"/"ODS Encoding...", by default the encoding is the default ANSI encoding):
+
+![utf8.png](doc/utf8.png?raw=true)
+
+For .NET users, that means you cannot use `Trace.WriteLine()` to send these types of traces, instead you must declare a P/Invoke method and use it like this:
+
+    static void Main()
+    {
+        var str = "Kilroy était ici";
+
+        // one way of using it
+        OutputDebugStringA(str);
+
+        // another way of using it (if UnmanagedType.LPUTF8Str is not available)
+        var bytes = Encoding.UTF8.GetBytes(str);
+        OutputDebugStringA(bytes);
+    }
+
+    [DllImport("kernel32")]
+    private static extern void OutputDebugStringA(byte[] str);
+
+    [DllImport("kernel32")]
+    private static extern void OutputDebugStringA([MarshalAs(UnmanagedType.LPUTF8Str)] string str);
+
+PS: in fact the code above will work if you use `Trace.WriteLine` and you have the ISO-8859-1 encoding because the text 'Kilroy était ici' is compatible with this code page but it won't work with complex unicode characters.

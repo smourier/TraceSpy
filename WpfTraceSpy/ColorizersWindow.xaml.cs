@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace TraceSpy
@@ -7,6 +8,8 @@ namespace TraceSpy
     public partial class ColorizersWindow : Window
     {
         private readonly Context _context;
+        private readonly ColumnSortHandler _colorizersSortHandler = new ColumnSortHandler();
+        private readonly ColumnSortHandler _colorSetsSortHandler = new ColumnSortHandler();
 
         public ColorizersWindow()
         {
@@ -16,7 +19,8 @@ namespace TraceSpy
         }
 
         private void Close_Click(object sender, RoutedEventArgs e) => Close();
-        private void LVColorizer_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Modify((e.OriginalSource as FrameworkElement)?.DataContext as Colorizer);
+        private void LVColorizers_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Modify((e.OriginalSource as FrameworkElement)?.DataContext as Colorizer);
+        private void LVColorizers_ColumnHeaderClick(object sender, RoutedEventArgs e) => _colorizersSortHandler.HandleClick(e.OriginalSource as GridViewColumnHeader, LVColorizers.ItemsSource);
         private void ModifyColorizer_Click(object sender, RoutedEventArgs e) => Modify(LVColorizers.SelectedValue as Colorizer);
         private void Modify(Colorizer colorizer)
         {
@@ -63,6 +67,7 @@ namespace TraceSpy
         }
 
         private void LVColorSets_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Modify((e.OriginalSource as FrameworkElement)?.DataContext as ColorSet);
+        private void LVColorSets_ColumnHeaderClick(object sender, RoutedEventArgs e) => _colorSetsSortHandler.HandleClick(e.OriginalSource as GridViewColumnHeader, LVColorSets.ItemsSource);
         private void ModifyColorSet_Click(object sender, RoutedEventArgs e) => Modify(LVColorSets.SelectedValue as ColorSet);
         private void Modify(ColorSet colorSet)
         {

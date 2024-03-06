@@ -303,7 +303,7 @@ namespace TraceSpy
                     _bufferStream.Read(pidBytes, 0, pidBytes.Length);
                     var pid = BitConverter.ToInt32(pidBytes, 0);
                     _bufferStream.Read(strBytes, 0, strBytes.Length);
-                    var text = GetNullTerminatedString(strBytes).Trim();
+                    var text = GetNullTerminatedString(strBytes);
                     if (_state.RemoveEmptyLines && string.IsNullOrWhiteSpace(text))
                         continue;
 
@@ -322,20 +322,49 @@ namespace TraceSpy
 
         private static string GetNullTerminatedString(byte[] bytes)
         {
-            var chars = new char[bytes.Length];
-            for (var i = 0; i < bytes.Length; i++)
+            var encoding = App.Current.Settings.OdsEncoding ?? Encoding.Default;
+            var terminator = App.Current.Settings.OdsEncodingTerminator;
+            int index;
+            if (terminator.Length == 1) // ascii, default or UTF8 falls here
             {
-                if (bytes[i] == 0)
+                index = Array.IndexOf(bytes, terminator[0]);
+                if (index == 0)
+                    return string.Empty;
+
+                if (index < 0)
+                {
+                    bytes[bytes.Length - 1] = 0;
+                    return encoding.GetString(bytes);
+                }
+
+                return encoding.GetString(bytes, 0, index);
+            }
+
+            // there are few chances that once here (multiple zeros for terminator, UTF16, UTF32, etc.) it will work
+            // as OutputDebugStringW uses OutputDebugStringA https://learn.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-outputdebugstringw
+            // and OutputDebugStringA truncate strings at first 0 byte...
+            index = -1;
+            for (var i = 0; i < bytes.Length; i += terminator.Length)
+            {
+                if (bytes.Skip(i).Take(terminator.Length).SequenceEqual(terminator))
                 {
                     if (i == 0)
                         return string.Empty;
 
-                    return new string(chars, 0, i);
+                    index = i;
+                    break;
                 }
-                chars[i] = (char)bytes[i];
             }
 
-            return Encoding.Default.GetString(bytes);
+            if (index < 0)
+            {
+                // hacky, truncate twice so we're sure to put enough zeroes in there, even non-aligned
+                Array.Copy(terminator, 0, bytes, bytes.Length - terminator.Length, terminator.Length);
+                Array.Copy(terminator, 0, bytes, bytes.Length - terminator.Length * 2, terminator.Length);
+                return encoding.GetString(bytes);
+            }
+
+            return encoding.GetString(bytes, 0, index);
         }
 
         private void OdsTrace_Click(object sender, RoutedEventArgs e)
@@ -712,6 +741,19 @@ namespace TraceSpy
             var dlg = new TraceDetailsWindow(LV);
             dlg.Owner = this;
             dlg.ShowDialog();
+        }
+
+        private void ODSEncoding_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OdsEncodingsWindow();
+            dlg.Owner = this;
+            dlg.ShowDialog();
+        }
+
+        private void ClearSearches_Click(object sender, RoutedEventArgs e)
+        {
+            App.Current.Settings.ClearSearches();
+            App.Current.Settings.SerializeToConfiguration();
         }
     }
 }

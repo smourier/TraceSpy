@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
@@ -9,7 +10,10 @@ namespace TraceSpy
     public class WpfSettings : Serializable<WpfSettings>
     {
         private string _fontName;
+        private string _odsEncodingName;
         private Lazy<Typeface> _typeFace;
+        private Lazy<Encoding> _odsEncoding;
+        private Lazy<byte[]> _odsEncodingTerminator;
         private string _alternateColor;
         private Lazy<Brush> _alternateBrush;
         private List<string> _searches = new List<string>();
@@ -38,6 +42,7 @@ namespace TraceSpy
             ProcessColumnWidth = 102;
             TextColumnWidth = 681;
             _filters.Add(new Filter(null, false));
+            ResetOdsEncoding();
         }
 
         public bool ResolveProcessName { get; set; }
@@ -63,6 +68,48 @@ namespace TraceSpy
         public double TextColumnWidth { get; set; }
         public bool DontAnimateCaptureMenuItem { get; set; }
         public string TestTraceText { get; set; }
+
+        public string OdsEncodingName
+        {
+            get => _odsEncodingName;
+            set
+            {
+                if (_odsEncodingName == value)
+                    return;
+
+                ResetOdsEncoding();
+                _odsEncodingName = value;
+            }
+        }
+
+        public byte[] OdsEncodingTerminator => _odsEncodingTerminator.Value;
+        public Encoding OdsEncoding => _odsEncoding.Value;
+
+        private byte[] GetOdsEncodingTerminator() => OdsEncoding.GetBytes("\0");
+        private void ResetOdsEncoding()
+        {
+            _odsEncoding = new Lazy<Encoding>(GetOdsEncoding);
+            _odsEncodingTerminator = new Lazy<byte[]>(GetOdsEncodingTerminator);
+        }
+
+        private Encoding GetOdsEncoding()
+        {
+            if (OdsEncodingName != null)
+            {
+                try
+                {
+                    if (int.TryParse(OdsEncodingName, out var cp))
+                        return Encoding.GetEncoding(cp);
+
+                    return Encoding.GetEncoding(OdsEncodingName);
+                }
+                catch
+                {
+                    // can't find continue
+                }
+            }
+            return Encoding.Default;
+        }
 
         [XmlIgnore] // we don't persist this one
         public bool DisableAllFilters { get; set; }
@@ -138,7 +185,6 @@ namespace TraceSpy
         }
 
         public void ClearSearches() => _searches = new List<string>();
-
         public void AddSearch(string search)
         {
             if (string.IsNullOrWhiteSpace(search))

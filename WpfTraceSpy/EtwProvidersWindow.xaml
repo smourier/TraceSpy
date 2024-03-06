@@ -18,6 +18,7 @@
         </Grid.RowDefinitions>
         <ListView
             Name="LV"
+            GridViewColumnHeader.Click="LV_ColumnHeaderClick"
             ItemsSource="{Binding Providers}"
             MouseDoubleClick="LV_MouseDoubleClick"
             SelectionMode="Single">

@@ -67,6 +67,12 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="..\WpfTraceSpy\AutoCompleteComboBox.cs" />
+    <Compile Include="..\WpfTraceSpy\ColumnSortHandler.cs">
+      <Link>ColumnSortHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\WpfTraceSpy\OdsEncodingsWindow.xaml.cs">
+      <Link>OdsEncodingsWindow.xaml.cs</Link>
+    </Compile>
     <Compile Include="..\WpfTraceSpy\Properties\AssemblyVersionInfo.cs">
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
@@ -135,6 +141,11 @@
       <Link>AboutWindow.xaml</Link>
     </Page>
     <Page Include="..\WpfTraceSpy\ColorizersWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WpfTraceSpy\OdsEncodingsWindow.xaml">
+      <Link>OdsEncodingsWindow.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

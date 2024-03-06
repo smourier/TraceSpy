@@ -25,8 +25,9 @@
         <ListView
             Name="LVColorizers"
             Grid.Row="1"
+            GridViewColumnHeader.Click="LVColorizers_ColumnHeaderClick"
             ItemsSource="{Binding Colorizers}"
-            MouseDoubleClick="LVColorizer_MouseDoubleClick"
+            MouseDoubleClick="LVColorizers_MouseDoubleClick"
             SelectionMode="Single">
             <ListView.View>
                 <GridView>
@@ -81,6 +82,7 @@
         <ListView
             Name="LVColorSets"
             Grid.Row="4"
+            GridViewColumnHeader.Click="LVColorSets_ColumnHeaderClick"
             ItemsSource="{Binding ColorSets}"
             MouseDoubleClick="LVColorSets_MouseDoubleClick"
             SelectionMode="Single">

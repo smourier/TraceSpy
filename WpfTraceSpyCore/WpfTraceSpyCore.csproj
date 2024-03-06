@@ -24,6 +24,7 @@
     <Compile Include="..\WpfTraceSpy\ColorRange.cs" Link="ColorRange.cs" />
     <Compile Include="..\WpfTraceSpy\ColorSet.cs" Link="ColorSet.cs" />
     <Compile Include="..\WpfTraceSpy\ColorSetWindow.xaml.cs" Link="ColorSetWindow.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\ColumnSortHandler.cs" Link="ColumnSortHandler.cs" />
     <Compile Include="..\WpfTraceSpy\ConcurrentLinkedList.cs" Link="ConcurrentLinkedList.cs" />
     <Compile Include="..\WpfTraceSpy\DictionaryObject.cs" Link="DictionaryObject.cs" />
     <Compile Include="..\WpfTraceSpy\EtwProvider.cs" Link="EtwProvider.cs" />
@@ -44,6 +45,7 @@
     <Compile Include="..\WpfTraceSpy\MainWindowState.cs" Link="MainWindowState.cs" />
     <Compile Include="..\WpfTraceSpy\MonitorFocusScopes.xaml.cs" Link="MonitorFocusScopes.xaml.cs" />
     <Compile Include="..\WpfTraceSpy\NumericUpDownControl.xaml.cs" Link="NumericUpDownControl.xaml.cs" />
+    <Compile Include="..\WpfTraceSpy\OdsEncodingsWindow.xaml.cs" Link="OdsEncodingsWindow.xaml.cs" />
     <Compile Include="..\WpfTraceSpy\Properties\AssemblyVersionInfo.cs" Link="Properties\AssemblyVersionInfo.cs" />
     <Compile Include="..\WpfTraceSpy\SendTrace.cs" Link="SendTrace.cs" />
     <Compile Include="..\WpfTraceSpy\SendTraceWindow.xaml.cs" Link="SendTraceWindow.xaml.cs" />
@@ -69,6 +71,7 @@
     <ApplicationDefinition Include="..\WpfTraceSpy\App.xaml" Link="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
     <Page Include="..\WpfTraceSpy\ColorizersWindow.xaml" Link="ColorizersWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -100,6 +103,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="..\WpfTraceSpy\NumericUpDownControl.xaml" Link="NumericUpDownControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\OdsEncodingsWindow.xaml" Link="OdsEncodingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="..\WpfTraceSpy\SendTraceWindow.xaml" Link="SendTraceWindow.xaml">

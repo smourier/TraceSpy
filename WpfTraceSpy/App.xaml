@@ -24,5 +24,30 @@
             </Style.Triggers>
         </Style>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <DataTemplate x:Key="HeaderTemplateArrowUp">
+            <DockPanel>
+                <TextBlock Text="{Binding}" />
+                <Path
+                    Width="20"
+                    Margin="5,0,5,0"
+                    Data="M 5,10 L 15,10 L 10,5 L 5,10"
+                    Fill="Gray" />
+            </DockPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="HeaderTemplateArrowDown">
+            <DockPanel>
+                <TextBlock Text="{Binding}" />
+                <Path
+                    Width="20"
+                    Margin="5,0,5,0"
+                    Data="M 5,5 L 10,10 L 15,5 L 5,5"
+                    Fill="Gray" />
+            </DockPanel>
+        </DataTemplate>
+
+        <Style TargetType="{x:Type ListViewItem}">
+            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+        </Style>
     </Application.Resources>
 </Application>

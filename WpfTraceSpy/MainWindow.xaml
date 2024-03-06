@@ -176,6 +176,11 @@
                     InputGestureText="Ctrl+X" />
                 <Separator />
                 <MenuItem
+                    Name="ClearSearches"
+                    Click="ClearSearches_Click"
+                    Header="_Clear Searches History" />
+                <Separator />
+                <MenuItem
                     Name="SendTestTrace"
                     Click="SendTestTrace_Click"
                     Header="_Send Test Trace..."
@@ -198,6 +203,10 @@
                     Name="ETWProviders"
                     Click="ETWProviders_Click"
                     Header="_ETW Providers..." />
+                <MenuItem
+                    Name="ODSEncoding"
+                    Click="ODSEncoding_Click"
+                    Header="_ODS Encoding..." />
                 <Separator />
                 <MenuItem
                     Name="OpenConfig"

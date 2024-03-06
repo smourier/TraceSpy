@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace TraceSpy
@@ -7,6 +8,7 @@ namespace TraceSpy
     public partial class FiltersWindow : Window
     {
         private readonly Context _context;
+        private readonly ColumnSortHandler _sortHandler = new ColumnSortHandler();
 
         public FiltersWindow()
         {
@@ -17,6 +19,7 @@ namespace TraceSpy
 
         private void Close_Click(object sender, RoutedEventArgs e) => Close();
         private void LV_MouseDoubleClick(object sender, MouseButtonEventArgs e) => ModifyFilter((e.OriginalSource as FrameworkElement)?.DataContext as Filter);
+        private void LV_ColumnHeaderClick(object sender, RoutedEventArgs e) => _sortHandler.HandleClick(e.OriginalSource as GridViewColumnHeader, LV.ItemsSource);
         private void Modify_Click(object sender, RoutedEventArgs e) => ModifyFilter(LV.SelectedValue as Filter);
 
         private void ModifyFilter(Filter filter)

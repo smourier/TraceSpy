@@ -64,6 +64,10 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AutoCompleteComboBox.cs" />
+    <Compile Include="ColumnSortHandler.cs" />
+    <Compile Include="OdsEncodingsWindow.xaml.cs">
+      <DependentUpon>OdsEncodingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyVersionInfo.cs" />
     <Compile Include="SendTrace.cs" />
     <Compile Include="Colorizer.cs" />
@@ -129,6 +133,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ColorizersWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OdsEncodingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
