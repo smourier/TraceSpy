@@ -9,6 +9,8 @@ namespace TraceSpy
 {
     public class WpfSettings : Serializable<WpfSettings>
     {
+        public const int WHERE_NOONE_CAN_SEE_ME = -32000; // from \windows\core\ntuser\kernel\userk.h
+
         private string _fontName;
         private string _odsEncodingName;
         private Lazy<Typeface> _typeFace;
@@ -21,6 +23,10 @@ namespace TraceSpy
         private List<Colorizer> _colorizers = new List<Colorizer>();
         private List<ColorSet> _colorSets = new List<ColorSet>();
         private List<EtwProvider> _etwProviders = new List<EtwProvider>();
+        private double _left;
+        private double _findLeft;
+        private double _top;
+        private double _findTop;
 
         public WpfSettings()
         {
@@ -55,12 +61,8 @@ namespace TraceSpy
         public bool CaptureEtwTraces { get; set; }
         public bool CaptureOdsTraces { get; set; }
         public ShowTicksMode ShowTicksMode { get; set; }
-        public double Left { get; set; }
-        public double Top { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
-        public double FindLeft { get; set; }
-        public double FindTop { get; set; }
         public double FontSize { get; set; }
         public double IndexColumnWidth { get; set; }
         public double TicksColumnWidth { get; set; }
@@ -68,6 +70,54 @@ namespace TraceSpy
         public double TextColumnWidth { get; set; }
         public bool DontAnimateCaptureMenuItem { get; set; }
         public string TestTraceText { get; set; }
+
+        public double Left
+        {
+            get => _left;
+            set
+            {
+                if (value == WHERE_NOONE_CAN_SEE_ME)
+                    return;
+
+                _left = value;
+            }
+        }
+
+        public double Top
+        {
+            get => _top;
+            set
+            {
+                if (value == WHERE_NOONE_CAN_SEE_ME)
+                    return;
+
+                _top = value;
+            }
+        }
+
+        public double FindLeft
+        {
+            get => _findLeft;
+            set
+            {
+                if (value == WHERE_NOONE_CAN_SEE_ME)
+                    return;
+
+                _findLeft = value;
+            }
+        }
+
+        public double FindTop
+        {
+            get => _findTop;
+            set
+            {
+                if (value == WHERE_NOONE_CAN_SEE_ME)
+                    return;
+
+                _findTop = value;
+            }
+        }
 
         public string OdsEncodingName
         {
