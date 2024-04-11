@@ -107,6 +107,10 @@
                     Header="_Wrap Text"
                     IsCheckable="True"
                     IsChecked="{Binding WrapText, Mode=TwoWay}" />
+                <MenuItem
+                    Header="_Don't Split Text"
+                    IsCheckable="True"
+                    IsChecked="{Binding DontSplitText, Mode=TwoWay}" />
                 <MenuItem Header="_Ticks">
                     <MenuItem
                         Header="As _Ticks"

@@ -21,6 +21,8 @@ namespace TraceSpy
 {
     public partial class MainWindow : Window
     {
+        public const string ClearTracesPrefix = "##TraceSpyClear##";
+
         private const int _odsBufferSize = 4096;
         private readonly EventWaitHandle _bufferReadyEvent;
         private readonly EventWaitHandle _dataReadyEvent;
@@ -49,6 +51,7 @@ namespace TraceSpy
             _state.ShowEtwDescription = App.Current.Settings.ShowEtwDescription;
             _state.ShowProcessId = App.Current.Settings.ShowProcessId;
             _state.WrapText = App.Current.Settings.WrapText;
+            _state.DontSplitText = App.Current.Settings.DontSplitText;
             _state.ShowTicksMode = App.Current.Settings.ShowTicksMode;
             _state.PropertyChanged += OnStatePropertyChanged;
 
@@ -126,6 +129,7 @@ namespace TraceSpy
             App.Current.Settings.ShowEtwDescription = _state.ShowEtwDescription;
             App.Current.Settings.ShowProcessId = _state.ShowProcessId;
             App.Current.Settings.WrapText = _state.WrapText;
+            App.Current.Settings.DontSplitText = _state.DontSplitText;
             App.Current.Settings.ShowTicksMode = _state.ShowTicksMode;
             App.Current.Settings.SerializeToConfiguration();
 
@@ -256,6 +260,18 @@ namespace TraceSpy
         {
             if (evt == null || evt.ProcessName == null)
                 return;
+
+            if (!App.Current.Settings.DontAllowClearingText && evt.Text?.StartsWith(ClearTracesPrefix) == true)
+            {
+                _dataSource.Clear();
+                TraceEvent.ResetIndex();
+                var text = evt.Text.Substring(ClearTracesPrefix.Length);
+                if (string.IsNullOrEmpty(text))
+                    return;
+
+                // send the rest of clear line
+                evt.Text = text;
+            }
 
             if (allowExclusion && App.Current.Settings.ExcludeLine(evt.Text, evt.ProcessName))
                 return;
@@ -564,7 +580,7 @@ namespace TraceSpy
                 if (evt.Text == null)
                     continue;
 
-                if (evt.Text.IndexOf(search, sc) > 0)
+                if (evt.Text.IndexOf(search, sc) >= 0)
                 {
                     LV.SelectedItem = evt;
                     ((System.Windows.Controls.ListViewItem)LV.ItemContainerGenerator.ContainerFromItem(evt))?.Focus();

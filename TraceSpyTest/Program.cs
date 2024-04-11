@@ -34,8 +34,8 @@ namespace TraceSpyTest
         private static void SafeMain()
         {
             var count = 1;
-            string t;
             var etwProvider = CommandLineUtilities.GetArgument("etw", Guid.Empty);
+            var phrase = CommandLineUtilities.GetArgument<string>("phrase", null);
             Console.WriteLine("TraceSpy Test.");
             Console.WriteLine();
             Console.WriteLine("Press Q, ESC, or CTRL-C to quit");
@@ -76,9 +76,10 @@ namespace TraceSpyTest
                         return;
 
                     case ConsoleKey.O:
-                        t = "ODSTrace #" + count + " from TraceSpyTest. Date:" + DateTime.Now;
-                        Console.WriteLine("Sending: '" + t + "'");
-                        Trace.WriteLine(t);
+                        phrase = phrase ?? "ODSTrace #{0} from TraceSpyTest. Date:{1}";
+                        phrase = string.Format(phrase, count, DateTime.Now);
+                        Console.WriteLine("Sending: '" + phrase + "'");
+                        Trace.WriteLine(phrase);
                         count++;
                         break;
 
@@ -87,9 +88,10 @@ namespace TraceSpyTest
                         {
                             _timer = new Timer((state) =>
                             {
-                                t = "ODS Continuous Trace #" + count + " from TraceSpyTest. Date:" + DateTime.Now + ". " + GetSomeRandomText();
-                                Console.WriteLine("Sending: '" + t + "'");
-                                Trace.WriteLine(t);
+                                phrase = phrase ?? "ODS Continuous Trace #{0} from TraceSpyTest. Date:{1}. {2}";
+                                phrase = string.Format(phrase, count, DateTime.Now, GetSomeRandomText());
+                                Console.WriteLine("Sending: '" + phrase + "'");
+                                Trace.WriteLine(phrase);
                                 count++;
                                 _timer.Change(_rnd.Next(100, 2000), 0);
                             });
@@ -105,9 +107,25 @@ namespace TraceSpyTest
                     case ConsoleKey.E:
                         if (_etw != null)
                         {
-                            t = "ETWTrace #" + count + " from TraceSpyTest. Date:" + DateTime.Now;
-                            Console.WriteLine("Sending: '" + t + "'");
-                            _etw.WriteMessageEvent(t);
+                            phrase = phrase ?? "ETWTrace #{0} from TraceSpyTest. Date:{1}";
+                            phrase = string.Format(phrase, count, DateTime.Now);
+                            Console.WriteLine("Sending: '" + phrase + "'");
+                            _etw.WriteMessageEvent(phrase);
+                            count++;
+                        }
+                        break;
+
+                    case ConsoleKey.K:
+                        const string clearTracesPrefix = "##TraceSpyClear##";
+                        Console.WriteLine("Sending: '" + clearTracesPrefix + "'");
+                        if (_etw != null)
+                        {
+                            _etw.WriteMessageEvent(clearTracesPrefix);
+                            count++;
+                        }
+                        else
+                        {
+                            Trace.WriteLine(clearTracesPrefix);
                             count++;
                         }
                         break;
@@ -115,21 +133,22 @@ namespace TraceSpyTest
                     default:
                         if (num > 0)
                         {
+                            phrase = phrase ?? "Trace #{0}, {2}/{3} from TraceSpyTest. Date:{1}";
                             for (var i = 1; i <= num; i++)
                             {
-                                t = "Trace #" + count + ", " + i + "/" + num + " from TraceSpyTest. Date:" + DateTime.Now;
+                                var phrase2 = string.Format(phrase, count, DateTime.Now, i, num);
                                 if (num < 1000 || (i % 1000) == 0)
                                 {
-                                    Console.WriteLine("Sending: '" + t + "'");
+                                    Console.WriteLine("Sending: '" + phrase2 + "'");
                                 }
 
                                 if (_etw != null)
                                 {
-                                    _etw.WriteMessageEvent(t);
+                                    _etw.WriteMessageEvent(phrase2);
                                 }
                                 else
                                 {
-                                    Trace.WriteLine(t);
+                                    Trace.WriteLine(phrase2);
                                 }
                                 count++;
                             }

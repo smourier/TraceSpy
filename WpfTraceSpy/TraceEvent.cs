@@ -38,7 +38,15 @@ namespace TraceSpy
 
                 _text = value;
                 _ranges = new Lazy<IReadOnlyList<ColorRange>>(GetRanges, true);
-                Texts = value != null ? _text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries) : null;
+
+                if (App.Current.Settings.DontSplitText)
+                {
+                    Texts = new[] { _text };
+                }
+                else
+                {
+                    Texts = value != null ? _text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries) : null;
+                }
             }
         }
 
