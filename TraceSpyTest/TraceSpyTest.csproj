@@ -42,17 +42,11 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\TraceSpyService\CommandLineUtilities.cs">
-      <Link>CommandLineUtilities.cs</Link>
-    </Compile>
-    <Compile Include="..\TraceSpyService\Extensions.cs">
-      <Link>Extensions.cs</Link>
-    </Compile>
-    <Compile Include="..\TraceSpyService\TokenElevationType.cs">
-      <Link>TokenElevationType.cs</Link>
-    </Compile>
+    <Compile Include="CommandLineUtilities.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TokenElevationType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig">
