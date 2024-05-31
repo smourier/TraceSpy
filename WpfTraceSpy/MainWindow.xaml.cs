@@ -78,7 +78,7 @@ namespace TraceSpy
                     var img = Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                     CaptionIcon.Source = img;
                 }
-                Opacity = App.Current.Settings.Opacity;
+                Opacity = Math.Max(0.1, App.Current.Settings.Opacity);
             }
             else
             {

@@ -30,7 +30,7 @@
             AutoToolTipPrecision="1"
             LargeChange="0.1"
             Maximum="1"
-            Minimum="0"
+            Minimum="0.1"
             Orientation="Horizontal"
             SmallChange="0.01"
             Ticks="0,1"

@@ -47,6 +47,7 @@ namespace TraceSpy
             TicksColumnWidth = 96;
             ProcessColumnWidth = 102;
             TextColumnWidth = 681;
+            Opacity = 1;
             _filters.Add(new Filter(null, false));
             ResetOdsEncoding();
         }
