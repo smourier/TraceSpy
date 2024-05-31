@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace TraceSpy
@@ -52,10 +53,44 @@ namespace TraceSpy
             _state.ShowProcessId = App.Current.Settings.ShowProcessId;
             _state.WrapText = App.Current.Settings.WrapText;
             _state.DontSplitText = App.Current.Settings.DontSplitText;
+            _state.IsTopmost = App.Current.Settings.IsTopmost;
             _state.ShowTicksMode = App.Current.Settings.ShowTicksMode;
             _state.PropertyChanged += OnStatePropertyChanged;
 
+            if (App.Current.Settings.EnableTransparency)
+            {
+                WindowStyle = WindowStyle.None;
+                AllowsTransparency = true;
+                ResizeMode = ResizeMode.CanResizeWithGrip;
+            }
+
             InitializeComponent();
+
+            if (App.Current.Settings.EnableTransparency)
+            {
+                CaptionBorder.Fill = SystemColors.ActiveBorderBrush;
+                CaptionIconBorder.BorderBrush = CaptionBorder.Fill;
+                CaptionIconBackground.Background = MainMenu.Background;
+                MainMenu.BorderBrush = CaptionBorder.Fill;
+                MainGrid.Background = MainMenu.Background;
+                using (var icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath))
+                {
+                    var img = Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    CaptionIcon.Source = img;
+                }
+                Opacity = App.Current.Settings.Opacity;
+            }
+            else
+            {
+                MainGrid.RowDefinitions[0].Height = new GridLength(0);
+                CaptionIconBorder.Visibility = Visibility.Collapsed;
+                CaptionIconBackground.Visibility = Visibility.Collapsed;
+                CaptionIcon.Visibility = Visibility.Collapsed;
+                MainMenu.Margin = new Thickness();
+                MainMenu.BorderThickness = new Thickness(0);
+                ButtonsPanel.Visibility = Visibility.Collapsed;
+            }
+
             LoadSettings();
             DataContext = _state;
             _state.EtwStarted = App.Current.Settings.CaptureEtwTraces;
@@ -130,6 +165,7 @@ namespace TraceSpy
             App.Current.Settings.ShowProcessId = _state.ShowProcessId;
             App.Current.Settings.WrapText = _state.WrapText;
             App.Current.Settings.DontSplitText = _state.DontSplitText;
+            App.Current.Settings.IsTopmost = _state.IsTopmost;
             App.Current.Settings.ShowTicksMode = _state.ShowTicksMode;
             App.Current.Settings.SerializeToConfiguration();
 
@@ -770,6 +806,84 @@ namespace TraceSpy
         {
             App.Current.Settings.ClearSearches();
             App.Current.Settings.SerializeToConfiguration();
+        }
+
+        private void Transparency_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new TransparencyWindow();
+            dlg.Owner = this;
+            dlg.ShowDialog();
+
+            if (App.Current.Settings.EnableTransparency != App.Current.MainWindow.AllowsTransparency)
+            {
+                if (this.ShowConfirm("Transparency settings have changed, a restart is needed for it to take effect. Do you want to restart TraceSpy now?") != MessageBoxResult.Yes)
+                    return;
+
+                System.Windows.Forms.Application.Restart();
+                System.Windows.Application.Current.Shutdown();
+            }
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Caption_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var hit = MainMenu.InputHitTest(e.GetPosition(MainMenu));
+            if (hit is Border)
+            {
+                DragMove();
+            }
+        }
+
+        private void Caption_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var hit = MainMenu.InputHitTest(e.GetPosition(MainMenu));
+            if (hit is Border)
+            {
+                if (WindowState == WindowState.Maximized)
+                {
+                    RestoreButton_Click(sender, e);
+                }
+                else
+                {
+                    MaximizeButton_Click(sender, e);
+                }
+            }
+        }
+
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Maximized;
+            RestoreButton.Visibility = Visibility.Visible;
+            MaximizeButton.Visibility = Visibility.Collapsed;
+        }
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void RestoreButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Normal;
+            RestoreButton.Visibility = Visibility.Collapsed;
+            MaximizeButton.Visibility = Visibility.Visible;
+        }
+
+        private void ResetWindow_Click(object sender, RoutedEventArgs e)
+        {
+            var screen = Screen.FromHandle(new WindowInteropHelper(this).Handle);
+            var bounds = screen.WorkingArea;
+            bounds.Inflate(-100, -100);
+            Height = bounds.Height;
+            MaxHeight = bounds.Height;
+            Width = bounds.Width;
+            MaxWidth = bounds.Width;
+            Left = bounds.Left + (bounds.Width - ActualWidth) / 2;
+            Top = bounds.Top + (bounds.Height - ActualHeight) / 2;
         }
     }
 }

@@ -1,0 +1,62 @@
+﻿<Window
+    x:Class="TraceSpy.TransparencyWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TraceSpy"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="TraceSpy Transparency"
+    Width="305"
+    Height="130"
+    FocusManager.FocusedElement="{Binding ElementName=OpacitySlider}"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+    <Grid>
+        <Label
+            Name="OpacityLabel"
+            Width="98"
+            Margin="10,10,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="Opacity:" />
+        <Slider
+            Name="OpacitySlider"
+            Width="200"
+            Margin="80,16,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            AutoToolTipPlacement="BottomRight"
+            AutoToolTipPrecision="1"
+            LargeChange="0.1"
+            Maximum="1"
+            Minimum="0"
+            Orientation="Horizontal"
+            SmallChange="0.01"
+            Ticks="0,1"
+            Value="{Binding Opacity, UpdateSourceTrigger=PropertyChanged}" />
+        <CheckBox
+            Name="EnableTransparency"
+            Height="15"
+            Margin="16,52,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="Enable _transparency"
+            IsChecked="{Binding EnableTransparency, UpdateSourceTrigger=PropertyChanged}" />
+        <Label
+            Margin="10,62,0,0"
+            FontSize="11"
+            Foreground="DimGray">
+            (Requires TraceSpy restart)
+        </Label>
+        <Button
+            Name="CloseButton"
+            Width="75"
+            Height="23"
+            Margin="205,52,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="_Close"
+            IsCancel="True" />
+    </Grid>
+</Window>

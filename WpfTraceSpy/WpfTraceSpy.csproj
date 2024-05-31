@@ -65,6 +65,9 @@
     </Compile>
     <Compile Include="AutoCompleteComboBox.cs" />
     <Compile Include="ColumnSortHandler.cs" />
+    <Compile Include="TransparencyWindow.xaml.cs">
+      <DependentUpon>TransparencyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OdsEncodingsWindow.xaml.cs">
       <DependentUpon>OdsEncodingsWindow.xaml</DependentUpon>
     </Compile>
@@ -133,6 +136,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ColorizersWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TransparencyWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

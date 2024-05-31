@@ -129,6 +129,9 @@
     <Compile Include="..\WpfTraceSpy\TraceDetailsWindow.xaml.cs">
       <DependentUpon>TraceDetailsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="..\WpfTraceSpy\TransparencyWindow.xaml.cs">
+      <Link>TransparencyWindow.xaml.cs</Link>
+    </Compile>
     <Compile Include="..\WpfTraceSpy\WpfSettings.cs" />
     <Compile Include="..\WpfTraceSpy\TraceEvent.cs" />
     <Compile Include="..\WpfTraceSpy\TraceEventColumnLayout.cs" />
@@ -205,6 +208,11 @@
     <Page Include="..\WpfTraceSpy\TraceDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="..\WpfTraceSpy\TransparencyWindow.xaml">
+      <Link>TransparencyWindow.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

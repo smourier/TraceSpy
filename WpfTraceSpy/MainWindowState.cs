@@ -1,4 +1,6 @@
-﻿namespace TraceSpy
+﻿using System.ComponentModel;
+
+namespace TraceSpy
 {
     public class MainWindowState : DictionaryObject
     {
@@ -20,6 +22,7 @@
         public bool AutoScroll { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
         public bool WrapText { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
         public bool DontSplitText { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
+        public bool IsTopmost { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
 
         public ShowTicksMode ShowTicksMode
         {
@@ -86,6 +89,15 @@
                     default:
                         return "ODS Unavailable";
                 }
+            }
+        }
+
+        protected override void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(sender, e);
+            if (e.PropertyName == nameof(IsTopmost))
+            {
+                App.Current.MainWindow.Topmost = IsTopmost;
             }
         }
     }
