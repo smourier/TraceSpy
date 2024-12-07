@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace TraceSpy
@@ -55,6 +55,7 @@ namespace TraceSpy
             _state.DontSplitText = App.Current.Settings.DontSplitText;
             _state.IsTopmost = App.Current.Settings.IsTopmost;
             _state.ShowTicksMode = App.Current.Settings.ShowTicksMode;
+            _state.ThemeName = App.Current.Settings.ThemeName.Nullify();
             _state.PropertyChanged += OnStatePropertyChanged;
 
             if (App.Current.Settings.EnableTransparency)
@@ -65,6 +66,8 @@ namespace TraceSpy
             }
 
             InitializeComponent();
+
+            ApplyTheme();
 
             if (App.Current.Settings.EnableTransparency)
             {
@@ -145,8 +148,11 @@ namespace TraceSpy
             MainMenu.RaiseMenuItemClickOnKeyGesture(e);
         }
 
+        public Theme CurrentTheme { get; private set; }
+
 #if !FX4
         private Lazy<double> _pixelsPerDip;
+
         public double PixelsPerDip => _pixelsPerDip.Value;
 
         protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
@@ -167,12 +173,50 @@ namespace TraceSpy
             App.Current.Settings.DontSplitText = _state.DontSplitText;
             App.Current.Settings.IsTopmost = _state.IsTopmost;
             App.Current.Settings.ShowTicksMode = _state.ShowTicksMode;
+            App.Current.Settings.ThemeName = _state.ThemeName.Nullify();
             App.Current.Settings.SerializeToConfiguration();
 
-            if (e.PropertyName == nameof(MainWindowState.WrapText) ||
-                e.PropertyName == nameof(MainWindowState.ShowTicksMode))
+            if (e.PropertyName == nameof(MainWindowState.WrapText) || e.PropertyName == nameof(MainWindowState.ShowTicksMode))
             {
                 OnColumnLayoutPropertyChanged(null, null);
+            }
+
+            if (e.PropertyName == nameof(MainWindowState.ThemeName))
+            {
+                ApplyTheme();
+            }
+        }
+
+        private void ApplyTheme()
+        {
+            CurrentTheme = Theme.Load(_state.ThemeName);
+            LV.Background = CurrentTheme.ListViewBackColorBrush;
+            LVH.Background = CurrentTheme.ListViewBackColorBrush;
+            ApplyTheme(MainMenu);
+            UpdateTraceVisuals();
+            CurrentTheme.Save();
+        }
+
+        private void ApplyTheme(Menu menu)
+        {
+            menu.Background = CurrentTheme.MenuBackColorBrush;
+            menu.Foreground = CurrentTheme.MenuTextColorBrush;
+            foreach (var child in menu.Items.OfType<MenuItem>())
+            {
+                ApplyTheme(child);
+            }
+        }
+
+        private void ApplyTheme(MenuItem menuItem)
+        {
+            if (menuItem.Name == "OdsTrace" || menuItem.Name == "EtwTrace")
+                return;
+
+            menuItem.Background = CurrentTheme.MenuBackColorBrush;
+            menuItem.Foreground = CurrentTheme.MenuTextColorBrush;
+            foreach (var child in menuItem.Items.OfType<MenuItem>())
+            {
+                ApplyTheme(child);
             }
         }
 
@@ -242,6 +286,15 @@ namespace TraceSpy
             foreach (var item in panel.EnumerateVisualChildren(true).OfType<TraceEventElement>())
             {
                 item.InvalidateMeasure();
+                item.InvalidateVisual();
+            }
+        }
+
+        private void UpdateTraceVisuals()
+        {
+            var panel = LV.FindVisualChild<VirtualizingStackPanel>();
+            foreach (var item in panel.EnumerateVisualChildren(true).OfType<TraceEventElement>())
+            {
                 item.InvalidateVisual();
             }
         }
@@ -500,12 +553,12 @@ namespace TraceSpy
 
         private void Font_Click(object sender, RoutedEventArgs e)
         {
-            using (var dlg = new FontDialog())
+            using (var dlg = new System.Windows.Forms.FontDialog())
             {
                 dlg.AllowVerticalFonts = false;
                 dlg.FontMustExist = true;
                 dlg.Font = new System.Drawing.Font(LV.FontFamily.Source, (float)LV.FontSize);
-                if (dlg.ShowDialog(NativeWindow.FromHandle(new WindowInteropHelper(this).Handle)) != System.Windows.Forms.DialogResult.OK)
+                if (dlg.ShowDialog(System.Windows.Forms.NativeWindow.FromHandle(new WindowInteropHelper(this).Handle)) != System.Windows.Forms.DialogResult.OK)
                     return;
 
                 App.Current.Settings.FontName = dlg.Font.Name;
@@ -659,6 +712,7 @@ namespace TraceSpy
 
         private void Edit_SubmenuOpened(object sender, RoutedEventArgs e)
         {
+            ThemeSubmenu(sender, e);
             CopyFullLine.IsEnabled = LV.SelectedItems.Count > 0;
             if (LV.SelectedItems.Count > 1)
             {
@@ -783,7 +837,7 @@ namespace TraceSpy
             }
         }
 
-        private void OpenConfig_Click(object sender, RoutedEventArgs e) => Process.Start(new ProcessStartInfo { FileName = Path.GetDirectoryName(WpfSettings.ConfigurationFilePath), UseShellExecute = true });
+        private void OpenConfig_Click(object sender, RoutedEventArgs e) => Process.Start(new ProcessStartInfo { FileName = System.IO.Path.GetDirectoryName(WpfSettings.ConfigurationFilePath), UseShellExecute = true });
 
         private void LV_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -875,7 +929,7 @@ namespace TraceSpy
 
         private void ResetWindow_Click(object sender, RoutedEventArgs e)
         {
-            var screen = Screen.FromHandle(new WindowInteropHelper(this).Handle);
+            var screen = System.Windows.Forms.Screen.FromHandle(new WindowInteropHelper(this).Handle);
             var bounds = screen.WorkingArea;
             bounds.Inflate(-100, -100);
             Height = bounds.Height;
@@ -884,6 +938,42 @@ namespace TraceSpy
             MaxWidth = bounds.Width;
             Left = bounds.Left + (bounds.Width - ActualWidth) / 2;
             Top = bounds.Top + (bounds.Height - ActualHeight) / 2;
+        }
+
+        private void ThemeSubmenu(object sender, RoutedEventArgs e)
+        {
+            // apply background all the way down
+            var popup = (sender as DependencyObject)?.FindVisualChild<Popup>();
+            if (popup.Child is Border border)
+            {
+                border.Background = CurrentTheme.MenuBackColorBrush;
+                if (border.Child is ScrollViewer sv)
+                {
+                    sv.Background = border.Background;
+                    if (sv.Content is Grid g)
+                    {
+                        foreach (var rc in g.EnumerateVisualChildren().OfType<Rectangle>())
+                        {
+                            rc.Fill = border.Background;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void LV_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (var te in e.AddedItems.OfType<TraceEvent>())
+            {
+                te.IsSelected = true;
+            }
+
+            foreach (var te in e.RemovedItems.OfType<TraceEvent>())
+            {
+                te.IsSelected = false;
+            }
+
+            UpdateTraceVisuals();
         }
     }
 }

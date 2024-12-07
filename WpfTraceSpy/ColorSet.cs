@@ -44,11 +44,11 @@ namespace TraceSpy
 
         [XmlIgnore]
         public Brush ForeBrush => _foreBrush.Value;
-        private Brush GetForeBrush() => ConvertToBrush(ForeBrushText, Brushes.Black);
+        private Brush GetForeBrush() => ConvertToBrush(ForeBrushText, App.CurrentTheme.RangeTextColorBrush);
 
         [XmlIgnore]
         public Brush BackBrush => _backBrush.Value;
-        private Brush GetBackBrush() => ConvertToBrush(BackBrushText, Brushes.White);
+        private Brush GetBackBrush() => ConvertToBrush(BackBrushText, App.CurrentTheme.RangeBackColorBrush);
 
         [XmlIgnore]
         public Brush FrameBrush => _frameBrush.Value;

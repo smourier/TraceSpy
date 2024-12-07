@@ -29,7 +29,13 @@
             <Setter Property="Background" Value="Transparent" />
         </Style>
     </Window.Resources>
-    <Grid x:Name="MainGrid" Background="Gray">
+    <Grid x:Name="MainGrid">
+        <Grid.Resources>
+            <Style x:Key="zz" TargetType="MenuItem">
+                <Setter Property="BorderBrush" Value="Red" />
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="1" />
             <RowDefinition Height="Auto" />
@@ -66,12 +72,16 @@
             IsMainMenu="True"
             PreviewMouseDoubleClick="Caption_PreviewMouseDoubleClick"
             PreviewMouseDown="Caption_MouseLeftButtonDown">
-            <MenuItem Height="24" Header="_File">
+            <MenuItem
+                Height="24"
+                Header="_File"
+                SubmenuOpened="ThemeSubmenu">
                 <MenuItem
                     Name="MenuExit"
                     Click="MenuExit_Click"
                     Header="E_xit"
-                    InputGestureText="Alt+F4" />
+                    InputGestureText="Alt+F4"
+                    ItemContainerStyle="{StaticResource zz}" />
             </MenuItem>
             <MenuItem
                 Name="OdsTrace"
@@ -117,7 +127,7 @@
                 </MenuItem.Style>
             </MenuItem>
 
-            <MenuItem Header="_View">
+            <MenuItem Header="_View" SubmenuOpened="ThemeSubmenu">
                 <MenuItem
                     Header="_Remove Empty Lines"
                     IsCheckable="True"
@@ -150,7 +160,7 @@
                     Header="_TopMost Window"
                     IsCheckable="True"
                     IsChecked="{Binding IsTopmost, Mode=TwoWay}" />
-                <MenuItem Header="_Ticks">
+                <MenuItem Header="_Ticks" SubmenuOpened="ThemeSubmenu">
                     <MenuItem
                         Header="As _Ticks"
                         IsCheckable="True"
@@ -234,11 +244,21 @@
                     Click="ResetWindow_Click"
                     Header="_Reset Window Size..." />
             </MenuItem>
-            <MenuItem Header="_Options">
+            <MenuItem Header="_Options" SubmenuOpened="ThemeSubmenu">
                 <MenuItem
                     Name="Font"
                     Click="Font_Click"
                     Header="_Font..." />
+                <MenuItem Header="_Theme" SubmenuOpened="ThemeSubmenu">
+                    <MenuItem
+                        Header="Light"
+                        IsCheckable="True"
+                        IsChecked="{Binding ThemeLight, Mode=TwoWay}" />
+                    <MenuItem
+                        Header="Dark"
+                        IsCheckable="True"
+                        IsChecked="{Binding ThemeDark, Mode=TwoWay}" />
+                </MenuItem>
                 <MenuItem
                     Name="Filters"
                     Click="Filters_Click"
@@ -265,7 +285,10 @@
                     Click="OpenConfig_Click"
                     Header="Open _Configuration Folder" />
             </MenuItem>
-            <MenuItem x:Name="HelpMenu" Header="_Help">
+            <MenuItem
+                x:Name="HelpMenu"
+                Header="_Help"
+                SubmenuOpened="ThemeSubmenu">
                 <MenuItem
                     Name="About"
                     Click="About_Click"
@@ -299,8 +322,14 @@
                 Style="{StaticResource TitleBar}" />
         </WrapPanel>
         <ListView Name="LVH" Grid.Row="2">
+            <ListView.Resources>
+                <Style x:Key="LVHHeaderStyle" TargetType="GridViewColumnHeader">
+                    <Setter Property="Background" Value="{Binding ListViewHeaderBackground}" />
+                    <Setter Property="Foreground" Value="{Binding ListViewHeaderForeground}" />
+                </Style>
+            </ListView.Resources>
             <ListView.View>
-                <GridView x:Name="GV">
+                <GridView x:Name="GV" ColumnHeaderContainerStyle="{StaticResource LVHHeaderStyle}">
                     <GridViewColumn
                         x:Name="IndexColumn"
                         Width="50"
@@ -326,6 +355,7 @@
             HorizontalContentAlignment="Stretch"
             FocusManager.IsFocusScope="True"
             MouseDoubleClick="LV_MouseDoubleClick"
+            SelectionChanged="LV_SelectionChanged"
             ScrollViewer.ScrollChanged="LV_ScrollChanged">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">

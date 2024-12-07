@@ -50,6 +50,7 @@ namespace TraceSpyTest
                 Console.WriteLine();
                 Console.WriteLine("ETW");
                 Console.WriteLine(" Press E to send an ETW trace to provider '" + etwProvider + "'.");
+                Console.WriteLine(" Press T to send an ETW trace every random interval, T again to stop.");
                 Console.WriteLine(" Press 1..9 to send 0..9 ETW traces to provider '" + etwProvider + "'.");
                 Console.WriteLine("  Combine with Shift to multiply by 10");
                 Console.WriteLine("  Combine with Control to multiply by 100");
@@ -112,6 +113,27 @@ namespace TraceSpyTest
                             Console.WriteLine("Sending: '" + phrase + "'");
                             _etw.WriteMessageEvent(phrase);
                             count++;
+                        }
+                        break;
+
+                    case ConsoleKey.T:
+                        if (_timer == null)
+                        {
+                            _timer = new Timer((state) =>
+                            {
+                                phrase = phrase ?? "ETWTrace #{0} from TraceSpyTest. Date:{1}";
+                                phrase = string.Format(phrase, count, DateTime.Now);
+                                Console.WriteLine("Sending: '" + phrase + "'");
+                                _etw.WriteMessageEvent(phrase);
+                                count++;
+                                _timer.Change(_rnd.Next(100, 2000), 0);
+                            });
+                            _timer.Change(_rnd.Next(100, 2000), 0);
+                        }
+                        else
+                        {
+                            _timer.Dispose();
+                            _timer = null;
                         }
                         break;
 

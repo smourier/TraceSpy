@@ -126,6 +126,9 @@
     </Compile>
     <Compile Include="..\WpfTraceSpy\Serializable.cs" />
     <Compile Include="..\WpfTraceSpy\ShowTicksMode.cs" />
+    <Compile Include="..\WpfTraceSpy\Theme.cs">
+      <Link>Theme.cs</Link>
+    </Compile>
     <Compile Include="..\WpfTraceSpy\TraceDetailsWindow.xaml.cs">
       <DependentUpon>TraceDetailsWindow.xaml</DependentUpon>
     </Compile>

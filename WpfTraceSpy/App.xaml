@@ -46,8 +46,5 @@
             </DockPanel>
         </DataTemplate>
 
-        <Style TargetType="{x:Type ListViewItem}">
-            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-        </Style>
     </Application.Resources>
 </Application>

@@ -2,13 +2,14 @@
 using System.Diagnostics;
 using System.Text;
 using System.Windows;
-using System.Windows.Media;
 
 namespace TraceSpy
 {
     public partial class App : Application
     {
         public static new App Current => (App)Application.Current;
+        public static MainWindow CurrentWindow => Current.Window;
+        public static Theme CurrentTheme => CurrentWindow.CurrentTheme;
         private static readonly Lazy<string> _processName = new Lazy<string>(() => Process.GetCurrentProcess().ProcessName);
 
         public App()
@@ -23,6 +24,7 @@ namespace TraceSpy
 #endif
         }
 
+        public MainWindow Window => (MainWindow)MainWindow;
         public WpfSettings Settings { get; }
         public TraceEventColumnLayout ColumnLayout { get; }
 
@@ -48,11 +50,11 @@ namespace TraceSpy
             switch (level)
             {
                 case TraceLevel.Error:
-                    evt.BackgroundBrush = Brushes.DarkOrange;
+                    evt.BackgroundBrush = CurrentTheme.ErrorBackColorBrush;
                     break;
 
                 case TraceLevel.Warning:
-                    evt.BackgroundBrush = Brushes.Yellow;
+                    evt.BackgroundBrush = CurrentTheme.WarningBackColorBrush;
                     break;
             }
 

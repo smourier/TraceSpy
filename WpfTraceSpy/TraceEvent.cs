@@ -23,6 +23,7 @@ namespace TraceSpy
         public long Ticks { get; }
         public long PreviousTicks { get; set; }
         public string ProcessName { get; set; }
+        public bool IsSelected { get; set; }
         public Brush BackgroundBrush { get; set; }
         public bool DontColorize { get; set; }
         public string FullText => Index + "\t" + Ticks + "\t" + ProcessName + "\t" + Text;

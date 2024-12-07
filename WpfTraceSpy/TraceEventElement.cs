@@ -39,7 +39,7 @@ namespace TraceSpy
                     FlowDirection.LeftToRight,
                     App.Current.Settings.TypeFace,
                     FontSize,
-                    Brushes.Black);
+                    Event.IsSelected ? App.CurrentTheme.SelectedTextColorBrush : App.CurrentTheme.TextColorBrush);
 #else
                 var formattedText = new FormattedText(
                     Event.Text,
@@ -47,7 +47,7 @@ namespace TraceSpy
                     FlowDirection.LeftToRight,
                     App.Current.Settings.TypeFace,
                     FontSize,
-                    Brushes.Black,
+                    Event.IsSelected ? App.CurrentTheme.SelectedTextColorBrush : App.CurrentTheme.TextColorBrush,
                     App.PixelsPerDip);
 #endif
 
@@ -109,7 +109,7 @@ namespace TraceSpy
                 FlowDirection.LeftToRight,
                 App.Current.Settings.TypeFace,
                 FontSize,
-                Brushes.Black);
+                evt.IsSelected ? App.CurrentTheme.SelectedTextColorBrush : App.CurrentTheme.IndexColorBrush);
 #else
             var ppd = App.PixelsPerDip;
             var formattedText = new FormattedText(
@@ -118,7 +118,7 @@ namespace TraceSpy
                 FlowDirection.LeftToRight,
                 App.Current.Settings.TypeFace,
                 FontSize,
-                Brushes.Black,
+                evt.IsSelected ? App.CurrentTheme.SelectedTextColorBrush : App.CurrentTheme.IndexColorBrush,
                 ppd);
 #endif
 
@@ -134,7 +134,7 @@ namespace TraceSpy
                 FlowDirection.LeftToRight,
                 App.Current.Settings.TypeFace,
                 FontSize,
-                Brushes.Black);
+                evt.IsSelected ? App.CurrentTheme.SelectedTextColorBrush : App.CurrentTheme.TicksColorBrush);
 #else
             formattedText = new FormattedText(
                 evt.TicksText,
@@ -142,7 +142,7 @@ namespace TraceSpy
                 FlowDirection.LeftToRight,
                 App.Current.Settings.TypeFace,
                 FontSize,
-                Brushes.Black,
+                evt.IsSelected ? App.CurrentTheme.SelectedTextColorBrush : App.CurrentTheme.TicksColorBrush,
                 ppd);
 #endif
 
@@ -161,7 +161,7 @@ namespace TraceSpy
                     FlowDirection.LeftToRight,
                     App.Current.Settings.TypeFace,
                     FontSize,
-                    Brushes.Black);
+                    evt.IsSelected ? App.CurrentTheme.SelectedTextColorBrush : App.CurrentTheme.ProcessColorBrush);
 #else
                 formattedText = new FormattedText(
                     evt.ProcessName,
@@ -169,7 +169,7 @@ namespace TraceSpy
                     FlowDirection.LeftToRight,
                     App.Current.Settings.TypeFace,
                     FontSize,
-                    Brushes.Black,
+                    evt.IsSelected ? App.CurrentTheme.SelectedTextColorBrush : App.CurrentTheme.ProcessColorBrush,
                     ppd);
 #endif
 
@@ -193,7 +193,7 @@ namespace TraceSpy
                         FlowDirection.LeftToRight,
                         App.Current.Settings.TypeFace,
                         FontSize,
-                        Brushes.Black);
+                        evt.IsSelected ? App.CurrentTheme.SelectedTextColorBrush : App.CurrentTheme.TextColorBrush);
 #else
                     formattedText = new FormattedText(
                         evt.Text,
@@ -201,7 +201,7 @@ namespace TraceSpy
                         FlowDirection.LeftToRight,
                         App.Current.Settings.TypeFace,
                         FontSize,
-                        Brushes.Black,
+                        evt.IsSelected ? App.CurrentTheme.SelectedTextColorBrush : App.CurrentTheme.TextColorBrush,
                         ppd);
 #endif
 
@@ -259,7 +259,7 @@ namespace TraceSpy
                             FlowDirection.LeftToRight,
                             range.ColorSet != null ? range.ColorSet.Typeface.Item1 : App.Current.Settings.TypeFace,
                             range.ColorSet != null ? range.ColorSet.Typeface.Item2 : FontSize,
-                            range.ColorSet != null ? range.ColorSet.ForeBrush : Brushes.Black);
+                            range.ColorSet != null ? range.ColorSet.ForeBrush : evt.IsSelected ? App.CurrentTheme.SelectedTextColorBrush : App.CurrentTheme.RangeTextColorBrush);
 #else
                         formattedText = new FormattedText(
                             chunk,
@@ -267,7 +267,7 @@ namespace TraceSpy
                             FlowDirection.LeftToRight,
                             range.ColorSet != null ? range.ColorSet.Typeface.Item1 : App.Current.Settings.TypeFace,
                             range.ColorSet != null ? range.ColorSet.Typeface.Item2 : FontSize,
-                            range.ColorSet != null ? range.ColorSet.ForeBrush : Brushes.Black,
+                            range.ColorSet != null ? range.ColorSet.ForeBrush : evt.IsSelected ? App.CurrentTheme.SelectedTextColorBrush : App.CurrentTheme.RangeTextColorBrush,
                             ppd);
 #endif
 
