@@ -16,7 +16,7 @@ namespace TraceSpy
 #if NET
             Title += "Core";
 #endif
-            WB.Source = new BitmapImage(new Uri("https://stackoverflow.com/users/flair/403671.png?theme=clean"));
+            WB.Source = new BitmapImage(new Uri("https://stackexchange.com/users/flair/174359.png"));
             var asm = Assembly.GetExecutingAssembly();
             var product = asm.GetCustomAttribute<AssemblyProductAttribute>().Product;
             var copyright = asm.GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright;

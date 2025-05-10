@@ -18,6 +18,7 @@ namespace TraceSpy
                 throw new ArgumentNullException(nameof(url));
 
             var psi = new ProcessStartInfo(url);
+            psi.UseShellExecute = true;
             Process.Start(psi);
         }
 
