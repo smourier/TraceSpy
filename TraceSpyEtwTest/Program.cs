@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using EventProviderLogging;
@@ -12,6 +13,7 @@ public class Program
 {
     private static readonly Random _rnd = new Random(Environment.TickCount);
 
+    [RequiresUnreferencedCode("")]
     static async Task Main(string[] args)
     {
         using var host = Host.CreateDefaultBuilder(args)
