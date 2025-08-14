@@ -78,22 +78,7 @@ Things that are in TraceSpy but not in WpfTraceSpy:
 
 ![wpftracespy.png](doc/wpftracespy.png?raw=true)
 
-# Using WpfTraceSpy for .NET UWP (Universal Windows Application) Applications logging
-WpfTraceSpy (not TraceSpy) can also log traces from UWP (Universal Windows Applications) LoggingChannel classes. To emit a trace from your app, it's super simple:
-
-    // somewhere in your initialization code
-    private readonly static LoggingChannel _channel = new LoggingChannel("MyApp", new LoggingChannelOptions(), new Guid("01234567-01234-01234-01234-012345678901")); // change this guid, make it yours!
-    
-    // everywhere in your code. add simple string traces
-    _channel.LogMessage("hello from UWP!");
-
-Note you must configure the ETW provider specifically for that, like this:
-
-![etw2.png](doc/uwplogging.png?raw=true)
-
-And you should receive all UWP traces in WpfTraceSpy.
-
-# Using WpfTraceSpy for .NET Core (ASP or other) on Windows
+# Using WpfTraceSpy with .NET Core (ASP or other) on Windows
 .NET Core logging is not super easy to configure (this is the least to say...), especially in ASP.NET Core code. So I have provided a support .cs file that enables you to use ETW simple text traces (on Windows platform only) very easily as a logging provider under .NET core. Of course, you will then be able to get those traces in TraceSpy and WpfTraceSpy!
 
 The source is available here: [.NET Core ETW Simple traces](netcore) 
@@ -114,6 +99,47 @@ Here is how you can integrate in your startup code:
     
             app.UseMvc();
         }
+
+# Using WpfTraceSpy with .NET Core and Microsoft Logging Abstractions, with AOT support
+The project *EventProviderLogging* contains necessary source code (you can copy the .cs files in your project if you prefer) to enable using ETW simple string traces and TraceSpy in your .NET Core projects using [Microsoft Logging Abstractions](https://learn.microsoft.com/en-us/dotnet/core/extensions/logging), typically, but not limited to, ASP.NET Core projects.
+
+Making it work with Console applications is demonstrated in the *TraceSpyEtwTest*, with AOT support (you can publish it as a unique .exe using the provided FolderProfile.pubxml) Here's the relevant code in program.cs:
+
+    using var host = Host.CreateDefaultBuilder(args)
+        .ConfigureServices((context, services) =>
+        {
+            services
+                ...
+                .AddLogging(loggingBuilder =>
+                {
+                    // for ETW events, we must add the EventProvider like this:
+                    loggingBuilder.AddEventProvider();
+                });
+
+        }).Build();
+
+    var logger = host.Services.GetRequiredService<Logger>();
+    logger.LogInformation($"Start time: {start}");
+    logger.LogWarning($"Press CTRL+C to stop...");
+    ...
+
+
+<img width="1307" height="812" alt="etwlogging" src="https://github.com/user-attachments/assets/25217ded-aba3-4b25-b178-d4e9564b7dc6" />
+
+# Using WpfTraceSpy with .NET UWP (Universal Windows Application) Applications logging
+WpfTraceSpy (not TraceSpy) can also log traces from UWP (Universal Windows Applications) LoggingChannel classes. To emit a trace from your app, it's super simple:
+
+    // somewhere in your initialization code
+    private readonly static LoggingChannel _channel = new LoggingChannel("MyApp", new LoggingChannelOptions(), new Guid("01234567-01234-01234-01234-012345678901")); // change this guid, make it yours!
+    
+    // everywhere in your code. add simple string traces
+    _channel.LogMessage("hello from UWP!");
+
+Note you must configure the ETW provider specifically for that, like this:
+
+![etw2.png](doc/uwplogging.png?raw=true)
+
+And you should receive all UWP traces in WpfTraceSpy.
 
 # Using Regex Colorizers
 
@@ -154,7 +180,7 @@ For .NET users, that means you cannot use `Trace.WriteLine()` to send these type
 
     static void Main()
     {
-        var str = "Kilroy était ici";
+        var str = "Kilroy Ã©tait ici";
 
         // one way of using it
         OutputDebugStringA(str);
@@ -170,4 +196,4 @@ For .NET users, that means you cannot use `Trace.WriteLine()` to send these type
     [DllImport("kernel32")]
     private static extern void OutputDebugStringA([MarshalAs(UnmanagedType.LPUTF8Str)] string str);
 
-PS: in fact the code above will work if you use `Trace.WriteLine` and you have the ISO-8859-1 encoding because the text 'Kilroy était ici' is compatible with this code page but it won't work with complex unicode characters.
+PS: in fact the code above will work if you use `Trace.WriteLine` and you have the ISO-8859-1 encoding because the text 'Kilroy Ã©tait ici' is compatible with this code page but it won't work with complex unicode characters.
