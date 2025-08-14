@@ -18,11 +18,11 @@ namespace TraceSpy
         private Lazy<byte[]> _odsEncodingTerminator;
         private string _alternateColor;
         private Lazy<Brush> _alternateBrush;
-        private List<string> _searches = new List<string>();
-        private List<Filter> _filters = new List<Filter>();
-        private List<Colorizer> _colorizers = new List<Colorizer>();
-        private List<ColorSet> _colorSets = new List<ColorSet>();
-        private List<EtwProvider> _etwProviders = new List<EtwProvider>();
+        private List<string> _searches = [];
+        private List<Filter> _filters = [];
+        private List<Colorizer> _colorizers = [];
+        private List<ColorSet> _colorSets = [];
+        private List<EtwProvider> _etwProviders = [];
         private double _left;
         private double _findLeft;
         private double _top;
@@ -237,11 +237,11 @@ namespace TraceSpy
 
         public string[] Searches
         {
-            get => _searches.ToArray();
-            set => _searches = value == null ? new List<string>() : new List<string>(value);
+            get => [.. _searches];
+            set => _searches = value == null ? [] : new List<string>(value);
         }
 
-        public void ClearSearches() => _searches = new List<string>();
+        public void ClearSearches() => _searches = [];
         public void AddSearch(string search)
         {
             if (string.IsNullOrWhiteSpace(search))
@@ -253,8 +253,8 @@ namespace TraceSpy
 
         public Filter[] Filters
         {
-            get => _filters.ToArray();
-            set => _filters = value == null ? new List<Filter>() : new List<Filter>(value);
+            get => [.. _filters];
+            set => _filters = value == null ? [] : new List<Filter>(value);
         }
 
         public bool AddFilter(Filter old, Filter filter)
@@ -312,8 +312,8 @@ namespace TraceSpy
 
         public ColorSet[] ColorSets
         {
-            get => _colorSets.ToArray();
-            set => _colorSets = value == null ? new List<ColorSet>() : new List<ColorSet>(value);
+            get => [.. _colorSets];
+            set => _colorSets = value == null ? [] : new List<ColorSet>(value);
         }
 
         public bool AddColorSet(ColorSet colorSet)
@@ -342,8 +342,8 @@ namespace TraceSpy
 
         public Colorizer[] Colorizers
         {
-            get => _colorizers.ToArray();
-            set => _colorizers = value == null ? new List<Colorizer>() : new List<Colorizer>(value);
+            get => [.. _colorizers];
+            set => _colorizers = value == null ? [] : new List<Colorizer>(value);
         }
 
         public bool AddColorizer(Colorizer colorizer)
@@ -372,8 +372,8 @@ namespace TraceSpy
 
         public EtwProvider[] EtwProviders
         {
-            get => _etwProviders.ToArray();
-            set => _etwProviders = value == null ? new List<EtwProvider>() : new List<EtwProvider>(value);
+            get => [.. _etwProviders];
+            set => _etwProviders = value == null ? [] : new List<EtwProvider>(value);
         }
 
         public bool AddEtwProvider(EtwProvider provider)

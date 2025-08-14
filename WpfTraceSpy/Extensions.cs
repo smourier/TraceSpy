@@ -89,45 +89,33 @@ namespace TraceSpy
 
         public static void ShowMessage(this Window window, string text)
         {
-            if (window == null)
-            {
-                window = GetActiveWindow();
-            }
+            window ??= GetActiveWindow();
             MessageBox.Show(window, text, GetProduct(), MessageBoxButton.OK);
         }
 
         public static void ShowError(this Window window, string text) => ShowMessage(window, text, MessageBoxImage.Error);
         public static void ShowMessage(this Window window, string text, MessageBoxImage image)
         {
-            if (window == null)
-            {
-                window = GetActiveWindow();
-            }
+            window ??= GetActiveWindow();
             MessageBox.Show(window, text, GetProduct(), MessageBoxButton.OK, image);
         }
 
         public static MessageBoxResult ShowConfirm(this Window window, string text)
         {
-            if (window == null)
-            {
-                window = GetActiveWindow();
-            }
+            window ??= GetActiveWindow();
             return MessageBox.Show(window, text, GetProduct(), MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
         }
 
         public static MessageBoxResult ShowConfirmCancel(this Window window, string text)
         {
-            if (window == null)
-            {
-                window = GetActiveWindow();
-            }
+            window ??= GetActiveWindow();
             return MessageBox.Show(window, text, GetProduct(), MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
         }
 
         public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> enumerable)
         {
             if (collection == null)
-                throw new ArgumentException(nameof(collection));
+                throw new ArgumentNullException(nameof(collection));
 
             if (enumerable == null)
                 return;
@@ -144,7 +132,9 @@ namespace TraceSpy
             if (!name.StartsWith("ff", StringComparison.OrdinalIgnoreCase))
                 return name;
 
+#pragma warning disable CA1845 // Use span-based 'string.Concat'
             return "#" + name.Substring(2);
+#pragma warning restore CA1845 // Use span-based 'string.Concat'
         }
 
         public static FontFamily ToFontFamily(this System.Drawing.FontFamily family)

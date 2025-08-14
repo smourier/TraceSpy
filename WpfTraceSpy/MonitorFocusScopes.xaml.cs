@@ -54,7 +54,7 @@ namespace TraceSpy
             CheckKeyboardFocus();
         }
 
-        private void CheckKeyboardFocus() => _focusScopes.All(fs => { fs.IsKeyboardFocused = fs.FocusedElement == Keyboard.FocusedElement; return true; });
+        private void CheckKeyboardFocus() => _ = _focusScopes.All(fs => { fs.IsKeyboardFocused = fs.FocusedElement == Keyboard.FocusedElement; return true; });
 
         private static IEnumerable<DependencyObject> EnumerateVisualTree(DependencyObject obj)
         {

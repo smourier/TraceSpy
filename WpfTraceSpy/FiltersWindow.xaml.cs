@@ -38,7 +38,7 @@ namespace TraceSpy
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
-            if (!(LV.SelectedValue is Filter filter))
+            if (LV.SelectedValue is not Filter filter)
                 return;
 
             if (this.ShowConfirm("Are you sure you want to remove the '" + filter + "' Filter?") != MessageBoxResult.Yes)
@@ -76,8 +76,7 @@ namespace TraceSpy
                     OnPropertyChanged(nameof(ModifyEnabled));
                     OnPropertyChanged(nameof(RemoveEnabled));
                 };
-                Filters = new ObservableCollection<Filter>();
-                Filters.AddRange(App.Current.Settings.Filters);
+                Filters = [.. App.Current.Settings.Filters];
                 DisableAll = App.Current.Settings.DisableAllFilters;
             }
 

@@ -65,8 +65,7 @@ namespace TraceSpy
             public Context(FindWindow window)
             {
                 _window = window;
-                Searches = new ObservableCollection<string>();
-                Searches.AddRange(App.Current.Settings.Searches);
+                Searches = [.. App.Current.Settings.Searches];
                 _window.Searches.ItemsSource = Searches;
             }
 

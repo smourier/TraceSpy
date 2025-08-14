@@ -33,7 +33,7 @@ namespace TraceSpy
 
         private void LV_ColumnHeaderClick(object sender, RoutedEventArgs e) => _sortHandler.HandleClick(e.OriginalSource as GridViewColumnHeader, LV.ItemsSource);
 
-        private void ChooseEncoding(OdsEncoding encoding)
+        private static void ChooseEncoding(OdsEncoding encoding)
         {
             if (encoding == null)
                 return;
@@ -51,8 +51,7 @@ namespace TraceSpy
                 _window = window;
                 _window.LV.SelectionChanged += (sender, e) =>
                 {
-                    var select = _window.LV.SelectedItem as OdsEncoding;
-                    if (select != null)
+                    if (_window.LV.SelectedItem is OdsEncoding select)
                     {
                         _window.Title = "ODS Encoding - " + select.Encoding.DisplayName;
                     }
@@ -62,11 +61,12 @@ namespace TraceSpy
                     }
                 };
 
-                Encodings = new ObservableCollection<OdsEncoding>();
-
-                Encodings.AddRange(Encoding.GetEncodings()
-                    .OrderBy(e => e.DisplayName)
-                    .Select(e => new OdsEncoding { Encoding = e, IsSelected = e.CodePage == App.Current.Settings.OdsEncoding.CodePage }));
+                Encodings =
+                [
+                    .. Encoding.GetEncodings()
+                        .OrderBy(e => e.DisplayName)
+                        .Select(e => new OdsEncoding { Encoding = e, IsSelected = e.CodePage == App.Current.Settings.OdsEncoding.CodePage }),
+                ];
 
                 var selected = Encodings.FirstOrDefault(e => e.IsSelected);
                 if (selected != null)

@@ -42,11 +42,11 @@ namespace TraceSpy
 
                 if (App.Current.Settings.DontSplitText)
                 {
-                    Texts = new[] { _text };
+                    Texts = [_text];
                 }
                 else
                 {
-                    Texts = value != null ? _text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries) : null;
+                    Texts = value != null ? _text.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries) : null;
                 }
             }
         }
@@ -57,40 +57,17 @@ namespace TraceSpy
         {
             get
             {
-                string text;
                 const string decFormat = "0.00000000";
-                switch (App.Current.Settings.ShowTicksMode)
+                var text = App.Current.Settings.ShowTicksMode switch
                 {
-                    case ShowTicksMode.AsTime:
-                        text = new TimeSpan(Ticks).ToString();
-                        break;
-
-                    case ShowTicksMode.AsSeconds:
-                        text = (Ticks / (double)Stopwatch.Frequency).ToString() + " s";
-                        break;
-
-                    case ShowTicksMode.AsMilliseconds:
-                        text = (Ticks / (double)Stopwatch.Frequency / 1000).ToString() + " ms";
-                        break;
-
-                    case ShowTicksMode.AsDeltaTicks:
-                        text = (Ticks - PreviousTicks).ToString();
-                        break;
-
-                    case ShowTicksMode.AsDeltaSeconds:
-                        text = ((Ticks - PreviousTicks) / (double)Stopwatch.Frequency).ToString(decFormat) + " s";
-                        break;
-
-                    case ShowTicksMode.AsDeltaMilliseconds:
-                        text = ((1000 * (Ticks - PreviousTicks)) / (double)Stopwatch.Frequency).ToString(decFormat) + " ms";
-                        break;
-
-                    case ShowTicksMode.AsTicks:
-                    default:
-                        text = Ticks.ToString();
-                        break;
-
-                }
+                    ShowTicksMode.AsTime => new TimeSpan(Ticks).ToString(),
+                    ShowTicksMode.AsSeconds => (Ticks / (double)Stopwatch.Frequency).ToString() + " s",
+                    ShowTicksMode.AsMilliseconds => (Ticks / (double)Stopwatch.Frequency / 1000).ToString() + " ms",
+                    ShowTicksMode.AsDeltaTicks => (Ticks - PreviousTicks).ToString(),
+                    ShowTicksMode.AsDeltaSeconds => ((Ticks - PreviousTicks) / (double)Stopwatch.Frequency).ToString(decFormat) + " s",
+                    ShowTicksMode.AsDeltaMilliseconds => ((1000 * (Ticks - PreviousTicks)) / (double)Stopwatch.Frequency).ToString(decFormat) + " ms",
+                    _ => Ticks.ToString(),
+                };
                 return text;
             }
         }

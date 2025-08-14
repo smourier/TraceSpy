@@ -168,25 +168,19 @@ namespace TraceSpy
             switch (Type)
             {
                 case FilterType.Regex:
-                    switch (Column)
+                    return Column switch
                     {
-                        case FilterColumn.ProcessName:
-                            return Regex != null && processName != null && Regex.Match(processName).Success;
-
-                        default:
-                            return Regex != null && line != null && Regex.Match(line).Success;
-                    }
+                        FilterColumn.ProcessName => Regex != null && processName != null && Regex.Match(processName).Success,
+                        _ => Regex != null && line != null && Regex.Match(line).Success,
+                    };
 
                 default:
                     var sc = IgnoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
-                    switch (Column)
+                    return Column switch
                     {
-                        case FilterColumn.ProcessName:
-                            return Definition != null && processName != null && processName.IndexOf(Definition, sc) >= 0;
-
-                        default:
-                            return Definition != null && line != null && line.IndexOf(Definition, sc) >= 0;
-                    }
+                        FilterColumn.ProcessName => Definition != null && processName != null && processName.IndexOf(Definition, sc) >= 0,
+                        _ => Definition != null && line != null && line.IndexOf(Definition, sc) >= 0,
+                    };
             }
         }
 

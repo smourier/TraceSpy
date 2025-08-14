@@ -5,7 +5,7 @@ namespace TraceSpy
 {
     public class ConcurrentLinkedList<T>
     {
-        private readonly List<T> _list = new List<T>();
+        private readonly List<T> _list = [];
 
         private static object _syncObject;
         private static object SyncObject
@@ -34,7 +34,7 @@ namespace TraceSpy
             T[] array;
             lock (SyncObject)
             {
-                array = _list.ToArray();
+                array = [.. _list];
                 _list.Clear();
             }
             return array;

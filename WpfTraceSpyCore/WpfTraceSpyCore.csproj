@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net8.0-windows</TargetFramework>
+		<TargetFramework>net9.0-windows</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -73,7 +73,7 @@
 		<ApplicationDefinition Include="..\WpfTraceSpy\App.xaml" Link="App.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</ApplicationDefinition>
-		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.8" />
 		<Page Include="..\WpfTraceSpy\ColorizersWindow.xaml" Link="ColorizersWindow.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</Page>

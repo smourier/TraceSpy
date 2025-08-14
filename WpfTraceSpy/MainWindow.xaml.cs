@@ -30,10 +30,10 @@ namespace TraceSpy
         private readonly MemoryMappedFile _buffer;
         private readonly MemoryMappedViewStream _bufferStream;
         private readonly Thread _outputDebugStringThread;
-        private readonly ObservableCollection<TraceEvent> _dataSource = new ObservableCollection<TraceEvent>();
+        private readonly ObservableCollection<TraceEvent> _dataSource = [];
         private readonly MainWindowState _state;
         private readonly ConcurrentDictionary<int, string> _processes = new ConcurrentDictionary<int, string>();
-        private readonly Dictionary<Guid, EventRealtimeListener> _etwListeners = new Dictionary<Guid, EventRealtimeListener>();
+        private readonly Dictionary<Guid, EventRealtimeListener> _etwListeners = [];
         private readonly ConcurrentLinkedList<TraceEvent> _events = new ConcurrentLinkedList<TraceEvent>();
         private bool _stopOutputDebugStringTraces;
         private FindWindow _findWindow;
@@ -142,7 +142,7 @@ namespace TraceSpy
 #endif
         }
 
-        protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e)
+        protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
             MainMenu.RaiseMenuItemClickOnKeyGesture(e);
@@ -405,9 +405,17 @@ namespace TraceSpy
                 if (result) // we don't care about other return values
                 {
                     _bufferStream.Position = 0;
+#if NET
+                    _bufferStream.ReadExactly(pidBytes);
+#else
                     _bufferStream.Read(pidBytes, 0, pidBytes.Length);
+#endif
                     var pid = BitConverter.ToInt32(pidBytes, 0);
+#if NET
+                    _bufferStream.ReadExactly(strBytes);
+#else
                     _bufferStream.Read(strBytes, 0, strBytes.Length);
+#endif
                     var text = GetNullTerminatedString(strBytes);
                     if (_state.RemoveEmptyLines && string.IsNullOrWhiteSpace(text))
                         continue;
@@ -503,10 +511,7 @@ namespace TraceSpy
                 {
                 }
 
-                if (name == null)
-                {
-                    name = id.ToString();
-                }
+                name ??= id.ToString();
                 _processes[id] = name;
             }
 
@@ -659,7 +664,7 @@ namespace TraceSpy
             if (string.IsNullOrWhiteSpace(search))
                 return;
 
-            var focused = FocusManager.GetFocusedElement(_findWindow) is System.Windows.Controls.TextBox;
+            var focused = FocusManager.GetFocusedElement(_findWindow) is TextBox;
 
             var start = Math.Max(0, LV.SelectedIndex);
             var sc = _findWindow.CaseMatch ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
@@ -672,7 +677,7 @@ namespace TraceSpy
                 if (evt.Text.IndexOf(search, sc) >= 0)
                 {
                     LV.SelectedItem = evt;
-                    ((System.Windows.Controls.ListViewItem)LV.ItemContainerGenerator.ContainerFromItem(evt))?.Focus();
+                    ((ListViewItem)LV.ItemContainerGenerator.ContainerFromItem(evt))?.Focus();
                     LV.ScrollIntoView(evt);
                     if (focused)
                     {

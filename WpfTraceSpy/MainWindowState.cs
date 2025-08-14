@@ -97,17 +97,12 @@ namespace TraceSpy
         {
             get
             {
-                switch (OdsStarted)
+                return OdsStarted switch
                 {
-                    case true:
-                        return "Stop ODS Traces";
-
-                    case false:
-                        return "Start ODS Traces";
-
-                    default:
-                        return "ODS Unavailable";
-                }
+                    true => "Stop ODS Traces",
+                    false => "Start ODS Traces",
+                    _ => "ODS Unavailable",
+                };
             }
         }
 

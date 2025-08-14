@@ -38,7 +38,7 @@ namespace TraceSpy
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
-            if (!(LV.SelectedValue is EtwProvider provider))
+            if (LV.SelectedValue is not EtwProvider provider)
                 return;
 
             if (this.ShowConfirm("Are you sure you want to remove the '" + provider + "' ETW provider?") != MessageBoxResult.Yes)
@@ -77,8 +77,7 @@ namespace TraceSpy
                     OnPropertyChanged(nameof(RemoveEnabled));
                 };
 
-                Providers = new ObservableCollection<EtwProvider>();
-                Providers.AddRange(App.Current.Settings.EtwProviders);
+                Providers = [.. App.Current.Settings.EtwProviders];
             }
 
             public ObservableCollection<EtwProvider> Providers { get; }

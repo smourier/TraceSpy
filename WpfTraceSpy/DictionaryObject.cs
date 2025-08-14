@@ -134,16 +134,9 @@ namespace TraceSpy
             return value1.Equals(value2);
         }
 
-        private class ObjectComparer : IEqualityComparer<object>
+        private class ObjectComparer(DictionaryObject dob) : IEqualityComparer<object>
         {
-            private readonly DictionaryObject _dob;
-
-            public ObjectComparer(DictionaryObject dob)
-            {
-                _dob = dob;
-            }
-
-            public new bool Equals(object x, object y) => _dob.DictionaryObjectAreValuesEqual(x, y);
+            public new bool Equals(object x, object y) => dob.DictionaryObjectAreValuesEqual(x, y);
             public int GetHashCode(object obj) => (obj?.GetHashCode()).GetValueOrDefault();
         }
 
@@ -153,12 +146,12 @@ namespace TraceSpy
                 return true;
 
             var dic = new Dictionary<object, int>(new ObjectComparer(this));
-            IEnumerable<object> left = errors1 != null ? errors1.Cast<object>() : Enumerable.Empty<object>();
+            IEnumerable<object> left = errors1 != null ? errors1.Cast<object>() : [];
             foreach (var obj in left)
             {
-                if (dic.ContainsKey(obj))
+                if (dic.TryGetValue(obj, out var value))
                 {
-                    dic[obj]++;
+                    dic[obj] = ++value;
                 }
                 else
                 {
@@ -171,9 +164,9 @@ namespace TraceSpy
 
             foreach (var obj in errors2)
             {
-                if (dic.ContainsKey(obj))
+                if (dic.TryGetValue(obj, out var value))
                 {
-                    dic[obj]--;
+                    dic[obj] = --value;
                 }
                 else
                     return false;
@@ -256,10 +249,7 @@ namespace TraceSpy
                     if ((DictionaryObjectGetErrors(name)?.Cast<object>().Any()).GetValueOrDefault())
                     {
                         var rolled = DictionaryObjectRollbackProperty(options, name, oldProp, newProp);
-                        if (rolled == null)
-                        {
-                            rolled = oldProp;
-                        }
+                        rolled ??= oldProp;
 
                         if (rolled == null)
                         {

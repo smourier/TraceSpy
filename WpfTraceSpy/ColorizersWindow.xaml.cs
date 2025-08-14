@@ -41,7 +41,7 @@ namespace TraceSpy
 
         private void RemoveColorizer_Click(object sender, RoutedEventArgs e)
         {
-            if (!(LVColorizers.SelectedValue is Colorizer colorizer))
+            if (LVColorizers.SelectedValue is not Colorizer colorizer)
                 return;
 
             if (this.ShowConfirm("Are you sure you want to remove the '" + colorizer + "' colorizer?") != MessageBoxResult.Yes)
@@ -88,7 +88,7 @@ namespace TraceSpy
 
         private void RemoveColorSet_Click(object sender, RoutedEventArgs e)
         {
-            if (!(LVColorSets.SelectedValue is ColorSet colorSet))
+            if (LVColorSets.SelectedValue is not ColorSet colorSet)
                 return;
 
             if (this.ShowConfirm("Are you sure you want to remove the '" + colorSet + "' color set?") != MessageBoxResult.Yes)
@@ -134,11 +134,9 @@ namespace TraceSpy
                     OnPropertyChanged(nameof(RemoveColorSetEnabled));
                 };
 
-                Colorizers = new ObservableCollection<Colorizer>();
-                Colorizers.AddRange(App.Current.Settings.Colorizers);
+                Colorizers = [.. App.Current.Settings.Colorizers];
 
-                ColorSets = new ObservableCollection<ColorSet>();
-                ColorSets.AddRange(App.Current.Settings.ColorSets);
+                ColorSets = [.. App.Current.Settings.ColorSets];
             }
 
             public ObservableCollection<Colorizer> Colorizers { get; }

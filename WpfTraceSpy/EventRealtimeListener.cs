@@ -140,7 +140,7 @@ namespace TraceSpy
             }
             finally
             {
-                CloseTrace(oh);
+                _ = CloseTrace(oh);
             }
         }
 
@@ -150,24 +150,32 @@ namespace TraceSpy
             var prop = new EVENT_TRACE_PROPERTIES();
             if (stopping)
             {
-                size = Marshal.SizeOf(typeof(EVENT_TRACE_PROPERTIES)) + (1024 + 1) * 2;
+                size = Marshal.SizeOf<EVENT_TRACE_PROPERTIES>() + (1024 + 1) * 2;
                 properties = Marshal.AllocCoTaskMem(size);
+#if NET
+                RtlZeroMemory(properties, size);
+#else
                 RtlZeroMemory(properties, (IntPtr)size);
+#endif
                 prop.Wnode.Guid = ProviderGuid;
                 prop.Wnode.BufferSize = size;
             }
             else
             {
-                size = Marshal.SizeOf(typeof(EVENT_TRACE_PROPERTIES)) + (SessionName.Length + 1) * 2;
+                size = Marshal.SizeOf<EVENT_TRACE_PROPERTIES>() + (SessionName.Length + 1) * 2;
                 properties = Marshal.AllocCoTaskMem(size);
+#if NET
+                RtlZeroMemory(properties, size);
+#else
                 RtlZeroMemory(properties, (IntPtr)size);
+#endif
                 prop.Wnode.Guid = ProviderGuid;
                 prop.Wnode.Flags = WNODE_FLAG_TRACED_GUID;
                 prop.Wnode.BufferSize = size;
                 prop.LogFileMode = EVENT_TRACE_REAL_TIME_MODE;
             }
 
-            prop.LoggerNameOffset = Marshal.SizeOf(typeof(EVENT_TRACE_PROPERTIES));
+            prop.LoggerNameOffset = Marshal.SizeOf<EVENT_TRACE_PROPERTIES>();
             Marshal.StructureToPtr(prop, properties, false);
             return properties;
         }
@@ -228,10 +236,10 @@ namespace TraceSpy
             {
                 for (var i = 0; i < count; i++)
                 {
-                    var propi = (EVENT_TRACE_PROPERTIES)Marshal.PtrToStructure(a[i], typeof(EVENT_TRACE_PROPERTIES));
+                    var propi = Marshal.PtrToStructure<EVENT_TRACE_PROPERTIES>(a[i]);
                     if (propi.Wnode.Guid == ProviderGuid)
                     {
-                        StopTrace(propi.Wnode.HistoricalContext, null, a[i]);
+                        _ = StopTrace(propi.Wnode.HistoricalContext, null, a[i]);
                     }
                 }
             }
@@ -263,7 +271,7 @@ namespace TraceSpy
         {
             if (_traceOn)
             {
-                EnableTraceEx(ProviderGuid, IntPtr.Zero, _handle, 0, (byte)EtwTraceLevel.Verbose, 0, 0, 0, IntPtr.Zero);
+                _ = EnableTraceEx(ProviderGuid, IntPtr.Zero, _handle, 0, (byte)EtwTraceLevel.Verbose, 0, 0, 0, IntPtr.Zero);
                 _traceOn = false;
             }
 
@@ -472,12 +480,14 @@ namespace TraceSpy
             public IntPtr Context;
         }
 
+#pragma warning disable IDE1006 // Naming Styles
         private const long INVALID_PROCESSTRACE_HANDLE = -1;
         private const uint PROCESS_TRACE_MODE_REAL_TIME = 0x00000100;
         private const uint PROCESS_TRACE_MODE_EVENT_RECORD = 0x10000000;
         private const uint WNODE_FLAG_TRACED_GUID = 0x00020000;
         private const uint EVENT_TRACE_REAL_TIME_MODE = 0x00000100;
         private const int ERROR_ALREADY_EXISTS = 183;
+#pragma warning restore IDE1006 // Naming Styles
 
         private delegate uint BufferCallback(ref EVENT_TRACE_LOGFILE buffer);
         private delegate void EventCallback(ref EVENT_TRACE eventRecord);

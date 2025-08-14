@@ -67,7 +67,7 @@ namespace TraceSpy
             if (evt == null)
                 return;
 
-            if (!(Current?.MainWindow is MainWindow window))
+            if (Current?.MainWindow is not MainWindow window)
                 return;
 
             window.AddTrace(evt);

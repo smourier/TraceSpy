@@ -58,43 +58,43 @@ namespace TraceSpy
         public Brush ErrorBackColorBrush { get; private set; }
 
         public const string DefaultWarningBackColor = "Yellow";
-        private string _WarningBackColor;
-        public string WarningBackColor { get => _WarningBackColor; set { _WarningBackColor = value; WarningBackColorBrush = GetBrush(value, DefaultWarningBackColor); } }
+        private string _warningBackColor;
+        public string WarningBackColor { get => _warningBackColor; set { _warningBackColor = value; WarningBackColorBrush = GetBrush(value, DefaultWarningBackColor); } }
 
         [XmlIgnore]
         public Brush WarningBackColorBrush { get; private set; }
 
         public const string DefaultListViewBackColor = "White";
-        private string _ListViewBackColor;
-        public string ListViewBackColor { get => _ListViewBackColor; set { _ListViewBackColor = value; ListViewBackColorBrush = GetBrush(value, DefaultListViewBackColor); } }
+        private string _listViewBackColor;
+        public string ListViewBackColor { get => _listViewBackColor; set { _listViewBackColor = value; ListViewBackColorBrush = GetBrush(value, DefaultListViewBackColor); } }
 
         [XmlIgnore]
         public Brush ListViewBackColorBrush { get; private set; }
 
         public const string DefaultListViewTextColor = "Black";
-        private string _ListViewTextColor;
-        public string ListViewTextColor { get => _ListViewTextColor; set { _ListViewTextColor = value; ListViewTextColorBrush = GetBrush(value, DefaultListViewTextColor); } }
+        private string _listViewTextColor;
+        public string ListViewTextColor { get => _listViewTextColor; set { _listViewTextColor = value; ListViewTextColorBrush = GetBrush(value, DefaultListViewTextColor); } }
 
         [XmlIgnore]
         public Brush ListViewTextColorBrush { get; private set; }
 
         public const string DefaultMenuTextColor = "Black";
-        private string _MenuTextColor;
-        public string MenuTextColor { get => _MenuTextColor; set { _MenuTextColor = value; MenuTextColorBrush = GetBrush(value, DefaultMenuTextColor); } }
+        private string _menuTextColor;
+        public string MenuTextColor { get => _menuTextColor; set { _menuTextColor = value; MenuTextColorBrush = GetBrush(value, DefaultMenuTextColor); } }
 
         [XmlIgnore]
         public Brush MenuTextColorBrush { get; private set; }
 
         public const string DefaultMenuBackColor = "#F0F0F0";
-        private string _MenuBackColor;
-        public string MenuBackColor { get => _MenuBackColor; set { _MenuBackColor = value; MenuBackColorBrush = GetBrush(value, DefaultMenuBackColor); } }
+        private string _menuBackColor;
+        public string MenuBackColor { get => _menuBackColor; set { _menuBackColor = value; MenuBackColorBrush = GetBrush(value, DefaultMenuBackColor); } }
 
         [XmlIgnore]
         public Brush MenuBackColorBrush { get; private set; }
 
         public const string DefaultSelectedTextColor = "Black";
-        private string _SelectedTextColor;
-        public string SelectedTextColor { get => _SelectedTextColor; set { _SelectedTextColor = value; SelectedTextColorBrush = GetBrush(value, DefaultSelectedTextColor); } }
+        private string _selectedTextColor;
+        public string SelectedTextColor { get => _selectedTextColor; set { _selectedTextColor = value; SelectedTextColorBrush = GetBrush(value, DefaultSelectedTextColor); } }
 
         [XmlIgnore]
         public Brush SelectedTextColorBrush { get; private set; }
