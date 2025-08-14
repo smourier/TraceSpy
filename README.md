@@ -3,6 +3,8 @@ TraceSpy is a pure .NET, 100% free and open source, alternative to the very popu
 
 Note TraceSpy will *not* evolve, instead, use **WpfTraceSpy** (see below).
 
+**Update 2025/08/14** : Added easy support for ETW logging and TraceSpy for Microsoft Logging Abstractions (ASP.NET Core, etc.)
+
 **Update 2020/12/28** : WPFTraceSpy now has Regex colorizers.
 
 **Update 2019/08/16** : WPFTraceSpy now can log UWP (Universal Windows Application) *LoggingChannel* messages.
