@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using EventProviderLogging;
@@ -13,7 +12,6 @@ public class Program
 {
     private static readonly Random _rnd = new Random(Environment.TickCount);
 
-    [RequiresUnreferencedCode("")]
     static async Task Main(string[] args)
     {
         using var host = Host.CreateDefaultBuilder(args)
@@ -24,7 +22,9 @@ public class Program
                     .AddLogging(loggingBuilder =>
                     {
                         // for ETW events, we must add the EventProvider like this:
+#pragma warning disable IL2026 // Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code
                         loggingBuilder.AddEventProvider();
+#pragma warning restore IL2026 // Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code
 
                         // MaxQueueLength = 1 otherwise we loose messages
                         loggingBuilder.AddConsole(config => config.MaxQueueLength = 1).AddSimpleConsole(config => config.SingleLine = true);
