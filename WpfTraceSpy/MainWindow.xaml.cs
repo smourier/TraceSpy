@@ -222,10 +222,31 @@ namespace TraceSpy
 
         private void LoadSettings()
         {
-            Left = App.Current.Settings.Left;
-            Top = App.Current.Settings.Top;
-            Width = App.Current.Settings.Width;
-            Height = App.Current.Settings.Height;
+            var left = App.Current.Settings.Left;
+            var top = App.Current.Settings.Top;
+            var width = App.Current.Settings.Width;
+            var height = App.Current.Settings.Height;
+
+            // check pos is within any monitor
+            var isVisible = false;
+            foreach (var screen in System.Windows.Forms.Screen.AllScreens)
+            {
+                var bounds = screen.WorkingArea;
+                if (left + width >= bounds.Left && left <= bounds.Right &&
+                    top + height >= bounds.Top && top <= bounds.Bottom)
+                {
+                    isVisible = true;
+                    break;
+                }
+            }
+
+            if (isVisible)
+            {
+                Left = left;
+                Top = top;
+                Width = width;
+                Height = height;
+            }
 
             App.Current.ColumnLayout.IndexColumnWidth = App.Current.Settings.IndexColumnWidth;
             IndexColumn.Width = App.Current.Settings.IndexColumnWidth;

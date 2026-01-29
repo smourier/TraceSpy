@@ -49,8 +49,12 @@ namespace TraceSpy
             }
         }
 
+        // can't mark as static we use these as binding properties
+#pragma warning disable CA1822 // Mark members as static
         public string ListViewHeaderBackground => App.CurrentTheme.ListViewBackColor;
         public string ListViewHeaderForeground => App.CurrentTheme.ListViewTextColor;
+#pragma warning restore CA1822 // Mark members as static
+
         public bool ThemeLight { get => string.IsNullOrEmpty(ThemeName) || ThemeName == LightTheme.ThemeName; set { ThemeName = null; } }
         public bool ThemeDark { get => ThemeName == DarkTheme.ThemeName; set { ThemeName = DarkTheme.ThemeName; } }
         public string ThemeName
