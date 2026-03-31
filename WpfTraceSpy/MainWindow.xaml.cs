@@ -620,11 +620,11 @@ namespace TraceSpy
 
             try
             {
-                System.Windows.Clipboard.SetText(sb.ToString());
+                Clipboard.SetText(sb.ToString());
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -638,11 +638,11 @@ namespace TraceSpy
 
             try
             {
-                System.Windows.Clipboard.SetText(sb.ToString());
+                Clipboard.SetText(sb.ToString());
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -900,7 +900,7 @@ namespace TraceSpy
                     return;
 
                 System.Windows.Forms.Application.Restart();
-                System.Windows.Application.Current.Shutdown();
+                Application.Current.Shutdown();
             }
         }
 

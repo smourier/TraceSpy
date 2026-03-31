@@ -166,10 +166,6 @@
                         IsCheckable="True"
                         IsChecked="{Binding ShowTicksAsTicks, Mode=TwoWay}" />
                     <MenuItem
-                        Header="As T_ime"
-                        IsCheckable="True"
-                        IsChecked="{Binding ShowTicksAsTime, Mode=TwoWay}" />
-                    <MenuItem
                         Header="As _Seconds"
                         IsCheckable="True"
                         IsChecked="{Binding ShowTicksAsSeconds, Mode=TwoWay}" />
@@ -177,6 +173,24 @@
                         Header="As _Milliseconds"
                         IsCheckable="True"
                         IsChecked="{Binding ShowTicksAsMilliseconds, Mode=TwoWay}" />
+                    <Separator />
+                    <MenuItem
+                        Header="As T_ime"
+                        IsCheckable="True"
+                        IsChecked="{Binding ShowTicksAsTime, Mode=TwoWay}" />
+                    <MenuItem
+                        Header="As _Full Time"
+                        IsCheckable="True"
+                        IsChecked="{Binding ShowTicksAsFullTime, Mode=TwoWay}" />
+                    <MenuItem
+                        Header="As Date Time"
+                        IsCheckable="True"
+                        IsChecked="{Binding ShowTicksAsDateTime, Mode=TwoWay}" />
+                    <MenuItem
+                        Header="As F_ull Date Time"
+                        IsCheckable="True"
+                        IsChecked="{Binding ShowTicksAsFullDateTime, Mode=TwoWay}" />
+                    <Separator />
                     <MenuItem
                         Header="As _Delta Ticks"
                         IsCheckable="True"
@@ -355,8 +369,8 @@
             HorizontalContentAlignment="Stretch"
             FocusManager.IsFocusScope="True"
             MouseDoubleClick="LV_MouseDoubleClick"
-            SelectionChanged="LV_SelectionChanged"
-            ScrollViewer.ScrollChanged="LV_ScrollChanged">
+            ScrollViewer.ScrollChanged="LV_ScrollChanged"
+            SelectionChanged="LV_SelectionChanged">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Template">

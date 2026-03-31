@@ -12,7 +12,7 @@ namespace TraceSpy
             ShowEtwDescription = true;
             AutoScroll = true;
             OdsStarted = false;
-            ShowTicksMode = ShowTicksMode.AsTicks;
+            ShowTicksMode = ShowTicksMode.AsFullTime;
         }
 
         public bool ResolveProcessName { get => DictionaryObjectGetPropertyValue<bool>(); set => DictionaryObjectSetPropertyValue(value); }
@@ -26,6 +26,9 @@ namespace TraceSpy
 
         public bool ShowTicksAsTicks { get => ShowTicksMode == ShowTicksMode.AsTicks; set { if (value) { ShowTicksMode = ShowTicksMode.AsTicks; } } }
         public bool ShowTicksAsTime { get => ShowTicksMode == ShowTicksMode.AsTime; set { if (value) { ShowTicksMode = ShowTicksMode.AsTime; } } }
+        public bool ShowTicksAsFullTime { get => ShowTicksMode == ShowTicksMode.AsFullTime; set { if (value) { ShowTicksMode = ShowTicksMode.AsFullTime; } } }
+        public bool ShowTicksAsDateTime { get => ShowTicksMode == ShowTicksMode.AsDateTime; set { if (value) { ShowTicksMode = ShowTicksMode.AsDateTime; } } }
+        public bool ShowTicksAsFullDateTime { get => ShowTicksMode == ShowTicksMode.AsFullDateTime; set { if (value) { ShowTicksMode = ShowTicksMode.AsFullDateTime; } } }
         public bool ShowTicksAsSeconds { get => ShowTicksMode == ShowTicksMode.AsSeconds; set { if (value) { ShowTicksMode = ShowTicksMode.AsSeconds; } } }
         public bool ShowTicksAsMilliseconds { get => ShowTicksMode == ShowTicksMode.AsMilliseconds; set { if (value) { ShowTicksMode = ShowTicksMode.AsMilliseconds; } } }
         public bool ShowTicksAsDeltaTicks { get => ShowTicksMode == ShowTicksMode.AsDeltaTicks; set { if (value) { ShowTicksMode = ShowTicksMode.AsDeltaTicks; } } }
@@ -40,6 +43,9 @@ namespace TraceSpy
                 {
                     OnPropertyChanged(nameof(ShowTicksAsTicks));
                     OnPropertyChanged(nameof(ShowTicksAsTime));
+                    OnPropertyChanged(nameof(ShowTicksAsFullTime));
+                    OnPropertyChanged(nameof(ShowTicksAsDateTime));
+                    OnPropertyChanged(nameof(ShowTicksAsFullDateTime));
                     OnPropertyChanged(nameof(ShowTicksAsSeconds));
                     OnPropertyChanged(nameof(ShowTicksAsMilliseconds));
                     OnPropertyChanged(nameof(ShowTicksAsDeltaTicks));

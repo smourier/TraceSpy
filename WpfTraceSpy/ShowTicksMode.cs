@@ -8,6 +8,9 @@
         AsMilliseconds,
         AsDeltaTicks,
         AsDeltaSeconds,
-        AsDeltaMilliseconds
+        AsDeltaMilliseconds,
+        AsDateTime,
+        AsFullDateTime,
+        AsFullTime,
     }
 }

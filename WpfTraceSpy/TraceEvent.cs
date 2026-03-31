@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Windows.Media;
 
@@ -15,7 +14,7 @@ namespace TraceSpy
         public TraceEvent()
         {
             Index = Interlocked.Increment(ref _index);
-            Ticks = Stopwatch.GetTimestamp();
+            Ticks = DateTime.Now.Ticks;
             _ranges = new Lazy<IReadOnlyList<ColorRange>>(GetRanges, true);
         }
 
@@ -26,7 +25,7 @@ namespace TraceSpy
         public bool IsSelected { get; set; }
         public Brush BackgroundBrush { get; set; }
         public bool DontColorize { get; set; }
-        public string FullText => Index + "\t" + Ticks + "\t" + ProcessName + "\t" + Text;
+        public string FullText => Index + "\t" + TicksText + "\t" + ProcessName + "\t" + Text;
         public IReadOnlyList<ColorRange> Ranges => _ranges.Value;
 
         public string Text
@@ -57,15 +56,17 @@ namespace TraceSpy
         {
             get
             {
-                const string decFormat = "0.00000000";
                 var text = App.Current.Settings.ShowTicksMode switch
                 {
-                    ShowTicksMode.AsTime => new TimeSpan(Ticks).ToString(),
-                    ShowTicksMode.AsSeconds => (Ticks / (double)Stopwatch.Frequency).ToString() + " s",
-                    ShowTicksMode.AsMilliseconds => (Ticks / (double)Stopwatch.Frequency / 1000).ToString() + " ms",
+                    ShowTicksMode.AsTime => new TimeSpan(Ticks).ToString(@"hh\:mm\:ss"),
+                    ShowTicksMode.AsFullTime => new TimeSpan(Ticks).ToString(@"hh\:mm\:ss\.fff"),
+                    ShowTicksMode.AsDateTime => new DateTime(Ticks).ToString(@"yyyy-mm-dd hh\:mm\:ss"),
+                    ShowTicksMode.AsFullDateTime => new DateTime(Ticks).ToString(@"yyyy-mm-dd hh\:mm\:ss\.fff"),
+                    ShowTicksMode.AsSeconds => (Ticks / (double)TimeSpan.TicksPerSecond).ToString() + " s",
+                    ShowTicksMode.AsMilliseconds => (Ticks / (double)TimeSpan.TicksPerMillisecond).ToString() + " ms",
                     ShowTicksMode.AsDeltaTicks => (Ticks - PreviousTicks).ToString(),
-                    ShowTicksMode.AsDeltaSeconds => ((Ticks - PreviousTicks) / (double)Stopwatch.Frequency).ToString(decFormat) + " s",
-                    ShowTicksMode.AsDeltaMilliseconds => ((1000 * (Ticks - PreviousTicks)) / (double)Stopwatch.Frequency).ToString(decFormat) + " ms",
+                    ShowTicksMode.AsDeltaSeconds => ((Ticks - PreviousTicks) / (double)TimeSpan.TicksPerSecond).ToString() + " s",
+                    ShowTicksMode.AsDeltaMilliseconds => ((Ticks - PreviousTicks) / (double)TimeSpan.TicksPerMillisecond).ToString() + " ms",
                     _ => Ticks.ToString(),
                 };
                 return text;

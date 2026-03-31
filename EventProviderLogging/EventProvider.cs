@@ -8,6 +8,7 @@ namespace EventProviderLogging;
 // this class provides simple ETW event logging capabilities directly (without using ILogger and Microsoft Logging Abstractions)
 public sealed partial class EventProvider : IDisposable
 {
+    // TODO: you should change this GUID to something unique for your application, you can generate a new one using "uuidgen" tool or online GUID generators
     public static Guid DefaultProviderId { get; set; } = new Guid("964d4572-adb9-4f3a-8170-fcbecec27467");
 
     public static EventProvider Current => _current.Value;
