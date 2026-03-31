@@ -415,7 +415,7 @@ namespace TraceSpy
                 return true;
 
             if (App.Current.Settings.DisableAllFilters)
-                return true;
+                return false;
 
             foreach (var filter in _filters.Where(f => f.IsActive))
             {

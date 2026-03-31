@@ -86,7 +86,7 @@
             Margin="268,0,0,13"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
-            Content="Disable _All"
+            Content="Disable _All (for this session)"
             IsChecked="{Binding DisableAll, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
         <Button
             Name="CloseButton"
