@@ -615,7 +615,7 @@ namespace TraceSpy
             var sb = new StringBuilder();
             foreach (var evt in LV.SelectedItems.OfType<TraceEvent>().OrderBy(evt => evt.Index))
             {
-                sb.AppendLine(evt.Text);
+                sb.AppendLine(evt.Text?.TrimEnd());
             }
 
             try
@@ -633,7 +633,7 @@ namespace TraceSpy
             var sb = new StringBuilder();
             foreach (var evt in LV.SelectedItems.OfType<TraceEvent>().OrderBy(evt => evt.Index))
             {
-                sb.AppendLine(evt.FullText);
+                sb.AppendLine(evt.FullText?.TrimEnd());
             }
 
             try
