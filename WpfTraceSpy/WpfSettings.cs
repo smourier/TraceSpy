@@ -72,6 +72,9 @@ namespace TraceSpy
         public double TextColumnWidth { get; set; }
         public bool DontAnimateCaptureMenuItem { get; set; }
         public bool DontSplitText { get; set; }
+        public bool TrimLinesEnd { get; set; }
+        public bool DontCopyEmptyLines { get; set; }
+        public bool CopyTrimmedLines { get; set; }
         public bool IsTopmost { get; set; }
         public bool EnableTransparency { get; set; }
         public double Opacity { get; set; }

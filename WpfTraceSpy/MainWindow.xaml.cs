@@ -53,6 +53,9 @@ namespace TraceSpy
             _state.ShowProcessId = App.Current.Settings.ShowProcessId;
             _state.WrapText = App.Current.Settings.WrapText;
             _state.DontSplitText = App.Current.Settings.DontSplitText;
+            _state.TrimLinesEnd = App.Current.Settings.TrimLinesEnd;
+            _state.DontCopyEmptyLines = App.Current.Settings.DontCopyEmptyLines;
+            _state.CopyTrimmedLines = App.Current.Settings.CopyTrimmedLines;
             _state.IsTopmost = App.Current.Settings.IsTopmost;
             _state.ShowTicksMode = App.Current.Settings.ShowTicksMode;
             _state.ThemeName = App.Current.Settings.ThemeName.Nullify();
@@ -170,7 +173,10 @@ namespace TraceSpy
             App.Current.Settings.ShowEtwDescription = _state.ShowEtwDescription;
             App.Current.Settings.ShowProcessId = _state.ShowProcessId;
             App.Current.Settings.WrapText = _state.WrapText;
+            App.Current.Settings.TrimLinesEnd = _state.TrimLinesEnd;
             App.Current.Settings.DontSplitText = _state.DontSplitText;
+            App.Current.Settings.DontCopyEmptyLines = _state.DontCopyEmptyLines;
+            App.Current.Settings.CopyTrimmedLines = _state.CopyTrimmedLines;
             App.Current.Settings.IsTopmost = _state.IsTopmost;
             App.Current.Settings.ShowTicksMode = _state.ShowTicksMode;
             App.Current.Settings.ThemeName = _state.ThemeName.Nullify();
@@ -443,6 +449,12 @@ namespace TraceSpy
 
                     var evt = new TraceEvent();
                     evt.ProcessName = GetProcessName(pid);
+
+                    if (_state.TrimLinesEnd)
+                    {
+                        text = text.TrimEnd();
+                    }
+
                     evt.Text = text;
                     _events.Add(evt);
                     Dispatcher.BeginInvoke(() =>
@@ -615,12 +627,29 @@ namespace TraceSpy
             var sb = new StringBuilder();
             foreach (var evt in LV.SelectedItems.OfType<TraceEvent>().OrderBy(evt => evt.Index))
             {
-                sb.AppendLine(evt.Text);
+                string text;
+                if (_state.CopyTrimmedLines)
+                {
+                    text = evt.Text?.TrimEnd();
+                }
+                else
+                {
+                    text = evt.Text;
+                }
+
+                if (_state.DontCopyEmptyLines && string.IsNullOrWhiteSpace(text))
+                    continue;
+
+                sb.AppendLine(text);
             }
+
+            var str = sb.ToString();
+            if (string.IsNullOrWhiteSpace(str))
+                return;
 
             try
             {
-                Clipboard.SetText(sb.ToString());
+                Clipboard.SetText(str);
             }
             catch (Exception ex)
             {
@@ -633,12 +662,29 @@ namespace TraceSpy
             var sb = new StringBuilder();
             foreach (var evt in LV.SelectedItems.OfType<TraceEvent>().OrderBy(evt => evt.Index))
             {
-                sb.AppendLine(evt.FullText);
+                string text;
+                if (_state.CopyTrimmedLines)
+                {
+                    text = evt.FullText?.TrimEnd();
+                }
+                else
+                {
+                    text = evt.FullText;
+                }
+
+                if (_state.DontCopyEmptyLines && string.IsNullOrWhiteSpace(text))
+                    continue;
+
+                sb.AppendLine(text);
             }
+
+            var str = sb.ToString();
+            if (string.IsNullOrWhiteSpace(str))
+                return;
 
             try
             {
-                Clipboard.SetText(sb.ToString());
+                Clipboard.SetText(str);
             }
             catch (Exception ex)
             {

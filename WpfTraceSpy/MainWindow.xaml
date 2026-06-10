@@ -133,6 +133,19 @@
                     IsCheckable="True"
                     IsChecked="{Binding RemoveEmptyLines, Mode=TwoWay}" />
                 <MenuItem
+                    Header="_Trim Lines End"
+                    IsCheckable="True"
+                    IsChecked="{Binding TrimLinesEnd, Mode=TwoWay}" />
+                <MenuItem
+                    Header="_Wrap Text"
+                    IsCheckable="True"
+                    IsChecked="{Binding WrapText, Mode=TwoWay}" />
+                <MenuItem
+                    Header="_Don't Split Text"
+                    IsCheckable="True"
+                    IsChecked="{Binding DontSplitText, Mode=TwoWay}" />
+                <Separator />
+                <MenuItem
                     Header="_Auto Scroll"
                     IsCheckable="True"
                     IsChecked="{Binding AutoScroll, Mode=TwoWay}" />
@@ -148,18 +161,21 @@
                     Header="Show ETW _Description"
                     IsCheckable="True"
                     IsChecked="{Binding ShowEtwDescription, Mode=TwoWay}" />
+                <Separator />
                 <MenuItem
-                    Header="_Wrap Text"
+                    Header="_Don't Copy Empty Lines"
                     IsCheckable="True"
-                    IsChecked="{Binding WrapText, Mode=TwoWay}" />
+                    IsChecked="{Binding DontCopyEmptyLines, Mode=TwoWay}" />
                 <MenuItem
-                    Header="_Don't Split Text"
+                    Header="_Copy Trimmed Lines"
                     IsCheckable="True"
-                    IsChecked="{Binding DontSplitText, Mode=TwoWay}" />
+                    IsChecked="{Binding CopyTrimmedLines, Mode=TwoWay}" />
+                <Separator />
                 <MenuItem
                     Header="_TopMost Window"
                     IsCheckable="True"
                     IsChecked="{Binding IsTopmost, Mode=TwoWay}" />
+                <Separator />
                 <MenuItem Header="_Ticks" SubmenuOpened="ThemeSubmenu">
                     <MenuItem
                         Header="As _Ticks"
