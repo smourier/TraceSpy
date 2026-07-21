@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Windows;
 
@@ -15,7 +16,25 @@ namespace TraceSpy
         public App()
         {
             ColumnLayout = new TraceEventColumnLayout();
-            Settings = WpfSettings.DeserializeFromConfiguration();
+
+            var configFilePath = Path.ChangeExtension(Process.GetCurrentProcess().MainModule.FileName, ".config");
+            if (!string.IsNullOrWhiteSpace(configFilePath) && File.Exists(configFilePath))
+            {
+                Settings = WpfSettings.Deserialize(configFilePath);
+            }
+            else
+            {
+                configFilePath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "WpfSettings.config");
+                if (!string.IsNullOrWhiteSpace(configFilePath) && File.Exists(configFilePath))
+                {
+                    Settings = WpfSettings.Deserialize(configFilePath);
+                }
+                else
+                {
+                    Settings = WpfSettings.DeserializeFromConfiguration();
+                }
+            }
+
             AppDomain.CurrentDomain.UnhandledException += (s, e) => OnException(e.ExceptionObject as Exception);
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
